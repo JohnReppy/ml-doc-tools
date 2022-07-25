@@ -1,0 +1,30 @@
+(* sources.cm
+ *
+ * COPYRIGHT (c) 2000 Bell Labs, Lucent Technologies.
+ *)
+
+Library
+
+  structure DefaultScanner
+  structure SMLScanner
+
+is
+
+#if defined(NEW_CM)
+  $/basis.cm
+  $/smlnj-lib.cm
+  $/regexp-lib.cm
+#else
+  smlnj-lib.cm
+  regexp-lib.cm
+#endif
+
+  ../mldoc/sources.cm
+
+  token-scanner-sig.sml
+  code-scanner-fn.sml
+  default-token-scanner.sml
+
+(* support for SML stylizing *)
+  sml-token-scanner.sml
+  sml-keywords.sml

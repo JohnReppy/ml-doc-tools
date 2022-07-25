@@ -1,0 +1,111 @@
+(* std-options.sml
+ *
+ * COPYRIGHT (c) 1998 Bell Labs, Lucent Technologies.
+ *
+ * @configure_input@
+ *
+ * Some standard default options for the ML-Doc tools.
+ *)
+
+structure StdOptions : sig
+
+    val stdOptions : MLDocConfig.option_info list
+
+    val latexOptions : MLDocConfig.option_info list
+    val htmlOptions : MLDocConfig.option_info list
+
+    val outDir : string -> MLDocConfig.option_info
+    val outFile : string -> MLDocConfig.option_info
+
+  end = struct
+
+    structure C = MLDocConfig
+
+    val stdOptions = [
+	    { flag		= C.NA,
+	      configName	= "Tools.SGMLS",
+	      default		= C.STR "@NSGMLS@"
+	    },
+	    { flag		= C.ARG "-config",
+	      configName	= "ConfigFile",
+	      default		= C.NOVAL
+	    },
+	    { flag		= C.ARG "-mldoc",
+	      configName	= "MLDocDir",
+	      default		= C.STR "ML-Doc"
+	    },
+	    { flag		= C.FLG "-debug",
+	      configName	= ".Debug",
+	      default		= C.NOVAL
+	    }
+	  ]
+
+    val latexOptions = [
+	    { flag		= C.ARG "-info",
+	      configName	= ".MasterInfoFile",
+	      default		= C.STR "Info/LaTeX.info"
+	    }
+	  ]
+
+    val htmlOptions = [
+	    { flag		= C.ARG "-info",
+	      configName	= ".MasterInfoFile",
+	      default		= C.STR "Info/HTML.info"
+	    },
+	    { flag		= C.ARG "-dir",
+	      configName	= ".OutDir",
+	      default		= C.STR "HTML"
+	    },
+	  (* style parameters *)
+	    { flag		= C.NA,
+	      configName	= ".Style.TitleHeadLevel",
+	      default		= C.NUM 1
+	    },
+	    { flag		= C.NA,
+	      configName	= ".Style.ChapterHeadLevel",
+	      default		= C.NUM 2
+	    },
+	    { flag		= C.NA,
+	      configName	= ".Style.SectionHeadLevel",
+	      default		= C.NUM 3
+	    },
+	    { flag		= C.NA,
+	      configName	= ".Style.SynopsisHeadLevel",
+	      default		= C.NUM 4
+	    },
+	    { flag		= C.NA,
+	      configName	= ".Style.InterfaceHeadLevel",
+	      default		= C.NUM 4
+	    },
+	    { flag		= C.NA,
+	      configName	= ".Style.DescriptionHeadLevel",
+	      default		= C.NUM 4
+	    },
+	    { flag		= C.NA,
+	      configName	= ".Style.DiscussHeadLevel",
+	      default		= C.NUM 4
+	    },
+	    { flag		= C.NA,
+	      configName	= ".Style.SeeAlsoHeadLevel",
+	      default		= C.NUM 4
+	    },
+	    { flag		= C.NA,
+	      configName	= ".Style.SubsectionHeadLevel",
+	      default		= C.NUM 4
+	    }
+	  ]
+
+    fun outDir dir = {
+	    flag	= C.ARG "-dir",
+	    configName	= ".OutDir",
+	    default	= C.STR dir
+	  }
+
+    fun outFile file = {
+	    flag	= C.ARG "-o",
+	    configName	= ".OutFile",
+	    default	= C.STR file
+	  }
+
+  end
+

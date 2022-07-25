@@ -1,0 +1,21 @@
+Library
+  structure Main
+is
+#if defined(NEW_CM)
+  $/basis.cm
+  $/smlnj-lib.cm
+#else
+  smlnj-lib.cm
+#endif
+
+  ../lib/sgmls-input/sources.cm
+  ../lib/mldoc/sources.cm
+
+  main.sml
+  valid.sml
+  common.sml
+  njcomp.sml
+  regexp-sig.sml
+  regexp.sml
+  entities.sml
+

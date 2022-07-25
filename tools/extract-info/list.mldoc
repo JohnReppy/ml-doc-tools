@@ -1,0 +1,279 @@
+<!-- list.mldoc -->
+
+<!DOCTYPE ML-DOC SYSTEM>
+
+<AUTHOR
+  NAME="Lal George"
+  EMAIL="george@research.att.com"
+  YEAR=1995>
+<COPYRIGHT OWNER="AT&AMP;T Bell Laboratories" YEAR=1995>
+<VERSION VERID="1.3" YEAR=1995 MONTH=10 DAY=23>
+<TITLE>The List structure</TITLE>
+
+<SECT>
+<HEAD>The <CD/List/ structure</HEAD>
+
+<PP>
+Polymorphic lists are traditionally an important datatype in
+functional programming.  As such, lists are often supported with a
+large collection of library functions. The <STRREF/List/ structure
+specifies a somewhat smaller collection of operations that reflect
+common usage. The design philosophy behind the <STRREF/List/ module
+is: 
+<ITEMIZE>
+  <ITEM>
+    It must be complete enough so that most programs will not
+    need to define additional list operations.
+  <ITEM> 
+    A function is included if it is: complicated to
+    implement, more concise or more efficient than an equivalent
+    combination of other list functions, and has proven utility.
+</ITEMIZE>
+	
+
+<STRUCTURE STRID="List">
+  <SIGBODY SIGID="LIST" FILE=LIST>
+    <SPEC>
+      <DATATYPE ONELINE><TYPARAM>'a<ID>list
+        <CONS>nil
+        <CONS>::<TY>('a * 'a list)
+      </DATATYPE>
+    <SPEC>
+      <EXN>Empty
+        <COMMENT>
+        indicates an operation requiring a non-empty list was given
+        an empty list as an argument.
+    <SPEC>
+      <VAL>null<TY>'a list -> bool
+        <COMMENT>
+          <PROTOTY>
+          null <ARG/l/
+          </PROTOTY>
+		returns <CONREF STRID="Bool">true</> if the list <ARG/l/ is <CONREF/nil/. 
+    <SPEC>
+      <VAL>length<TY>'a list -> int
+        <COMMENT>
+          <PROTOTY>
+          length <ARG/l/ 
+          </PROTOTY>
+        returns the number of elements in the list <ARG/l/.
+    <SPEC>
+      <VAL>@<TY>('a list * 'a list) -> 'a list
+        <COMMENT>
+          <PROTOTY>
+          <ARG/l1/ @ <ARG/l2/
+          </PROTOTY>
+        returns the list that is the concatenation of <ARG/l1/ and <ARG/l2/.
+
+    <SPEC>
+      <VAL>hd<TY>'a list -> 'a
+        <RAISES><EXNREF/Empty/
+        <COMMENT>
+          <PROTOTY>
+          hd <ARG/l/
+          </PROTOTY>
+          	returns the first element of <ARG/l/.  
+		Raises <EXNREF/Empty/ if <ARG/l/ is <CONREF/nil/.
+    <SPEC>
+      <VAL>tl<TY>'a list -> 'a list
+        <RAISES><EXNREF/Empty/
+        <COMMENT>
+          <PROTOTY>
+          tl <ARG/l/
+          </PROTOTY>
+        	returns all but the first element of <ARG/l/.
+	  	Raises <EXNREF/Empty/ if <ARG/l/ is <CONREF/nil/.
+    <SPEC>
+      <VAL>last<TY>'a list -> 'a
+        <RAISES><EXNREF/Empty/
+        <COMMENT>
+          <PROTOTY>
+          last <ARG/l/
+          </PROTOTY>
+          	returns the last element of <ARG/l/.  
+		Raises <EXNREF/Empty/ if <ARG/l/ is <CONREF/nil/.
+
+    <SPEC>
+      <VAL>nth<TY>('a list * int) -> 'a
+        <RAISES><EXNREF STRID="General">Subscript</>
+        <COMMENT>
+          <PROTOTY>
+          nth (<ARG/l/, <ARG/i/)
+          </PROTOTY>
+        returns the i'th element of the list <ARG/l/, 
+	counting from 0. Raises <EXNREF STRID="General">Subscript</> 
+	if <MATH/<ARG/i/ &LESS; 0/ or <MATH/<ARG/i/ &GREATEREQ; <CD/length/ <ARG/l//.
+    <SPEC>
+      <VAL>take<TY>('a list * int) -> 'a list
+        <RAISES><EXNREF STRID="General">Subscript</>
+        <COMMENT>
+          <PROTOTY>
+          take (<ARG/l/, <ARG/i/)
+          </PROTOTY>
+          	returns the first <ARG/i/ elements of the list
+<ARG/l/. Raises <EXNREF STRID="General">Subscript</> 
+if <MATH/<ARG/i/ &LESS; 0/ or <MATH/<ARG/i/ &GREATEREQ; <CD/length/ <ARG/l//.
+
+    <SPEC>
+      <VAL>drop<TY>('a list * int) -> 'a list
+        <RAISES><EXNREF STRID="General">Subscript</>
+        <COMMENT>
+          <PROTOTY>
+          drop (<ARG/l/, <ARG/i/)
+          </PROTOTY>
+     	returns what is left after dropping the first <ARG/i/
+elements of the list <ARG/l/. Raises <EXNREF STRID="General">Subscript</>
+if <MATH/<ARG/i/ &LESS; 0/ or <MATH/<ARG/i/ &GREATER; <CD/length/ <ARG/l//.
+It holds that 
+  <CD/<VALREF/take/(<ARG/l/, <ARG/i/) <VALREF/@/ <VALREF/drop/(<ARG/l/, <ARG/i/) = <ARG/l// 
+when 
+  <MATH/0 &LESSEQ; <ARG/i/ &LESSEQ; <CD/length/ <ARG/l//.
+    <SPEC>
+      <VAL>rev<TY>'a list -> 'a list
+        <COMMENT>
+          <PROTOTY>
+          rev <ARG/l/
+          </PROTOTY>
+		returns a list consisting of <ARG/l/'s elements in reverse.
+    <SPEC>
+      <VAL>concat<TY>'a list list -> 'a list
+        <COMMENT>
+          <PROTOTY>
+          concat <ARG/l/
+          </PROTOTY>
+          	returns the list which is the concatenation of all the
+		lists in <ARG/l/.
+    <SPEC>
+      <VAL>revAppend<TY>('a list * 'a list) -> 'a list
+        <COMMENT>
+          <PROTOTY>
+          revAppend (<ARG/l1/, <ARG/l2/)
+          </PROTOTY>
+	
+	  returns <CD/(rev l1) @ l2/.
+    <SPEC>
+      <VAL>app<TY>('a -> unit) -> 'a list -> unit
+        <COMMENT>
+          <PROTOTY>
+          app <ARG/f/ <ARG/l/
+          </PROTOTY>
+          applies <ARG/f/ to the elements of <ARG/l/, from left to right.
+    <SPEC>
+      <VAL>map<TY>('a -> 'b) -> 'a list -> 'b list
+        <COMMENT>
+          <PROTOTY>
+          map <ARG/f/ <ARG/l/
+          </PROTOTY>
+	applies <ARG/f/ to each element of <ARG/l/ from left to right,
+        returning the list of results.
+
+    <SPEC>
+      <VAL>mapPartial<TY>('a -> 'b option) -> 'a list -> 'b list
+        <COMMENT>
+          <PROTOTY>
+          mapPartial <ARG/f/ <ARG/l/
+          </PROTOTY>
+	applies <ARG/f/ to each element of <ARG/l/ from left
+to right, returning a list of results where <ARG/f/ was
+defined. <ARG/f/ is not defined for an element of <ARG/l/ if <ARG/f/
+applied to the element returns <CONREF STRID="General">NONE</>.
+
+    <SPEC>
+      <VAL>find<TY>('a -> bool) -> 'a list -> 'a option
+        <COMMENT>
+          <PROTOTY>
+          find <ARG/f/ <ARG/l/
+          </PROTOTY>
+          applies <ARG/f/ to each element <ARG/x/ of the list
+<ARG/l/, from left to right, until <CD/<ARG/f/ <ARG/x// evaluates to
+<CONREF STRID="Bool">true</>; 
+returns <CD/<CONREF STRID="General">SOME</> <ARG/x// if such an <ARG/x/ exists, 
+otherwise <CONREF STRID="General">NONE</>.
+    <SPEC>
+      <VAL>filter<TY>('a -> bool) -> 'a list -> 'a list
+        <COMMENT>
+          <PROTOTY>
+          filter <ARG/f/ <ARG/l/
+          </PROTOTY>
+          applies <ARG/f/ to each element <ARG/x/ of <ARG/l/, from left to
+right, and returns the list of those <ARG/x/ for which 
+<CD/<ARG/f/ <ARG/x// evaluated to <CONREF STRID="Bool">true</>.
+    <SPEC>
+      <VAL>partition<TY>('a -> bool) -> 'a list -> ('a list * 'a list)
+        <COMMENT>
+          <PROTOTY>
+          partition <ARG/f/ <ARG/l/
+          </PROTOTY>
+          applies <ARG/f/ to each element <ARG/x/ of <ARG/l/, from left
+	  to right, and returns a pair <CD/(<ARG/pos/, <ARG/neg/)/ where
+          <ARG/pos/ is the list of those <ARG/x/ for which <CD/<ARG/f/ <ARG/x//
+          evaluated to <CONREF STRID="Bool">true</>, and 
+          <ARG/neg/ is the list of those for which <CD/<ARG/f/ <ARG/x// 
+          evaluated to <CONREF STRID="Bool">false</>.
+          The elements of <ARG/pos/ and <ARG/neg/ retain the same relative
+          order they possessed in <ARG/l/.
+
+    <SPEC>
+      <VAL>foldl<TY>(('a * 'b) -> 'b) -> 'b -> 'a list -> 'b
+        <COMMENT>
+          <PROTOTY>
+          foldl <ARG/f/ <ARG/b/ [<ARG/x1/, <ARG/x2/, ..., <ARG/xn/]
+          </PROTOTY>
+          returns
+          <CODE>
+          <ARG/f/(<ARG/xn/,...,<ARG/f/(<ARG/x2/, <ARG/f/(<ARG/x1/, <ARG/b/))...)
+          </CODE>
+          or <ARG/b/ if the list is empty.
+    <SPEC>
+      <VAL>foldr<TY>(('a * 'b) -> 'b) -> 'b -> 'a list -> 'b
+        <COMMENT>
+          <PROTOTY>
+          foldr <ARG/f/ <ARG/b/ [<ARG/x1/, <ARG/x2/, ..., <ARG/xn/]
+          </PROTOTY>
+          returns
+          <CODE>
+          <ARG/f/(<ARG/x1/, <ARG/f/(<ARG/x2/, ..., <ARG/f/(<ARG/xn/, <ARG/b/)...))
+          </CODE>
+          or <ARG/b/ if the list is empty.
+
+    <SPEC>
+      <VAL>exists<TY>('a -> bool) -> 'a list -> bool
+        <COMMENT>
+          <PROTOTY>
+          exists <ARG/f/ <ARG/l/
+          </PROTOTY>
+          applies <ARG/f/ to each element <ARG/x/ of the list
+<ARG/l/, from left to right, until <CD/<ARG/f/ <ARG/x// evaluates to
+<CONREF STRID="Bool">true</>; returns <CONREF STRID="Bool">true</> if  
+such an <ARG/x/ exists and <CONREF STRID="Bool">false</> otherwise.
+
+    <SPEC>
+      <VAL>all<TY>('a -> bool) -> 'a list -> bool
+        <COMMENT>
+          <PROTOTY>
+          all <ARG/f/ <ARG/l/
+          </PROTOTY>
+applies <ARG/f/ to each element <ARG/x/ of the list <ARG/l/, from left to
+right, until <CD/<ARG/f/ <ARG/x// evaluates to <CONREF STRID="Bool">false</>; 
+returns <CONREF STRID="Bool">false</> 
+if such an <ARG/x/ exists and <CONREF STRID="Bool">true</> otherwise.
+Equivalent to 
+<CD/<VALREF STRID="Bool">not</>(<VALREF/exists/ (<VALREF STRID="Bool">not</> o <ARG/f/) <ARG/l/))/.
+
+    <SPEC>
+      <VAL>tabulate<TY>(int * (int -> 'a)) -> 'a list
+        <RAISES><EXNREF STRID="General">Size</>
+        <COMMENT>
+          <PROTOTY>
+          tabulate (<ARG/n/, <ARG/f/)
+          </PROTOTY>
+returns a list of length <ARG/n/ equal to 
+<CD/[<ARG/f/(0), <ARG/f/(1), ..., <ARG/f/(<ARG/n/-1)]/, 
+created from left to right. 
+Raises <EXNREF STRID="General">Size</> if <MATH/<ARG/n/ &LESS; 0/.
+
+     <SEEALSO>
+	<STRREF/General/
+	<STRREF/ListPair/
+     </SEEALSO>
+</STRUCTURE>

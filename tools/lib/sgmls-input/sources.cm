@@ -1,0 +1,49 @@
+(* sources.cm
+ *
+ * COPYRIGHT (c) 1997 Bell Labs, Lucent Technologies.
+ *
+ * Sources file for library to parse the output of nsgmls.
+ *)
+
+Library
+
+signature ELEM
+signature MARKUP
+signature PARSE_SGMLS
+
+structure SGMLS
+structure StdElem
+structure StdMarkup
+structure StdParser
+structure RunSGMLS
+
+functor MarkupFn
+functor ParseSGMLS
+functor PrintMarkup
+
+is
+#if defined(NEW_CM)
+  $/basis.cm
+  $/smlnj-lib.cm
+#if (SMLNJ_MINOR_VERSION < 43)
+  ../compat/110_42.sml
+#endif
+#else
+  ../compat/110_0_7.sml
+  smlnj-lib.cm
+#endif
+
+  sgmls.sml
+  elem-sig.sml
+  markup-sig.sml
+  markup.sml
+  scan-sgmls-sig.sml
+  scan-sgmls.sml
+  parse-sgmls-fn.sml
+
+  std-elem.sml
+  std-parser.sml
+
+  run-sgmls.sml
+
+  print-markup.sml

@@ -1,0 +1,3867 @@
+Only in Basis/ML-Doc: OPEN
+Only in Basis.SAV/ML-Doc: Open
+diff -r Basis/ML-Doc/aggregates-chapter.mldoc Basis.SAV/ML-Doc/aggregates-chapter.mldoc
+10c10
+< <VERSION VERID="1.2" YEAR=2000 MONTH=5 DAY=26>
+---
+> <VERSION VERID="1.1" YEAR=1996 MONTH=4 DAY=16>
+20c20
+< access and (for arrays) update operations.
+---
+> access and update operations.
+Only in Basis/ML-Doc: aggregates-over.mldoc
+Only in Basis/ML-Doc: array-slice.mldoc
+diff -r Basis/ML-Doc/array.mldoc Basis.SAV/ML-Doc/array.mldoc
+10c10
+< <VERSION VERID="1.5" YEAR=2000 MONTH=5 DAY=26>
+---
+> <VERSION VERID="1.5" YEAR=1996 MONTH=4 DAY=16>
+18d17
+<   <STRREF TOPID/ArraySlice/
+25,26c24
+< constructor such as <CD/array/, <CD/fromList/, etc.; 
+< otherwise they are not equal.
+---
+> constructor such as <CD/array/, <CD/fromList/, etc.; otherwise they are not equal.
+28c26
+< Thus, type <CD/ty array/ admits equality even if <CD/ty/ does not.
+---
+> Thus, type <CD/t array/ admits equality even if <CD/ty/ does not.
+35c33
+<     <SPECBREAK>
+---
+>     <SPECBREAK NEWLINE>
+42c40
+<     <SPECBREAK>
+---
+>     <SPECBREAK NEWLINE>
+82c80
+<     <SPECBREAK>
+---
+>     <SPECBREAK NEWLINE>
+114c112
+<     <SPECBREAK>
+---
+>     <SPECBREAK NEWLINE>
+116c114,115
+<       <VAL>vector<TY>'a array -> 'a vector
+---
+>       <VAL>extract<TY>('a array * int * int option) -> 'a vector
+>         <RAISES><EXNREF STRID="General"/Subscript/
+119c118
+<           vector <ARG/arr/
+---
+>           extract <ARG/slice/
+121,125c120,124
+<           generates a vector from <ARG/arr/. Specifically, the
+<           result is equivalent to
+<           <CODE>
+<           Vector.tabulate (length <ARG/arr/, fn i => sub (<ARG/arr/, i))
+<           </CODE>
+---
+> 	  extracts the <AREF TAG="array-vector-slice">array slice</AREF>
+> 	  <ARG/slice/ from the array <ARG/arr/, and returns it as a vector.
+> 	  If the slice is not <AREF TAG="valid-slices">valid,</AREF> then
+> 	  the exception <EXNREF STRID="General"/Subscript/ is raised.
+>     <SPECBREAK>
+127c126
+<       <VAL>copy<TY>{src : 'a array, dst : 'a array, di : int} -> unit
+---
+>       <VAL>copy<TY>{src : 'a array, si : int, len : int option, dst : 'a array, di : int} -> unit
+129c128
+<       <VAL>copyVec<TY>{src : 'a Vector.vector, dst : 'a array, di : int} -> unit
+---
+>       <VAL>copyVec<TY>{src : 'a vector, si : int, len : int option, dst : 'a array, di : int} -> unit
+133,135c132,134
+<           copy {<ARG/src/, <ARG/dst/, <ARG/di/}
+<           <PROTO>
+<           copyVec {<ARG/src/, <ARG/dst/, <ARG/di/}
+---
+>             copy {<ARG/src/, <ARG/si/, <ARG/len/, <ARG/dst/, <ARG/di/}
+> 	  <PROTO>
+>             copyVec {<ARG/src/, <ARG/si/, <ARG/len/, <ARG/dst/, <ARG/di/}
+137,145c136,147
+< 	  copy the given array or vector
+< 	  into the array <ARG/dst/, with the <CD/i/th element in <ARG/src/,
+<       for <MATH/0 &LESSEQ; <ARG/i/ &LESS; <ARG/len//
+<       where <ARG/len/ is the length of <ARG/src/,
+<       being copied to
+< 	  position <MATH/<ARG/di/ + <ARG/i// in the destination array.
+< 	  If <MATH><ARG/di/ &LESS; 0</MATH> or if
+< 	  <MATH><VALREF STRID="Array"/length/ <ARG/dst/ &LESS; <ARG/di/+<ARG/len/</MATH>,
+<       then the
+---
+> 	  copy the slice specified by <CD>(<ARG/src/, <ARG/si/, <ARG/len/)</CD>
+> 	  into the array <ARG/dst/, with element <ARG/si/ being copied to
+> 	  position <ARG/di/ in the destination array.
+> 	  The function <VALREF NOLINK/copy/ takes an
+> 	  <AREF TAG="array-vector-slice">array slice</AREF> as its source,
+> 	  while the function  <VALREF NOLINK/copyVec/ uses a vector slice.
+> <!-- SHOULD THERE BE AN ANCHOR FOR "vector slice: TOO? -->
+> 	  If the source slice is not <AREF TAG="valid-slices">valid,</AREF>
+> 	  then the <EXNREF STRID="General"/Subscript/ exception is raised.
+> 	  Likewise, if <MATH><ARG/di/ &LESS; 0</MATH> or if
+> 	  <MATH><NORM><ARG/dst/</NORM> &LESS; <ARG/di/+n</MATH>, where
+> 	  <MATH/n/ is the number of elements copied, then the
+148,150c150,151
+< The <CD/copy/ function must correctly handle the case in which
+< <ARG/dst/ and the base array of <ARG/src/
+< are equal, and the source and destination regions overlap.
+---
+> The <CD/copy/ function must correctly handle the case in which <ARG/src/
+> and <ARG/dst/ are equal, and the source and destination slices overlap.
+152c153
+<     <SPECBREAK>
+---
+>     <SPECBREAK NEWLINE>
+154c155,156
+<       <VAL>appi<TY>((int * 'a) -> unit) -> 'a array -> unit
+---
+>       <VAL>appi<TY>((int * 'a) -> unit) -> ('a array * int * int option) -> unit
+>         <RAISES><EXNREF STRID="General"/Subscript/
+158c160
+<           appi <ARG/f/ <ARG/arr/
+---
+>           appi <ARG/f/ <ARG/slice/
+164,182c166,179
+<       The more general form <VALREF/appi/ supplies <ARG/f/ with 
+<       the array index of the corresponding element.
+<     <SPECBREAK>
+<     <SPEC>
+<       <VAL>modifyi<TY>((int * 'a) -> 'a) -> 'a array -> unit
+<       <VAL>modify<TY>('a -> 'a) -> 'a array -> unit
+<         <COMMENT>
+<           <PROTOTY>
+<             modifyi <ARG/f/ <ARG/slice/
+< 	  <PROTO>
+<             modify <ARG/f/ <ARG/arr/
+<           </PROTOTY>
+< 	  apply the function <ARG/f/ to the elements of an array in
+< 	  left to right order (i.e., increasing indices), and replace each
+< 	  element with the result.
+< 	  The more general <VALREF STRID="Array"/modifyi/ supplies
+<       <ARG/f/ with the array index of the corresponding element.
+< 	  The expression <CD>modify <ARG/f/ <ARG/arr/</CD>
+< 	  is equivalent to <CD/modifyi (<ARG/f/ o #2) <ARG/arr//.
+---
+> 	  The more general <VALREF STRID="Array"/appi/ function applies <ARG/f/
+> 	  to the elements of the <AREF TAG="array-vector-slice">array slice</AREF>
+> 	  <ARG/slice/ and supplies both the element and the element's index to the
+> 	  function <ARG/f/.
+> 	  If <ARG/slice/ is not <AREF TAG="valid-slices">valid</AREF>, then
+> 	  the exception <EXNREF STRID="General"/Subscript/ is raised.
+> 	  <PP>
+> 	  The function <CD/app/ applies <ARG/f/ to the whole array and
+> 	  does not supply the element index to <ARG/f/.
+> 	  Thus the expression <CD>app <ARG/f/ <ARG/arr/</CD>
+> 	  is equivalent to:
+> 	  <CODE>
+> appi (<ARG/f/ o #2) (<ARG/arr/, 0, NONE)
+> </CODE>
+185,186c182,185
+<       <VAL>foldli<TY>((int * 'a * 'b) -> 'b) -> 'b -> 'a array -> 'b
+<       <VAL>foldri<TY>((int * 'a * 'b) -> 'b) -> 'b -> 'a array -> 'b
+---
+>       <VAL>foldli<TY>((int * 'a * 'b) -> 'b) -> 'b -> ('a array * int * int option) -> 'b
+>         <RAISES><EXNREF STRID="General"/Subscript/
+>       <VAL>foldri<TY>((int * 'a * 'b) -> 'b) -> 'b -> ('a array * int * int option) -> 'b
+>         <RAISES><EXNREF STRID="General"/Subscript/
+191,194c190,193
+<             foldli <ARG/f/ <ARG/init/ <ARG/arr/
+<       <PROTO>
+<             foldri <ARG/f/ <ARG/init/ <ARG/arr/
+<       <PROTO>
+---
+>             foldli <ARG/f/ <ARG/init/ <ARG/slice/
+> 	  <PROTO>
+>             foldri <ARG/f/ <ARG/init/ <ARG/slice/
+> 	  <PROTO>
+196c195
+<       <PROTO>
+---
+> 	  <PROTO>
+199,208c198,208
+<       fold the function <ARG/f/ over the elements of an array, using
+<       the value <ARG/init/ as the initial value.
+<       The functions <VALREF STRID="Array"/foldli/ and 
+<       <VALREF STRID="Array"/foldl/ apply the function <ARG/f/
+<       from left to right (increasing indices), while the functions
+<       <VALREF STRID="Array"/foldri/ and <VALREF STRID="Array"/foldr/ 
+<       work from right to left (decreasing indices).
+<       The more general functions <VALREF STRID="Array"/foldli/ 
+<       and <VALREF STRID="Array"/foldri/ supply <ARG/f/ with 
+<       the array index of the corresponding element.
+---
+> 	  fold the function <ARG/f/ over the elements of an array, using
+> 	  the value <ARG/init/ as the initial value.
+> 	  The functions <VALREF STRID="Array"/foldli/ and <VALREF STRID="Array"/foldl/ apply the function <ARG/f/
+> 	  from left to right (increasing indices), while the functions
+> 	  <VALREF STRID="Array"/foldri/ and <VALREF STRID="Array"/foldr/ work from right to left (decreasing
+> 	  indices).
+> 	  The more general functions <VALREF STRID="Array"/foldli/ and <VALREF STRID="Array"/foldri/ work on
+> 	  <AREF TAG="array-vector-slice">array slices</AREF>, and supply both the
+> 	  element and the element's index to the function <ARG/f/.
+> 	  The functions <VALREF STRID="Array"/foldl/ and <VALREF STRID="Array"/foldr/ work on the whole array
+> 	  <ARG/arr/ and do not supply the element index to <ARG/f/.
+209a210,217
+>           More precisely, if <CD/<VALREF STRID="Array"/extract/ <ARG/slice/ = <VALREF STRID="Vector"/Vector.fromList/ [<ARG/A0/,<ARG/A1/,...,<ARG/An/]/,
+>           then
+> 	  the expression <CD>foldli <ARG/f/ <ARG/init/ <ARG/slice/</CD>
+>           is equivalent to:
+> 	  <CODE>
+> <VALREF STRID="List"/List.foldl/ (fn ((i, <ARG/a/), <ARG/x/) => <ARG/f/(<ARG/i/, <ARG/a/, <ARG/x/))
+>   <ARG/init/ [(0,<ARG/A0/),(1,<ARG/A1/),...,(n,<ARG/An/)]
+> </CODE>
+213c221,222
+< foldli (fn (_, <ARG/a/, <ARG/x/) => <ARG/f/(<ARG/a/, <ARG/x/)) <ARG/init/ <ARG/arr/
+---
+> foldli (fn (_, <ARG/a/, <ARG/x/) => <ARG/f/(<ARG/a/, <ARG/x/))
+>   <ARG/init/ (<ARG/arr/, 0, NONE)
+216c225
+<           and <VALREF STRID="Array"/foldr/.
+---
+>           and <VALREF STRID="List"/List.foldr/.
+226,267c235,236
+<       <VAL>findi<TY>((int * 'a) -> bool) -> 'a array -> (int * 'a) option
+<       <VAL>find<TY>('a -> bool) -> 'a array -> 'a option
+<         <COMMENT>
+<           <PROTOTY>
+<           findi <ARG/f/ <ARG/arr/
+<           <PROTO>
+<           find <ARG/f/ <ARG/arr/
+<           </PROTOTY>
+<           apply <ARG/f/ to each element of the array
+< <ARG/arr/, from left to right (i.e., increasing indices), until 
+< a <CD>true</> value is returned. If this occurs, the functions return
+< the element. The more general version <VALREF/appi/ also supplies <ARG/f/ with
+< the array index of the element and, upon finding an entry
+< satisfying the predicate, returns that index with the element.
+<     <SPECBREAK>
+<     <SPEC>
+<       <VAL>exists<TY>('a -> bool) -> 'a array -> bool
+<         <COMMENT>
+<           <PROTOTY>
+<           exists <ARG/f/ <ARG/arr/
+<           </PROTOTY>
+<           applies <ARG/f/ to each element <ARG/x/ of the array
+< <ARG/arr/, from left to right (i.e., increasing indices),
+< until <CD/<ARG/f/ <ARG/x// evaluates to
+< <CD>true</>; returns <CD>true</> if  
+< such an <ARG/x/ exists and <CD>false</> otherwise.
+<     <SPECBREAK>
+<     <SPEC>
+<       <VAL>all<TY>('a -> bool) -> 'a array -> bool
+<         <COMMENT>
+<           <PROTOTY>
+<           all <ARG/f/ <ARG/arr/
+<           </PROTOTY>
+< applies <ARG/f/ to each element <ARG/x/ of the array <ARG/arr/, from left to
+< right (i.e., increasing indices), until <CD/<ARG/f/ <ARG/x// evaluates 
+< to <CD>false</>; returns <CD>false</> 
+< if such an <ARG/x/ exists and <CD>true</> otherwise.
+< Equivalent to 
+< <CD/<VALREF STRID="Bool">not</>(<VALREF STRID="Array"/exists/ (<VALREF STRID="Bool">not</> o <ARG/f/) <ARG/l/))/.
+<     <SPECBREAK>
+<     <SPEC>
+<       <VAL>collate<TY>(('a * 'a) -> order) -> ('a array * 'a array) -> order
+---
+>       <VAL>modifyi<TY>((int * 'a) -> 'a) -> ('a array * int * int option) -> unit
+>       <VAL>modify<TY>('a -> 'a) -> 'a array -> unit
+270c239,241
+<           collate <ARG/f/ (<ARG/sl/, <ARG/sl2/)
+---
+>             modifyi <ARG/f/ <ARG/slice/
+> 	  <PROTO>
+>             modify <ARG/f/ <ARG/arr/
+272,273c243,259
+<           performs lexicographic comparison of the two slices using the
+<           given ordering <ARG/f/ on elements.
+---
+> 	  apply the function <ARG/f/ to the elements of an array in
+> 	  left to right order (i.e., increasing indices), and replace the
+> 	  elements with the results of <ARG/f/.
+> 	  The more general <VALREF STRID="Array"/modifyi/ function applies <ARG/f/ to the elements
+> 	  of the <AREF TAG="array-vector-slice">array slice</AREF> <ARG/slice/
+> 	  and supplies both the element and the element's index to the
+> 	  function <ARG/f/.
+> 	  If <ARG/slice/ is not <AREF TAG="valid-slices">valid</AREF>, then
+> 	  the exception <EXNREF STRID="General"/Subscript/ is raised.
+> 	  <PP>
+> 	  The function <CD/modify/ applies <ARG/f/ to the whole array and
+> 	  does not supply the element index to <ARG/f/.
+> 	  Thus the expression <CD>modify <ARG/f/ <ARG/arr/</CD>
+> 	  is equivalent to:
+> 	  <CODE>
+> modifyi (<ARG/f/ o #2) (<ARG/arr/, 0, NONE)
+> </CODE>
+diff -r Basis/ML-Doc/array2.mldoc Basis.SAV/ML-Doc/array2.mldoc
+6c6
+< <VERSION VERID="1.4" YEAR=2000 MONTH=6 DAY=11>
+---
+> <VERSION VERID="1.3" YEAR=1997 MONTH=4 DAY=11>
+18,19c18
+< arrays. As with 1-dimensional array, these arrays have the equality property
+< that two arrays are equal 
+---
+> arrays. Arrays also have a special equality property: two arrays are equal 
+24c23
+< Thus, type <CD/ty array/ admits equality even if <CD/ty/ does not.
+---
+> Thus, type <CD/t array/ admits equality even if <CD/ty/ does not.
+38,39c37,38
+<       in the range from <ARG/col/ to
+<       <MATH><ARG/col/ + (<ARG/w/ - 1)</MATH>, inclusively. If
+---
+>       in the range
+>       <MATH><ARG/col/ + (<ARG/w/ - 1)</MATH> (inclusive). If
+64,73c63
+<       specifies a way of traversing a region. Specifically, 
+<       <CD/RowMajor/ indicates that, given a region, the rows
+<       are traversed from left to right (smallest column index to largest
+<       column index), starting with the first
+<       row in the region, then the second, and so on until the 
+<       last row is traversed. <CD/ColMajor/ reverses the roles
+<       of row and column, traversing the columns from top down (smallest
+<       row index to largest column index), starting with the first
+<       column, then the second, and so on until the last column is
+<       traversed.
+---
+>       specifies way of traversing a region.
+228c218
+<       <VAL>foldi<TY>traversal -> ((int * int * 'a * 'b) -> 'b) -> 'b -> 'a region -> 'b
+---
+>       <VAL>modifyi<TY>traversal -> ((int * int * 'a) -> 'a) -> 'a region -> unit
+230c220
+<       <VAL>fold<TY>traversal -> (('a * 'b) -> 'b) -> 'b -> 'a array -> 'b
+---
+>       <VAL>modify<TY>traversal -> ('a -> 'a) -> 'a array -> unit
+233c223
+<           foldi <ARG/tr/ <ARG/f/ <ARG/init/ <ARG/reg/
+---
+>           modifyi <ARG/tr/ <ARG/f/ <ARG/reg/
+235c225
+<           fold <ARG/tr/ <ARG/f/ <ARG/init/ <ARG/arr/
+---
+>           modify <ARG/tr/ <ARG/f/ <ARG/arr/
+237,240c227,230
+< 	  fold the function <ARG/f/ over the elements of an array <ARG/arr/, 
+<       traversing the elements in <ARG/tr/ order, and using
+< 	  the value <ARG/init/ as the initial value.
+< 	  The more general <VALREF STRID="Array2"/foldi/ function applies <ARG/f/
+---
+> 	  apply the function <ARG/f/ to the elements of an array in
+>       the order specified by <ARG/tr/,
+>       and replace each element with the result of <ARG/f/.
+> 	  The more general <VALREF STRID="Array2"/modifyi/ function applies <ARG/f/
+247c237
+< 	  The function <CD/fold/ applies <ARG/f/ to the whole array and
+---
+> 	  The function <CD/modify/ applies <ARG/f/ to the whole array and
+249c239
+< 	  Thus the expression <CD>fold <ARG/tr/ <ARG/f/ <ARG/init/ <ARG/arr/</CD>
+---
+> 	  Thus the expression <CD>modify <ARG/tr/ <ARG/f/ <ARG/arr/</CD>
+252,253c242
+< foldi <ARG/tr/ (fn (_,_,a,b) => <ARG/f/ (a,b)) <ARG/init/ 
+<            {base=<ARG/arr/, row=0, col=0, nrows=NONE, ncols=NONE}
+---
+> modifyi <ARG/tr/ (<ARG/f/ o #3) {base=<ARG/arr/, row=0, col=0, nrows=NONE, ncols=NONE}
+257c246
+<       <VAL>modifyi<TY>traversal -> ((int * int * 'a) -> 'a) -> 'a region -> unit
+---
+>       <VAL>foldi<TY>traversal -> ((int * int * 'a * 'b) -> 'b) -> 'b -> 'a region -> 'b
+259c248
+<       <VAL>modify<TY>traversal -> ('a -> 'a) -> 'a array -> unit
+---
+>       <VAL>fold<TY>traversal -> (('a * 'b) -> 'b) -> 'b -> 'a array -> 'b
+262c251
+<           modifyi <ARG/tr/ <ARG/f/ <ARG/reg/
+---
+>           foldi <ARG/tr/ <ARG/f/ <ARG/init/ <ARG/reg/
+264c253
+<           modify <ARG/tr/ <ARG/f/ <ARG/arr/
+---
+>           fold <ARG/tr/ <ARG/f/ <ARG/init/ <ARG/arr/
+266,269c255,258
+< 	  apply the function <ARG/f/ to the elements of an array in
+<       the order specified by <ARG/tr/,
+<       and replace each element with the result of <ARG/f/.
+< 	  The more general <VALREF STRID="Array2"/modifyi/ function applies <ARG/f/
+---
+> 	  fold the function <ARG/f/ over the elements of an array <ARG/arr/, 
+>       traversing the elements in <ARG/tr/ order, and using
+> 	  the value <ARG/init/ as the initial value.
+> 	  The more general <VALREF STRID="Array2"/foldi/ function applies <ARG/f/
+276c265
+< 	  The function <CD/modify/ applies <ARG/f/ to the whole array and
+---
+> 	  The function <CD/fold/ applies <ARG/f/ to the whole array and
+278c267
+< 	  Thus the expression <CD>modify <ARG/tr/ <ARG/f/ <ARG/arr/</CD>
+---
+> 	  Thus the expression <CD>fold <ARG/tr/ <ARG/f/ <ARG/init/ <ARG/arr/</CD>
+281c270,271
+< modifyi <ARG/tr/ (<ARG/f/ o #3) {base=<ARG/arr/, row=0, col=0, nrows=NONE, ncols=NONE}
+---
+> foldi <ARG/tr/ (fn (_,_,a,b) => <ARG/f/ (a,b)) <ARG/init/ 
+>            {base=<ARG/arr/, row=0, col=0, nrows=NONE, ncols=NONE}
+Only in Basis.SAV/ML-Doc: basis.tgz
+diff -r Basis/ML-Doc/bit-flags.mldoc Basis.SAV/ML-Doc/bit-flags.mldoc
+10c10
+< <VERSION VERID="1.6" YEAR=2000 MONTH=5 DAY=28>
+---
+> <VERSION VERID="1.5" YEAR=1999 MONTH=4 DAY=28>
+48,54d47
+<       <VAL>all<TY>flags
+<         <COMMENT>
+<           <PROTOTY>
+<           all
+<           </PROTOTY>
+< 	  represents the union of all flags.
+<     <SPEC>
+64,82d56
+<       <VAL>intersect<TY>flags list -> flags
+<         <COMMENT>
+<           <PROTOTY>
+<           intersect <ARG/l/
+<           </PROTOTY>
+< 	  returns a value that represents the intersection of the sets of
+<       flags in the list <ARG/l/.
+<           The expression <CD>intersect []</CD> denotes <VALREF NOLINK/all/.
+<     <SPEC>
+<       <VAL>clear<TY>(flags * flags) -> bool
+<         <COMMENT>
+<           <PROTOTY>
+<           clear (<ARG/fl1/, <ARG/fl2/)
+<           </PROTOTY>
+<     returns the set of those flags in <ARG/fl2/ that are not set in 
+<     <ARG/fl1/, i.e., the set difference.
+<     It is equivalent to 
+< 	<CD>SysWord.andb(SysWord.notb (toWord f1), toWord f2)</CD>.
+<     <SPEC>
+100,108d73
+< <PP>
+< The number of distinct flags in an implementation
+< of the <SIGREF NOLINK/BIT_FLAGS/ interface must be less than or equal to the 
+< number of bits in the <TYREF/SysWord.word/ type.
+< In addition, <CD/fromWord o toWord/ must be the identity function, and
+< <CD/toWord o fromWord/ must be equivalent to
+< <CODE>
+< fn w => SysWord.andb(w, toWord all)
+< </CODE>
+diff -r Basis/ML-Doc/bool.mldoc Basis.SAV/ML-Doc/bool.mldoc
+10c10
+< <VERSION VERID="1.9" YEAR=2000 MONTH=5 DAY=25>
+---
+> <VERSION VERID="1.8" YEAR=1997 MONTH=2 DAY=25>
+26c26
+<   <DATATYPE COMPACT><ID/bool/<CONS>true<CONS>false</DATATYPE>
+---
+>   <DATATYPE COMPACT><TYPARAM>'a<ID/bool/<CONS>nil<CONS>::<TY>'a</DATATYPE>
+40,41c40,41
+<       takes a character-stream reader <ARG/getc/ and a stream <ARG/strm/,
+<       and scans for a boolean value. Ignoring case and initial whitespace,
+---
+>       take a character-stream reader <ARG/getc/ and a stream <ARG/strm/,
+>       and scan for a boolean value. Ignoring case and initial whitespace,
+44c44
+<       On successful scanning of a boolean value, it returns
+---
+>       On successful scanning of a boolean value,  return
+56,59c56,58
+<       scans the string <ARG/s/ on the same principle as <VALREF/scan/;
+<       returns <CD><CONREF STRID="Option">SOME</> <ARG/b/</CD> 
+<       for a scanned value <ARG/b/;
+<       otherwise it returns <CONREF STRID="Option">NONE</>.
+---
+>       scan the string <ARG/s/ on the same principle as <VALREF/scan/;
+>       return <CD><CONREF STRID="Option">SOME</> <ARG/b/</CD> for a scanned value <ARG/b/;
+>       otherwise return <CONREF STRID="Option">NONE</>.
+68c67
+<       returns the string representation of <ARG/b/, either <CD/"true"/
+---
+>       the string representation of <ARG/b/, either <CD/"true"/
+71,80d69
+< <PP>
+< In addition to the <VALREF/not/ function, the language provides the
+< special
+< <KW/andalso/ and <KW/orelse/ operators, which provide short-circuit
+< evaluation of the <CD/and/ and <CD/or/ of two boolean expressions.
+< The semantics of
+< strict <CD/and/ and <CD/or/ operators, which would evaluate both
+< expressions before applying the operator, are rarely needed and can
+< easily be obtained using the <KW/andalso/ and <KW/orelse/ operators.
+< needed, c
+diff -r Basis/ML-Doc/char.mldoc Basis.SAV/ML-Doc/char.mldoc
+10c10
+< <VERSION VERID="1.12" YEAR=2000 MONTH=5 DAY=27>
+---
+> <VERSION VERID="1.11" YEAR=1998 MONTH=7 DAY=21>
+18,19c18,19
+< <!--  <STRREF TOPID/Locale/  -->
+< <!--  <STRREF TOPID/MultiByte/ -->
+---
+>   <STRREF TOPID/Locale/
+>   <STRREF TOPID/MultiByte/
+24c24
+< There is a linear ordering defined on characters.
+---
+> There is a linear ordering supported on characters.
+29,30c29,30
+< signature.  The <CD/Char/ structure provides the extended
+< ASCII 8-bit character set and
+---
+> signature.  The <CD/Char/ structure defines a superset of
+> the usual ASCII characters and
+36,37c36,37
+< If the <STRREF TOPID/WideChar/ structure is provided, 
+< it is distinct from the <STRREF TOPID/Char/ structure.
+---
+> If the <STRREF TOPID/WideChar/ is provided, it is distinct from the <STRREF TOPID/Char/
+> structure.
+54d53
+< equals <CD/<VALREF SIGID="CHAR"/chr/ <VALREF SIGID="CHAR"/maxOrd//.
+58,59c57,58
+< <PP>          The greatest character code; 
+< equals <CD/<VALREF SIGID="CHAR"/ord/ <VALREF SIGID="CHAR"/maxChar//.
+---
+> <PP>          The greatest character code; equals
+> <CD/<VALREF SIGID="CHAR"/ord/ <VALREF SIGID="CHAR"/maxChar//.
+67c66
+<        returns the (non-negative) integer code of the character <ARG/c/.
+---
+>        returns the integer code of the character <ARG/c/
+126,127c125,126
+<           </PROTOTY> returns <CONREF STRID="General"/LESS/, <CONREF STRID="General"/EQUAL/ or
+< <CONREF STRID="General"/GREATER/, depending on whether <ARG/c/ precedes, equals or follows
+---
+>           </PROTOTY> returns <CONREF STRID="General"/LESS/, <CONREF STRID="General"/EQUAL/, or
+> <CONREF STRID="General"/GREATER/, according as <ARG/c/ precedes, equals, or follows
+159,166d157
+<       <VAL>isAscii<TY>char -> bool
+<         <COMMENT>
+<           <PROTOTY>
+<           isAscii <ARG/c/
+<           </PROTOTY> returns <CD/true/ if <ARG/c/ is a (seven-bit)
+< ASCII character, i.e., <MATH/0 &LESSEQ; <CD/ord/ <ARG/c/ &LESSEQ; 127/.
+< Note that this function is independent of locale.
+<     <SPEC>
+193a185,192
+>       <VAL>isAscii<TY>char -> bool
+>         <COMMENT>
+>           <PROTOTY>
+>           isAscii <ARG/c/
+>           </PROTOTY> returns <CD/true/ if <ARG/c/ is a (seven-bit)
+> ASCII character, i.e., <MATH/0 &LESSEQ; <CD/ord/ <ARG/c/ &LESSEQ; 127/.
+> Note that this function is independent of locale.
+>     <SPEC>
+286c285
+< <TR><TD><TD><CD/\^H/ (control-H) is the same as <CD>\b</CD> (backspace).</TR>
+---
+> <TR><TD><TD><CD/\^H/ (control-H) is the same as <CD/\b/ (backspace).</TR>
+295,296c294,297
+< In the escape sequences involving decimal or hexadecimal digits, 
+< if the resulting value cannot be represented in the character set, 
+---
+> In the escape sequences involving 
+> decimal or hexadecimal digits, the sequence of digits is taken to be
+> the longest sequence of such characters. If the resulting value cannot
+> be represented in the character set, 
+326,335c327,331
+<         For characters whose codes greater than 999, the character is
+<         mapped to six-character strings of the form <CD/"\\uxxxx"/, where
+<         <CD/xxxx/ are the four hexadecimal digits corresponding to 
+<         a character's code.
+<         All other characters (i.e., those whose codes are greater than 126
+<         but less than 1000) are mapped to four-character strings of the 
+<         form <CD/"\\ddd"/, where <CD/ddd/ are the three decimal digits 
+<         corresponding to a character's code.
+<     <PP>
+< 	To convert a character to a length-one string containing the
+---
+>         All other characters (i.e., those whose codes are 127 or greater)
+>         are mapped to four-character strings of the form <CD/"\\ddd"/, where
+>         <CD/ddd/ are the three decimal digits corresponding to a character's code.
+> 
+> 	Note: to convert a character to a length-one string containing the
+370,373c366,369
+< <TR><TD><CD/\ooo/<TD>The character whose encoding is the number <CD/ooo/, where</TR>
+< <TR><TD><TD><CD/ooo/ consists of one to three octal digits</TR>
+< <TR><TD><CD/\xhh/<TD>The character whose encoding is the number <CD/hh/,</TR>
+< <TR><TD><TD>where <CD/hh/ is a sequence of hexadecimal digits.
+---
+> <TR><TD><CD/\ddd/<TD>The character whose encoding is the number <CD/ddd/, where</TR>
+> <TR><TD><TD><CD/ddd/ consists of one to three octal digits</TR>
+> <TR><TD><CD/\uxxxx/<TD>The character whose encoding is the number <CD/xxxx/, where</TR>
+> <TR><TD><TD>where <CD/xxxx/ is a sequence of hexadecimal digits.
+375,376d370
+< Note that <VALREF/fromCString/ accepts an unescaped single quote character,
+< but does not accept an unescaped double quote character.
+417,418c411
+< <VALREF SIGID="CHAR"/isUpper/ and, in general, the definition of a ``letter''
+< are locale-dependent.
+---
+> <VALREF SIGID="CHAR"/isUpper/ are locale-dependent.
+459,460c452,453
+<   <TD/<TT/isCntrl/ <ARG/c//
+<   <TD/<CD/isAscii <ARG/c/ <KW/andalso/ not (isPrint <ARG/c/)//
+---
+>   <TD/<TT/isCtrl/ <ARG/c//
+>   <TD/<CD/not (isPrint <ARG/c/)//
+464c457
+<   <TD/<CD/(#"\t" <= <ARG/c/ <KW/andalso/ <ARG/c/ <= #"\r") <KW/orelse/ <ARG/c/ = #" "/
+---
+>   <TD/<CD/(#"\t" <= <ARG/c/ <KW/andalso/ <ARG/c/ <= #"\r") <KW/orelse/ <ARG/c/ = #"\ "/
+diff -r Basis/ML-Doc/general.mldoc Basis.SAV/ML-Doc/general.mldoc
+42d41
+<       <EXN>Match
+45,48c44
+< 	Indicates that pattern matching failed in a <CD/val/ binding or,
+<     respectively, in a <CD/case/ expression or function application.
+<     This occurs when the matched value is not an instance of any of
+<     the supplied patterns. 
+---
+> 	Indicates that pattern matching failed in a <CD/val/ binding.
+77,79c73,81
+< 	of an operation.  Not raised by any function in the SML
+< 	Basis Library, but provided for conventional use by users
+<     and user-defined libraries.
+---
+> 	of an operation.  Not raised by any function built into the SML
+> 	Standard Library, but provided for conventional use by users
+>         and user-defined libraries.
+>     <SPEC>
+>       <EXN>Match
+> 	<COMMENT>
+> 	<PP>
+> 	Indicates that pattern matching failed in a
+> 	<CD/case/ expression or function application.
+88c90
+< 	the SML'90 Definition).
+---
+> 	the Definition).
+194,196c196,197
+< Some systems may provide a compatibility mode in which the
+< exceptions replaced from SML'90 (e.g., <CD/Abs/, <CD/Sqrt/) 
+< are provided at top-level
+---
+> Some systems may provide a compatibility mode in which the replaced
+> exceptions (e.g., <CD/Abs/, <CD/Sqrt/) are provided at top-level
+diff -r Basis/ML-Doc/generic-sock.mldoc Basis.SAV/ML-Doc/generic-sock.mldoc
+27c27
+< <STRUCTURE STRID="GenericSock" STATUS=OPTIONAL>
+---
+> <STRUCTURE STRID="GenericSock">
+diff -r Basis/ML-Doc/host-db.mldoc Basis.SAV/ML-Doc/host-db.mldoc
+25c25
+< <STRUCTURE STRID="NetHostDB" STATUS=OPTIONAL>
+---
+> <STRUCTURE STRID="NetHostDB">
+diff -r Basis/ML-Doc/ieee-float.mldoc Basis.SAV/ML-Doc/ieee-float.mldoc
+28c28
+< <STRUCTURE STRID="IEEEReal" STATUS=REQUIRED>
+---
+> <STRUCTURE STRID="IEEEReal" STATUS=OPTIONAL>
+61,67c61,62
+<       <TYPE><ID>decimal_approx
+<         <COMMENT>
+< 	    <PP>
+<         Provides a structured decimal representation of a real. 
+<     <SPEC>
+<       <VAL>fieldsOf<TY>decimal_approx -> {
+<         class : float_class,
+---
+>       <TYPE><ID>decimal_approx<TY>{
+>         kind : float_class,
+74,90c69,83
+<       Returns a concrete representation a <TYREF/decimal_approx/ value.
+<       The <CD/class/ field indicates the corresponding real class. 
+<       A <CD/sign/ value of <CD/true/
+<       indicates a negative number. 
+<       The integers in the <CD/digits/ list must
+<       be decimal digits, i.e., integers between 0 and 9.
+<     <PP>
+<       When <CD/class/ is <CD/NAN/, the value represents a NaN value.
+<       When it is <CD/ZERO/ or <CD/INF/, the value corresponds to zero
+<       or infinity, respectively, with its sign given by the <CD/sign/
+<       field.
+<       When <CD/class/ is <CD/NORMAL/ or <CD/SUBNORMAL/, with
+<       <CD/digits/ = <MATH/[d<SUB/1/, d<SUB/2/, ..., d<SUB/n/]/,
+<       the decimal approximation corresponds
+<       to the real number 
+<       <MATH/s * 0.d<SUB/1/d<SUB/2/...d<SUB/n/ * 10<SUP/<CD/exp///,
+<       where <MATH/s/ is -1 if <CD/sign/ is <CD/true/ and 1 otherwise.
+---
+>         Provides a structured decimal representation of a real. The
+>         <CD/kind/ field indicates the real class. If <CD/sign/ is <CD/true/,
+>         the number is negative. The integers in the <CD/digits/ list must
+>         be digits, i.e., between 0 and 9.
+>         <PP>
+>         When <CD/kind/ is <CD/NORMAL/ or <CD/SUBNORMAL/, a value of 
+>         of type <CD/decimal_approx/ with 
+>         <CD/digits/ = <MATH/[d<SUB/1/, d<SUB/2/, ..., d<SUB/n/]/ corresponds
+>         to the 
+>         real number <MATH/s * 0.d<SUB/1/d<SUB/2/...d<SUB/n/ 10<SUP/exp//,
+>         where <MATH/s/ is -1 if <CD/sign/ is <CD/true/ and 1 otherwise.
+>         When <CD/kind/ is <CD/ZERO/ or <CD/INF/, the value corresponds to zero
+>         or infinity, respectively, with its sign determined by <CD/sign/.
+>         When <CD/kind/ is <CD/NAN/, the value corresponds to an unspecified
+> 	NaN value.
+121c114
+<             <TD/<TT/nan//
+---
+>             <TD/<TT/nan/(<MATH/d<SUB/1/d<SUB/2/...d<SUB/n//)/
+129,131c122,123
+< If <CD/R/ is a structure matching <SIGREF/REAL/, then
+<           <CD/toString o R.toDecimal/ is equivalent to 
+<           <CD/R.fmt IEEEReal.EXACT/.
+---
+>           <CD/toString o REAL.toDecimal/ is equivalent to 
+>           <CD/REAL.fmt IEEEReal.EXACT/.
+133c125
+<       <VAL>scan<TY>(char, 'a) StringCvt.reader -> 'a -> (decimal_approx * 'a) option
+---
+>       <VAL>fromString<TY>string -> decimal_approx option
+136,137c128
+<           scan <ARG/s/
+<           scan <ARG/getc/ <ARG/src/
+---
+>           fromString <ARG/s/
+139,146c130,134
+<           returns <CD/<CONREF STRID="Option"/SOME/ (d,r)/ if the decimal
+< 	  approximation <CD/d/ can be parsed from a prefix of the
+< 	  character source <ARG/src/ using the character input function
+< 	  <ARG/getc/; <CD/r/ is the rest of the character source. 
+<       Initial whitespace is ignored. <CONREF STRID="Option"/NONE/ 
+<       is returned otherwise.
+<      <PP>
+<      <CD/scan/ accepts any of the following regular expressions:
+---
+>           returns <CD/<CONREF STRID="Option"/SOME/ r/ if the decimal
+>       approximation <CD/r/ can be parsed from a prefix
+> 	  of string <ARG/s/, ignoring initial whitespace; 
+>       <CONREF STRID="Option"/NONE/ is returned if no such conversion is possible.
+> <CD/fromString/ accepts any of the following regular expressions:
+148,150c136,138
+< [+~-]?(inf|infinity)
+< [+~-]?nan
+< [+~-]?(([0-9]+(\.[0-9]+)?)|(\.[0-9]+))(e[+~-]?[0-9]+)?
+---
+> [+~-]?(INF|INFINITY)
+> [+~-]?(NAN)
+> [+~-]?(([0-9]+(\.[0-9]+)?)|(\.[0-9]+))([eE][+~-]?[0-9]+)?
+154,157c142,146
+< In the first case, 
+< <CD/d/ will have <CD/class/ set to <CONREF STRID="IEEEReal"/INF/.
+< In the second case, <CD/class/ is set to <CONREF STRID="IEEEReal"/NAN/.
+< In both these cases, <CD/d/ will have <CD/digits = []/ and <CD/exp = 0/.
+---
+> In the first case, <CD/kind/ is set to <CONREF STRID="IEEEReal"/INF/,
+> <CD/digits = []/ and <CD/exp = 0/.
+> In the second case, <CD/kind/ is set to <CONREF STRID="IEEEReal"/NAN/ and
+> <CD/exp = 0/. If the optional digits are provided, they become the list
+> of digits; otherwise, <CD/digits = []/.
+162c151
+< then <CD/class/ is set to <CONREF STRID="IEEEReal"/ZERO/,
+---
+> <CD/kind/ is set to <CONREF STRID="IEEEReal"/ZERO/,
+167,184d155
+< <PP>
+<      The type of <VALREF STRID="IEEEReal"/scan/ can also be written as
+< <CODE>
+< (char, 'a) StringCvt.reader -> (decimal_approx, 'a) StringCvt.reader
+< </CODE>
+<     <SPEC>
+<       <VAL>fromString<TY>string -> decimal_approx option
+<         <COMMENT>
+<           <PROTOTY>
+<           fromString <ARG/s/
+<           </PROTOTY>
+<       returns <CD/<CONREF STRID="Option"/SOME/ r/ if the decimal
+<       approximation <CD/r/ can be parsed from a prefix
+< 	  of string <ARG/s/, ignoring initial whitespace; 
+<       <CONREF STRID="Option"/NONE/ is returned if no 
+<       such conversion is possible. The accepted strings are the same
+<       as those accepted by <VALREF/scan/. Indeed, this function is
+<       equivalent to <CD/StringCvt.scanString scan/.
+diff -r Basis/ML-Doc/imperative-io-fn.mldoc Basis.SAV/ML-Doc/imperative-io-fn.mldoc
+23,24c23,24
+< an imperative-style stream I/O facility in terms of a lazy functional
+< stream I/O facility.  In the imperative style, input and output
+---
+> an imperative-style stream IO facility in terms of a lazy functional
+> stream IO facility.  In the imperative style, input and output
+28c28
+< IO failures, and attempts to do I/O on closed streams.
+---
+> IO failures, and attempts to do IO on closed streams.
+33c33
+< and <STRREF/TextIO/ structures supply imperative-style I/O for most
+---
+> and <STRREF/TextIO/ structures supply imperative-style IO for most
+35c35
+< to construct I/O facilities with element
+---
+> to construct IO facilities with element
+37c37
+< or ones based on user-specified I/O primitives.
+---
+> or ones based on user-specified IO primitives.
+45,46c45,46
+< 	The particular functional stream I/O facility from which this
+< 	imperative I/O facility is derived.  Most functions
+---
+> 	The particular functional stream IO facility from which this
+> 	imperative IO facility is derived.  Most functions
+diff -r Basis/ML-Doc/imperative-io.mldoc Basis.SAV/ML-Doc/imperative-io.mldoc
+401c401
+< at the PrimIO layer of the I/O system.  This is done by extracting the
+---
+> at the PrimIO layer of the IO system.  This is done by extracting the
+diff -r Basis/ML-Doc/inet-sock.mldoc Basis.SAV/ML-Doc/inet-sock.mldoc
+24c24
+< <STRUCTURE STRID="INetSock" STATUS=OPTIONAL>
+---
+> <STRUCTURE STRID="INetSock">
+diff -r Basis/ML-Doc/integer.mldoc Basis.SAV/ML-Doc/integer.mldoc
+142,143c142
+<           returns the greatest integer less than or equal to the quotient 
+<           of <ARG/i/ by
+---
+>           returns the truncated quotient of the division of <ARG/i/ by
+160d158
+<       When defined,
+161a160
+> 	  it holds that
+176,177c175
+< 	  <ARG/j/, i.e., it computes <MATH>(<ARG/i/ / <ARG/j/)</MATH> and 
+<       then drops any fractional part of the quotient.  
+---
+> 	  <ARG/j/, i.e., <MATH><CD/trunc/ (<ARG/i/ / <ARG/j/)</MATH>.  
+370a369
+>   <SIGINSTANCE STATUS=OPTIONAL> <ID>Int8
+390,391c389
+<     precision integer supported, while the 
+<     type <TYREF STRID="LargeInt"/LargeInt.int/
+---
+>     precision integer supported, while the type <TYREF STRID="LargeInt"/LargeInt.int/
+393,401c391,392
+<     A structure <STRREF/Int{N}/ implements <TT/N/-bit integers.
+< <PP>
+<     If an implementation provides the <STRREF TOPID/IntInf/ structure, 
+<     then <STRREF TOPID/LargeInt/ must be the
+<     same structure as <STRREF/IntInf/ (viewed through a thinning 
+<     <SIGREF/INTEGER/ signature).
+<     Otherwise, if <STRREF/LargeInt/ is not the
+<     same as <STRREF/Int/, then there must be a
+<     structure <STRREF/Int{N}/ equal to <STRREF/LargeInt/.
+---
+>     If an implementation provides the <STRREF TOPID/IntInf/ structure, then the
+>     type <TYREF STRID="LargeInt"/LargeInt.int/ must be the same
+403,404c394,395
+<     The type <TYREF STRID="Position"/Position.int/ is used to represent 
+<     positions in files and I/O streams.
+---
+>     The type <TYREF STRID="Position"/Position.int/ is used to represent positions
+>     in files and I/O streams.
+diff -r Basis/ML-Doc/intro-chapter.mldoc Basis.SAV/ML-Doc/intro-chapter.mldoc
+10c10
+< <VERSION VERID="1.10" YEAR=2000 MONTH=5 DAY=27>
+---
+> <VERSION VERID="1.10" YEAR=1998 MONTH=1 DAY=7>
+18,19c18
+< complements the language described by 
+< the <IT/Definition of Standard ML (Revised)/<CITE KEY=defn-rev>.
+---
+> complements the language described by the <IT/Definition of Standard ML/.
+24,25d22
+<   <ITEM> focus attention on the attractiveness of SML as a language
+<     for programming in a wide variety of domains, e.g., systems programming.
+27a25,26
+>   <ITEM> focus attention on the attractiveness of SML as a language
+>     for programming in a wide variety of domains, e.g., systems programming.
+29,41c28
+< The original definition of the Standard ML language, which we refer
+< to as <IT/SML'90/ for the year in which the definition was 
+< published<CITE KEY=defn>,
+< specified a sparse basis library, adequate for pedagogical purposes,
+< but too limited for programming applications. In response, most
+< implementations of the language extended the basis with large
+< collections of generic libraries. With the libraries coming
+< from different sources, they tended to be incompatible, even when
+< implementing the same abstract types and functions. The result was
+< that, despite the standardization of the language, any 
+< significant SML program could be compiled on multiple 
+< implementations only if the programmer was willing to provide portable
+< libraries that relied only on the initial basis.
+---
+> 
+43c30,35
+< The Basis Library defined here is a fairly rich collection
+---
+> In this chapter, we discuss the principles and conventions used in the 
+> design of the
+> Library, and present a high-level view of the library structure.
+> 
+> <PP>
+> By design, the Basis Library is meant to provide a fairly rich collection
+45,56c37,41
+< programming or for more domain-specific libraries. 
+< It provides most of the basic types and operations expected by 
+< a working programmer,
+< and specifies that anyone using SML
+< can expect to find them in any implementation.
+< <PP>
+< Some goals in designing the library worked towards its expansion.
+< One, suggested above, was the desire for the library to be ``complete
+< enough.'' If using a type provided by the library, the programmer should 
+< be able to look in the defining structure and find the right function
+< or, at least, the functions needed to build the desired function easily.
+< In addition, the library attempts to provide similar
+---
+> programming or for more domain-specific libraries. One criterion
+> for inclusion in the Basis Library is that a type or value
+> requires compiler or run-time system support. In addition, the Library
+> defines a standard minimal environment that anyone using SML
+> can expect to find. The Library also attempts to provide similar
+59a45
+> 
+64,65c50
+< implement, require compiler or run-time system support, 
+< or are more concise or efficient 
+---
+> implement, require compiler support, or are more concise or efficient 
+67,94c52,53
+< Some exceptions were made for historical reasons or for perceived user convenience.
+< <PP>
+< The SML language has the rare property of being a practical, general-purpose
+< programming language possessing a well-defined, indeed formal, semantics. 
+< Following in this spirit, some SML-based libraries, e.g., CML, build on this
+< precision by supplying their own formal semantics. Although we viewed this
+< goal as beyond what we could provide for the Basis Library, we still felt very
+< strongly that the functions included here should be defined as precisely and
+< clearly as possible. In certain cases, we have provided a reference 
+< implementation for a function, or an equivalent expression for a 
+< function application using more
+< primitive library functions. In both cases, the idea is to specify accurately
+< what the result value should be, though not the time complexity. 
+< Since side-effects may occur when a high-level function such as <CD/map/
+< implies the traversal of a data structure, the library specifies the order
+< of traversal.
+< The description of a function provides the dynamic contraints
+< on the arguments, such as that an integer index into an array must be less
+< than the length of the array, and relates what happens when a function
+< invocation violates these constraints, typically raising a particular
+< exception.
+< We have tried to stipulate completely the format of return values, so
+< that, when a type's representation is visible, the programmer will know what 
+< to expect concretely, not just abstractly.
+< We have avoided unspecified or implementation-dependent 
+< results whenever possible.
+< Some functions were excluded from the library because we could 
+< not provide a clean specification for the function's behavior.
+---
+> Some exceptions were made for historical reasons.
+> 
+116,122d74
+< <PP>
+< Some structures have signatures that refer to types that will belong
+< to another structure. Rather than include the other structure as a
+< substructure, we have chosen to rebind just the necessary types.
+< It was felt that this makes the code easier to reorganize in large systems.
+< Explicit connections between structures are specified by sharing
+< constraints in the language, or by descriptions in the text.
+135,137d86
+< A system will typically provide multiple implementations of some
+< of these signatures; it is assumed that multiple implementations
+< are allowed for all of them.
+152,155d100
+<   <TD><SIGREF/IMPERATIVE_IO/</TD>
+<   <TD>Imperative I/O interface</TD>
+< </TR>
+< <TR>
+160,161c105,106
+<   <TD><SIGREF/MONO_ARRAY/</TD>
+<   <TD>Mutable monomorphic arrays</TD>
+---
+>   <TD><SIGREF/IMPERATIVE_IO/</TD>
+>   <TD>Imperative I/O interface</TD>
+164,165c109,110
+<   <TD><SIGREF/MONO_ARRAY_SLICE/</TD>
+<   <TD>Mutable monomorphic subarrays</TD>
+---
+>   <TD><SIGREF/MONO_ARRAY/</TD>
+>   <TD>Mutable monomorphic arrays</TD>
+172,175d116
+<   <TD><SIGREF/MONO_VECTOR_SLICE/</TD>
+<   <TD>Mutable monomorphic subvectors</TD>
+< </TR>
+< <TR>
+177c118
+<   <TD>System-call operations for I/O</TD>
+---
+>   <TD>System-call operations for IO</TD>
+196,199d136
+<   <TD><SIGREF/TEXT/</TD>
+<   <TD>Package for related text structures</TD>
+< </TR>
+< <TR>
+224,227d160
+<   <TD><SIGREF/ARRAY_SLICE/</TD>
+<   <TD>Mutable polymorphic subarrays</TD>
+< </TR>
+< <TR>
+311,314d243
+< <TR>
+<   <TD><SIGREF/VECTOR_SLICE/</TD>
+<   <TD>Subarrays of immutable polymorphic arrays</TD>
+< </TR>
+329,333d257
+<   <TD><STRREF/ArraySlice/</TD>
+<   <TD><SIGREF/ARRAY_SLICE/</TD>
+<   <TD>Mutable polymorphic subarrays</TD>
+< </TR>
+< <TR>
+341c265
+<   <TD>Low-level binary I/O</TD>
+---
+>   <TD>Low-level binary IO</TD>
+489,493d412
+<   <TD><STRREF/Text/</TD>
+<   <TD><SIGREF/TEXT/</TD>
+<   <TD>Default text package</TD>
+< </TR>
+< <TR>
+501c420
+<   <TD>Low-level text I/O</TD>
+---
+>   <TD>Low-level text IO</TD>
+519,523d437
+<   <TD><STRREF/VectorSlice/</TD>
+<   <TD><SIGREF/VECTOR_SLICE/</TD>
+<   <TD>Subarrays of immutable polymorphic arrays</TD>
+< </TR>
+< <TR>
+582,589d495
+<   <TD><SIGREF/GENERIC_SOCK/</TD>
+<   <TD>Extended socket addresses and types</TD>
+< </TR>
+< <TR>
+<   <TD><SIGREF/INET_SOCK/</TD>
+<   <TD>Support for Internet-domain sockets</TD>
+< </TR>
+< <TR>
+593,598d498
+< <!--
+<   == <TR>
+<   ==   <TD><SIGREF/LOCALE/</TD>
+<   ==   <TD>Support for locale-dependent applications</TD>
+<   == </TR>
+<   -->
+600,601c500,501
+<   <TD><SIGREF/MONO_ARRAY2/</TD>
+<   <TD>Mutable monomorphic 2-dimensional arrays</TD>
+---
+>   <TD><SIGREF/LOCALE/</TD>
+>   <TD>Support for locale-dependent applications</TD>
+603,608d502
+< <!--
+<   == <TR>
+<   ==   <TD><SIGREF/MULTIBYTE/</TD>
+<   ==   <TD>Support for multibyte characters</TD>
+<   == </TR>
+<   -->
+610,619c504,505
+<   <TD><SIGREF/NET_DB/</TD>
+<   <TD>Access to the system's network data base</TD>
+< </TR>
+< <TR>
+<   <TD><SIGREF/NET_HOST_DB/</TD>
+<   <TD>Access to the network host data base</TD>
+< </TR>
+< <TR>
+<   <TD><SIGREF/NET_PROT_DB/</TD>
+<   <TD>Access to the network protocol data base</TD>
+---
+>   <TD><SIGREF/MONO_ARRAY2/</TD>
+>   <TD>Mutable monomorphic 2-dimensional arrays</TD>
+622,623c508,509
+<   <TD><SIGREF/NET_SERV_DB/</TD>
+<   <TD>Access to the network services data base</TD>
+---
+>   <TD><SIGREF/MULTIBYTE/</TD>
+>   <TD>Support for multibyte characters</TD>
+670,673d555
+<   <TD><SIGREF/SOCKET/</TD>
+<   <TD>General socket types and operations</TD>
+< </TR>
+< <TR>
+675,683c557
+<   <TD>Unix-like process invocationoperations</TD>
+< </TR>
+< <TR>
+<   <TD><SIGREF/UNIX_SOCK/</TD>
+<   <TD>Support for sockets in the Unix address family</TD>
+< </TR>
+< <TR>
+<   <TD><SIGREF/WINDOWS/</TD>
+<   <TD>Various high-level, Windows-specific operations</TD>
+---
+>   <TD>Various Unix-specific operations</TD>
+724,728d597
+<   <TD><STRREF/GenericSock/</TD>
+<   <TD><SIGREF/GENERIC_SOCK/</TD>
+<   <TD>Extended socket addresses and types</TD>
+< </TR>
+< <TR>
+731,746c600
+<   <TD>Functor to convert stream I/O into imperative I/O</TD>
+< </TR>
+< <TR>
+<   <TD><STRREF/INetSock/</TD>
+<   <TD><SIGREF/INET_SOCK/</TD>
+<   <TD>Support for Internet-domain sockets</TD>
+< </TR>
+< <TR>
+<   <TD><STRREF/IntArray/</TD>
+<   <TD><SIGREF/MONO_ARRAY/</TD>
+<   <TD>Mutable arrays of default integers</TD>
+< </TR>
+< <TR>
+<   <TD><STRREF/IntArray2/</TD>
+<   <TD><SIGREF/MONO_ARRAY2/</TD>
+<   <TD>2-dimensional arrays of integers</TD>
+---
+>   <TD>Functor to convert stream I/O into imperative IO</TD>
+758a613,617
+>   <TD><STRREF/IntArray/</TD>
+>   <TD><SIGREF/MONO_ARRAY/</TD>
+>   <TD>Mutable arrays of default integers</TD>
+> </TR>
+> <TR>
+763a623,627
+>   <TD><STRREF/IntArray2/</TD>
+>   <TD><SIGREF/MONO_ARRAY2/</TD>
+>   <TD>2-dimensional arrays of integers</TD>
+> </TR>
+> <TR>
+768a633,637
+>   <TD><STRREF/IntVector/</TD>
+>   <TD><SIGREF/MONO_VECTOR/</TD>
+>   <TD>Immutable vectors of default integers</TD>
+> </TR>
+> <TR>
+771a641
+> </TR>
+773,775c643,645
+<   <TD><STRREF/IntVector/</TD>
+<   <TD><SIGREF/MONO_VECTOR/</TD>
+<   <TD>Immutable vectors of default integers</TD>
+---
+>   <TD><STRREF/Locale/</TD>
+>   <TD><SIGREF/LOCALE/</TD>
+>   <TD>Support for locale-dependent applications</TD>
+777,807c647,650
+< <!--
+<   == <TR>
+<   ==   <TD><STRREF/Locale/</TD>
+<   ==   <TD><SIGREF/LOCALE/</TD>
+<   ==   <TD>Support for locale-dependent applications</TD>
+<   == </TR>
+<   == <TR>
+<   ==   <TD><STRREF/MultiByte/</TD>
+<   ==   <TD><SIGREF/MULTIBYTE/</TD>
+<   ==   <TD>Support for multibyte characters</TD>
+<   == </TR>
+<   -->
+< <TR>
+<   <TD><STRREF/NetDB/</TD>
+<   <TD><SIGREF/NET_DB/</TD>
+<   <TD>Access to the system's network data base</TD>
+< </TR>
+< <TR>
+<   <TD><STRREF/NetHostDB/</TD>
+<   <TD><SIGREF/NET_HOST_DB/</TD>
+<   <TD>Access to the network host data base</TD>
+< </TR>
+< <TR>
+<   <TD><STRREF/NetProtDB/</TD>
+<   <TD><SIGREF/NET_PROT_DB/</TD>
+<   <TD>Access to the network protocol data base</TD>
+< </TR>
+< <TR>
+<   <TD><STRREF/NetServDB/</TD>
+<   <TD><SIGREF/NET_SERV_DB/</TD>
+<   <TD>Access to the network services data base</TD>
+---
+> <TR>
+>   <TD><STRREF/MultiByte/</TD>
+>   <TD><SIGREF/MULTIBYTE/</TD>
+>   <TD>Support for multibyte characters</TD>
+810,812c653,655
+<   <TD><TT/Pack/<IT/N/<TT/Big/</TD>
+<   <TD><SIGREF/PACK_WORD/</TD>
+<   <TD>Big-endian packing for <IT/N/-bit words</TD>
+---
+>   <TD><TT/PackReal/<IT/N/<TT/Big/</TD>
+>   <TD><SIGREF/PACK_REAL/</TD>
+>   <TD>Big-endian packing for <IT/N/-bit floats</TD>
+815,817c658,660
+<   <TD><TT/Pack/<IT/N/<TT/Little/</TD>
+<   <TD><SIGREF/PACK_WORD/</TD>
+<   <TD>Little-endian packing for <IT/N/-bit words</TD>
+---
+>   <TD><TT/PackReal/<IT/N/<TT/Little/</TD>
+>   <TD><SIGREF/PACK_REAL/</TD>
+>   <TD>Little-endian packing for <IT/N/-bit floats</TD>
+830,832c673,675
+<   <TD><TT/PackReal/<IT/N/<TT/Big/</TD>
+<   <TD><SIGREF/PACK_REAL/</TD>
+<   <TD>Big-endian packing for <IT/N/-bit floats</TD>
+---
+>   <TD><TT/Pack/<IT/N/<TT/Big/</TD>
+>   <TD><SIGREF/PACK_WORD/</TD>
+>   <TD>Big-endian packing for <IT/N/-bit words</TD>
+835,837c678,680
+<   <TD><TT/PackReal/<IT/N/<TT/Little/</TD>
+<   <TD><SIGREF/PACK_REAL/</TD>
+<   <TD>Little-endian packing for <IT/N/-bit floats</TD>
+---
+>   <TD><TT/Pack/<IT/N/<TT/Little/</TD>
+>   <TD><SIGREF/PACK_WORD/</TD>
+>   <TD>Little-endian packing for <IT/N/-bit words</TD>
+893d735
+< </TR>
+895,897c737,739
+<   <TD><STRREF/RealArray2/</TD>
+<   <TD><SIGREF/MONO_ARRAY2/</TD>
+<   <TD>2-dimensional arrays of floating-point numbers</TD>
+---
+>   <TD><STRREF/RealVector/</TD>
+>   <TD><SIGREF/MONO_VECTOR/</TD>
+>   <TD>Immutable vectors for default floats</TD>
+910,914d751
+<   <TD><TT/Real/<IT/N/<TT/Array2/</TD>
+<   <TD><SIGREF/MONO_ARRAY2/</TD>
+<   <TD>2-dimensional arrays of <IT/N/-bit floating-point numbers</TD>
+< </TR>
+< <TR>
+920,922c757,759
+<   <TD><STRREF/RealVector/</TD>
+<   <TD><SIGREF/MONO_VECTOR/</TD>
+<   <TD>Immutable vectors for default floats</TD>
+---
+>   <TD><STRREF/RealArray2/</TD>
+>   <TD><SIGREF/MONO_ARRAY2/</TD>
+>   <TD>2-dimensional arrays of floating-point numbers</TD>
+925,927c762,764
+<   <TD><STRREF/Socket/</TD>
+<   <TD><SIGREF/SOCKET/</TD>
+<   <TD>General socket types and operations</TD>
+---
+>   <TD><TT/Real/<IT/N/<TT/Array2/</TD>
+>   <TD><SIGREF/MONO_ARRAY2/</TD>
+>   <TD>2-dimensional arrays of <IT/N/-bit floating-point numbers</TD>
+940,949d776
+<   <TD><STRREF/Unix/</TD>
+<   <TD><SIGREF/UNIX/</TD>
+<   <TD>Unix-like process invocation</TD>
+< </TR>
+< <TR>
+<   <TD><STRREF/UnixSock/</TD>
+<   <TD><SIGREF/UNIX_SOCK/</TD>
+<   <TD>Support for sockets in the Unix address family</TD>
+< </TR>
+< <TR>
+980,984d806
+<   <TD><STRREF/WideText/</TD>
+<   <TD><SIGREF/TEXT/</TD>
+<   <TD>Text package for wide characters</TD>
+< </TR>
+< <TR>
+987c809
+<   <TD>Low-level wide char I/O</TD>
+---
+>   <TD>Low-level wide char IO</TD>
+995,999d816
+<   <TD><STRREF/Windows/</TD>
+<   <TD><SIGREF/WINDOWS/</TD>
+<   <TD>Various high-level, Windows-specific operations</TD>
+< </TR>
+< <TR>
+1005,1010c822
+<   <TD><TT/Word/<IT/N/<TT/Array/</TD>
+<   <TD><SIGREF/MONO_ARRAY/</TD>
+<   <TD>Monomorphic arrays of <IT/N/-bit words</TD>
+< </TR>
+< <TR>
+<   <TD><TT/Word/<IT/N/<TT/Array2/</TD>
+---
+>   <TD><STRREF/Word8Array2/</TD>
+1012c824
+<   <TD>Monomorphic 2-dimensional arrays of <IT/N/-bit words</TD>
+---
+>   <TD>2-dimensional arrays of 8-bit words</TD>
+1015,1017c827,829
+<   <TD><TT/Word/<IT/N/<TT/Vector/</TD>
+<   <TD><SIGREF/MONO_VECTOR/</TD>
+<   <TD>Monomorphic vectors of <IT/N/-bit words</TD>
+---
+>   <TD><STRREF/Unix/</TD>
+>   <TD><SIGREF/UNIX/</TD>
+>   <TD>Unix-like process invocation</TD>
+1022a835,864
+> <HEAD>Module dependencies</HEAD>
+> <PP>
+> We specify certain relationships among the modules.
+> <ITEMIZE>
+>   <ITEM> 
+>     If <STRREF/IntInf/ is provided, then <STRREF/LargeInt/ must be the
+>     same structure as <STRREF/IntInf/ (viewed through a thinned signature).
+>     Otherwise, if <STRREF/LargeInt/ is not the
+>     same as <STRREF/Int/, then there must be a
+>     structure <STRREF/Int{N}/ equal to <STRREF/LargeInt/.
+>   <ITEM>
+>     If <STRREF/LargeWord/ is not the
+>     same as <STRREF/Word/, then there must be a
+>     structure <STRREF/Word{N}/ equal to <STRREF/LargeWord/.
+>   <ITEM>
+>     If <STRREF/LargeReal/ is not the
+>     same as <STRREF/Real/, then there must be a
+>     structure <STRREF/Real{N}/ equal to <STRREF/LargeReal/.
+>   <ITEM>
+>     The signatures <SIGREF/MULTIBYTE/ and <SIGREF/LOCALE/, and the structures
+>     <STRREF/Locale/, <STRREF/WideChar/, <STRREF/WideString/, <STRREF/WideSubstring/,
+>     <STRREF/WideCharVector/, <STRREF/WideCharArray/ and <STRREF/WideTextIO/
+>     are optional as a group.
+>   <ITEM>
+>     The <STRREF TOPID/Posix/ structures and signatures plus <STRREF/SysWord/
+>     are optional as a group.
+> </ITEMIZE>
+> </SECTION>
+> 
+> <SECTION>
+1025,1026c867
+< To assist users in compiling programs written under the old basis, 
+< we require
+---
+> To permit users to compile programs written under the old basis, we require
+1042,1049d882
+< The <CD/SML90/ structure can aid in building old programs in the new
+< environment, but it may not be sufficient. For example, in the old
+< basis, the expression <MATH>1.0 / 0.0</MATH> caused an exception to be
+< raised whereas, in the new basis, this evaluates to infinity. In
+< addition, the programmer may need to alter the code to deal with
+< language changes such as the value restriction. (A summary of language
+< changes can be found in the appendix.)
+< <PP>
+1140,1141c973
+< in addition to the expected relational 
+< operators <CD/&GT;/, <CD/&GTE;/, <CD/&LT;/ and
+---
+> plus the expected relational operators <CD/&GT;/, <CD/&GTE;/, <CD/&LT;/ and
+1196,1197d1027
+< Additional discussion string scanning and formatting can be found in
+< Chapter ??.
+1215,1217c1045,1046
+< The revised SML Definition (1997) introduces a new <CD/char/ type and 
+< syntax for charcter literal.
+< The SML Standard Basis provides
+---
+> The revised SML Definition (1997) introduces a new <CD/char/ type and literal
+> syntax along. The SML Standard Basis provides
+1224c1053
+< The SML'90 basis did not provide a character type, only a string type.
+---
+> The old (pre-1997) basis did not provide a character type, only a string type.
+1246,1260c1075,1076
+< an expression on the left-hand side of a semicolon in a sequence
+< expression (i.e., <MATH/e sub 1/ in <MATH/(e sub 1 ; e sub 2)/)
+< does not have <CD/unit/ type.
+< <PP>
+< The use and need for exceptions should be limited. If possible, the
+< types of the arguments should prevent an exceptional condition from arising.
+< Functions that parse character input to create a value should return
+< an option type, rather than raise an exception, if the input is incorrectly
+< structured.
+< <PP>
+< As would be expected using SML, the library should minimize the use of state.
+< In particular, we note that although the library allows imperative-style
+< input, it provides stream-based input with unbounded lookahead and many
+< of the routines for converting characters to values work most naturally
+< in this style.
+---
+> an expression on the left-hand side of a semicolon does not have <CD/unit/
+> type.
+diff -r Basis/ML-Doc/io-explain.mldoc Basis.SAV/ML-Doc/io-explain.mldoc
+45c45
+< <ITEM> A uniform interface for unbuffered reading and
+---
+> <ITEM> Uniform interface for unbuffered reading and
+48,52d47
+< <DTAG> System I/O
+< <ITEM> Input and output operating directly on operating system file descriptors
+< using <STRREF STRID="Posix" NOLINK/Posix.IO/ or its Windows equivalent.
+< These structures are optional; an implementation may choose not to make
+< I/O at this level directly available to the SML programmer.
+54,57c49
+< <PP>
+< Most programmers will want to operate at the <SIGREF/STREAM_IO/
+< or <SIGREF/IMPERATIVE_IO/ layer; only for special purposes should
+< it be necessary to go to a lower layer of the I/O stack.
+---
+> Operations are provided to move between the levels.
+60,63c52,53
+< <STRREF TOPID/TextIO/, where the individual elements are characters
+< (<TYREF STRID="Char"/Char.char/), and <STRREF TOPID/BinIO/,
+< where the elements are unsigned bytes (<TYREF STRID="Word8"/Word8.word/).
+< The former provides a few additional operations to better support
+---
+> one for binary data and one for text.
+> The latter provides a few additional operations to better support
+65,87c55
+< Users can also create new instantiations of the hierarchy using
+< other element types.
+< The library defines optional functors, 
+< <FCTREF/ImperativeIO/ and <FCTREF/StreamIO/, to facilitate
+< building new I/O stacks.
+< 
+< <PP>
+< Concerning the semantics of I/O, those functions at the lowest level
+< are dependent on a given operating system and are described elsewhere.
+< The model provided by the primitive I/O layer is fairly basic, and is
+< adequately described in the <SIGREF/PRIM_IO/ manual pages below. Here
+< we concentrate on some of the concepts concerning the top two layers.
+< Further details can be found in the
+< <SIGREF/IMPERATIVE_IO/ and <SIGREF/STREAM_IO/ manual pages.
+< 
+< <PP>
+< A functional input stream, as provided by the stream I/O layer,
+< provides a stateless mechanism for reading data. A program reading from
+< an input stream receives the input, as would occur with traditional
+< I/O, plus a new input stream, which represents the rest of the stream.
+< To get additional input, the program reads from the new stream;
+< reading from the original stream will only supply the same input that the
+< program received originally.
+---
+> The library defines optional functors for building new I/O stacks.
+100c68
+< Each input stream <ARG/s/ can be viewed as a sequence of ``available'' elements
+---
+> Each input stream <ARG/f/ can be viewed as a sequence of ``available'' elements
+103c71
+< <CD/(<ARG/v/, <ARG/s'/) = input <ARG/s// it is guaranteed
+---
+> <CD/(<ARG/v/, <ARG/f'/) = input(<ARG/f/)/ it is guaranteed
+117c85
+< there is no mechanism for performing more output, so any output operations
+---
+> there is no mechanism for outputting more, so any output operations
+132,134c100,102
+< system call that returns zero bytes is interpreted to mean that the
+< current end of stream has been reached. The next read to that stream,
+< however, could return more bytes. This situation would arise if, for example,
+---
+> system call that returns zero bytes is interpreted to mean end of
+> stream.  However, the next read to that stream could return
+> more bytes.  This situation would arise if, for example,
+164,165c132,133
+< Thus, a file may have more than one ``end-of-stream.'' If the
+< ``end-of-stream'' condition holds, an input
+---
+> Thus, a file may have more than one ``end-of-stream.'' If ``end-of-stream'' 
+> condition holds, an input
+179c147
+< Input at the imperative I/O level simply rebinds the reference
+---
+> In addition, input at the imperative I/O level rebind the reference
+Only in Basis/ML-Doc: io-over.mldoc
+diff -r Basis/ML-Doc/io.mldoc Basis.SAV/ML-Doc/io.mldoc
+130c130
+< It is possible that multiple error conditions hold when an I/O function 
+---
+> It is possible that multiple error conditions hold when an IO function 
+diff -r Basis/ML-Doc/large-int.mldoc Basis.SAV/ML-Doc/large-int.mldoc
+10c10
+< <VERSION VERID="1.5" YEAR=2000 MONTH=5 DAY=26>
+---
+> <VERSION VERID="1.4" YEAR=1997 MONTH=10 DAY=6>
+24,25c24,25
+< Operations in <STRREF NOLINK/IntInf/ that return a value of 
+< type <TYREF STRID="IntInf"/IntInf.int/ should never raise the
+---
+> Note that operations in <STRREF NOLINK/IntInf/ that return a value of 
+> type <TYREF STRID="IntInf"/IntInf.int/ will never raise the
+27,30d26
+< Note that, as it extends the <SIGREF/INTEGER/ interface, 
+< <STRREF NOLINK/IntInf/ defines a type <CD/int/. Any use of
+< this type below, unmodified by a structure, refers to the local
+< type <CD/int/ defined in <STRREF NOLINK/IntInf/.
+diff -r Basis/ML-Doc/list-pair.mldoc Basis.SAV/ML-Doc/list-pair.mldoc
+10c10
+< <VERSION VERID="1.5" YEAR=2000 MONTH=5 DAY=28>
+---
+> <VERSION VERID="1.4" YEAR=1996 MONTH=4 DAY=8>
+21,24c21,22
+< The operations fall into two categories. Those in the first category, 
+< whose names do not end in <CD/``Eq''/, 
+< do not require that the lists have the same length.
+< When the lists are of uneven lengths, the excess elements from the
+---
+> These operations do not require that the lists have the same length;
+> when the lists are of uneven lengths, the excess elements from the
+26,29d23
+< The operations in the second category,
+< whose names have the suffix <CD/``Eq''/, 
+< differ from their similarly named operations in the first category only
+< when the list arguments have unequal lengths.
+34,39d27
+<       <EXN>UnequalLengths
+<     <COMMENT>
+<     <PP>
+<     This exception is raised by those functions that require
+<     arguments of identical length.
+<   <SPEC>
+41,42d28
+<   <VAL>zipEq<TY>('a list * 'b list) -> ('a * 'b) list
+<       <RAISES><EXNREF STRID="ListPair"/UnequalLengths/
+46,47d31
+<       <PROTO>
+<       zipEq (<ARG/l1/, <ARG/l2/)
+51,55c35,37
+<       the second elements comprising the second element of the result, 
+<       and so on.
+<       If the lists are of unequal lengths, <VALREF/zip/ ignores the excess 
+<       elements from the tail of the longer one, while <VALREF/zipEq/
+<       raises the exception <EXNREF STRID="ListPair"/UnequalLengths/.
+---
+>       the second elements comprising the second element of the result, and so on.
+>       If the lists are of unequal lengths, the excess elements from the tail
+>       of the longer one are ignored.
+66,67d47
+<   <VAL>mapEq<TY>('a * 'b -> 'c) -> ('a list * 'b list) -> 'c list
+<       <RAISES><EXNREF STRID="ListPair"/UnequalLengths/
+71,72d50
+<       <PROTO>
+<       mapEq <ARG/f/ (<ARG/l1/, <ARG/l2/)
+74c52
+<       map the function <ARG/f/ over the list of pairs of elements from
+---
+>       maps the function <ARG/f/ over the list of pairs of elements from
+76,84c54,57
+<       If the lists are of unequal lengths, the former ignores the excess 
+<       elements from the tail of the longer one, and the latter
+<       raises <EXNREF STRID="ListPair"/UnequalLengths/.
+<       The above expressions are respectively equivalent to:
+<       <CODE>
+<       <VALREF STRID="List">List.map</> <ARG/f/ (zip (<ARG/l1/, <ARG/l2/))
+<       <VALREF STRID="List">List.map</> <ARG/f/ (zipEq (<ARG/l1/, <ARG/l2/))
+<       </CODE>
+<       ignoring possible side-effects of the function <ARG/f/.
+---
+>       If the lists are of unequal lengths, the excess elements from the tail
+>       of the longer one are ignored.
+>       The above expression is equivalent to:
+>       <CD/<VALREF STRID="List">List.map</> <ARG/f/ (zip (<ARG/l1/, <ARG/l2/))/.
+87,88d59
+<   <VAL>appEq<TY>('a * 'b -> unit) -> ('a list * 'b list) -> unit
+<       <RAISES><EXNREF STRID="ListPair"/UnequalLengths/
+92,93d62
+<       <PROTO>
+<       appEq <ARG/f/ (<ARG/l1/, <ARG/l2/)
+95c64
+<       apply the function <ARG/f/ to the list of pairs of elements from
+---
+>       applies the function <ARG/f/ to the list of pairs of elements from
+97,112c66,73
+<       If the lists are of unequal lengths, the former ignores the excess 
+<       elements from the tail of the longer one, and the latter
+<       raises <EXNREF STRID="ListPair"/UnequalLengths/.
+<       <CODE>
+<       <VALREF STRID="List">List.app</> <ARG/f/ (zip (<ARG/l1/, <ARG/l2/))
+<       <VALREF STRID="List">List.app</> <ARG/f/ (zipEq (<ARG/l1/, <ARG/l2/))
+<       </CODE>
+<       ignoring possible side-effects of the function <ARG/f/.
+<   <SPEC>
+<     <VAL>foldl<TY>(('a * 'b * 'c) -> 'c) -> 'c -> ('a list * 'b list) -> 'c
+<     <VAL>foldr<TY>(('a * 'b * 'c) -> 'c) -> 'c -> ('a list * 'b list) -> 'c
+<     <VAL>foldlEq<TY>(('a * 'b * 'c) -> 'c) -> 'c -> ('a list * 'b list) -> 'c
+<         <RAISES><EXNREF STRID="ListPair"/UnequalLengths/
+<     <VAL>foldrEq<TY>(('a * 'b * 'c) -> 'c) -> 'c -> ('a list * 'b list) -> 'c
+<         <RAISES><EXNREF STRID="ListPair"/UnequalLengths/
+<       <COMMENT>
+---
+>       If the lists are of unequal lengths, the excess elements from the tail
+>       of the longer one are ignored.
+>       The above expression is equivalent to:
+>       <CD/<VALREF STRID="List">List.app</> <ARG/f/ (zip (<ARG/l1/, <ARG/l2/))/.
+>     <SPEC>
+>       <VAL>foldl<TY>(('a * 'b * 'c) -> 'c) -> 'c -> ('a list * 'b list) -> 'c
+>       <VAL>foldr<TY>(('a * 'b * 'c) -> 'c) -> 'c -> ('a list * 'b list) -> 'c
+>         <COMMENT>
+117,120d77
+<           <PROTO>
+<           foldlEq <ARG/f/ <ARG/c/ (<ARG/l1/, <ARG/l2/)
+<           <PROTO>
+<           foldrEq <ARG/f/ <ARG/c/ (<ARG/l1/, <ARG/l2/)
+123c80
+<       lists <ARG/l1/ and <ARG/l2/ starting with the value  <ARG/c/.
+---
+>       lists <ARG/l1/ and <ARG/l2/.
+125,132c82,85
+<       <CODE>
+<       <VALREF STRID="List">List.foldl</> <ARG/f'/ <ARG/c/ (zip (<ARG/l1/, <ARG/l2/))
+<       <VALREF STRID="List">List.foldr</> <ARG/f'/ <ARG/c/ (zip (<ARG/l1/, <ARG/l2/))
+<       <VALREF STRID="List">List.foldl</> <ARG/f'/ <ARG/c/ (zipEq (<ARG/l1/, <ARG/l2/))
+<       <VALREF STRID="List">List.foldr</> <ARG/f'/ <ARG/c/ (zipEq (<ARG/l1/, <ARG/l2/))
+<       </CODE>
+<       where <ARG/f'/ is <CD/fn ((a,b),c) => f(a,b,c)/ and
+<       ignoring possible side-effects of the function <ARG/f/.
+---
+>       <CD/<VALREF STRID="List">List.foldl</> <ARG/f'/ <ARG/c/ (zip (<ARG/l1/, <ARG/l2/))/
+>       and
+>       <CD/<VALREF STRID="List">List.foldr</> <ARG/f'/ <ARG/c/ (zip (<ARG/l1/, <ARG/l2/))/
+>       where <ARG/f'/ is <CD/fn ((a,b),c) => f(a,b,c)/.
+145,173c98,100
+<       <CODE>
+<       <VALREF STRID="List">List.all</> <ARG/pred/ (zip (<ARG/l1/, <ARG/l2/))
+<       <VALREF STRID="List">List.exists</> <ARG/pred/ (zip (<ARG/l1/, <ARG/l2/))
+<       </CODE>
+<   <SPEC>
+<   <VAL>allEq<TY>('a * 'b -> bool) -> ('a list * 'b list) -> bool
+<     <COMMENT>
+<       <PROTOTY>
+<         allEq <ARG/pred/ (<ARG/l1/, <ARG/l2/)
+<       </PROTOTY>
+<       returns <CD/true/ if <ARG/l1/ and <ARG/l2/ have equal length and the
+<       all pairs of elements satisfy the predicate <ARG/pred/. That is, the
+<       the expression is equivalent to:
+<       <CODE>
+<         (<VALREF STRID="List">List.length</> <ARG/l1/ = <VALREF STRID="List">List.length</> <ARG/l2/) andalso
+<       (<VALREF STRID="List">List.all</> <ARG/pred/ (zip (<ARG/l1/, <ARG/l2/)))
+<       </CODE>
+<       This function does not appear to have any nice algebraic relations
+<       with other functions, but it is included as providing a useful
+<       notion of equality, analogous to the notion of equality of lists
+<       over equality types.
+<       <IMPLNOTE>
+<       The implementation is simple
+<       <CODE>
+<         fun allEq p ([], []) = true
+<           | allEq p (x::xs, y::ys) = p(x, y) andalso allEq p (xs, ys)
+<           | allEq _ _ = false
+<       </CODE>
+<       </IMPLNOTE>
+---
+>       <CD/<VALREF STRID="List">List.all</> <ARG/pred/ (zip (<ARG/l1/, <ARG/l2/))/
+>       and
+>       <CD/<VALREF STRID="List">List.exists</> <ARG/pred/ (zip (<ARG/l1/, <ARG/l2/))/.
+176,179c103,113
+<   Note that a function requiring equal length arguments may determine 
+<   this lazily, i.e., it may act as though the lists have equal length
+<   and invoke the user-supplied function argument, but raise the exception
+<   when it arrives at the end of one list before the end of the other.
+---
+> <RATIONALE>
+>   Another approach to these functions would be to raise an exception when the
+>   argument lists are of unequal length.
+>   We chose not to do this, because comparing the lists for length conflicts
+>   with the short-circuit evaluation of <CD/all/ and <CD/exists/.
+> <PP>
+>   There is some merit in defining <CD/all/ to be false when the two lists
+>   have different lengths, but this would involve either giving up the
+>   relationship between <CD/all/ and <CD/exists/, or redefining <CD/exists/
+>   to return true for unequal length lists.
+> </RATIONALE>
+diff -r Basis/ML-Doc/list.mldoc Basis.SAV/ML-Doc/list.mldoc
+10c10
+< <VERSION VERID="1.9" YEAR=2000 MONTH=5 DAY=24>
+---
+> <VERSION VERID="1.8" YEAR=1997 MONTH=10 DAY=4>
+37,40d36
+< <PP>
+< Following the concrete syntax provided by the list <KW/::/ operator,
+< we head of a list appears leftmost. Thus, a traversal of a list from
+< left to right starts with the head, then recurses on the tail.
+42c38
+< <STRUCTURE STRID="List" STATUS=REQUIRED>
+---
+> <STRUCTURE STRID="List">
+112c108
+< <CD/(int,char list) StringCvt.reader/ and can be used to scan decimal
+---
+> <CD/(int,char list) StringCvt.reader/ and scan be used to scan decimal
+133c129
+< if <MATH/<ARG/i/ &LESS; 0/ or <MATH/<ARG/i/ &GREATER; <CD/length/ <ARG/l//.
+---
+> if <MATH/<ARG/i/ &LESS; 0/ or <MATH/<ARG/i/ &GREATEREQ; <CD/length/ <ARG/l//.
+195,196c191
+< to right, returning a list of results, with 
+< <CONREF STRID="Option">SOME</> stripped, where <ARG/f/ was
+---
+> to right, returning a list of results where <ARG/f/ was
+199,202d193
+< The above expression is equivalent to:
+< <CODE>
+< ((map valOf) o (filter isSome) o (map <ARG/f/)) <ARG/l/
+< </CODE>
+224c215
+< as they occurred in the argument list.
+---
+> as the occurred in the argument list.
+299,306d289
+<     <SPEC>
+<       <VAL>collate<TY>('a * 'a -> order) -> ('a list * 'a list) -> order
+<         <COMMENT>
+<           <PROTOTY>
+<           collate <ARG/f/ (<ARG/l1/, <ARG/l2/)
+<           </PROTOTY>
+<           performs lexicographic comparison of the two lists using the
+<           given ordering <ARG/f/ on the list elements.
+diff -r Basis/ML-Doc/locale.mldoc Basis.SAV/ML-Doc/locale.mldoc
+58c58
+< <PP>      The locale's format for numeric values; used, e.g., by formatted I/O.
+---
+> <PP>          The locale's format for numeric values; used, e.g., by formatted IO.
+Only in Basis/ML-Doc: manpages.mldoc
+diff -r Basis/ML-Doc/math.mldoc Basis.SAV/ML-Doc/math.mldoc
+8c8
+< <VERSION VERID="1.8" YEAR=2000 MONTH=5 DAY=25>
+---
+> <VERSION VERID="1.7" YEAR=1996 MONTH=5 DAY=15>
+46,47c46,47
+< <PP>          Denotes the base <TT>e</TT> (2.718281828...)
+<               of the natural logarithm.
+---
+> <PP>          Denotes the base of the natural logarithm <TT>e</TT>
+> 	  (2.718281828...).
+114c114
+< 	  is the same as the quadrant of the point (<ARG/x/,<ARG/y/).
+---
+> 	  is the same as the quadrant of the point (<ARG/y/,<ARG/x/).
+116c116
+< 	  and the result is <MATH><CD/sign/(<ARG/y/) * &PI;/2</MATH>.
+---
+> 	  and the result is <MATH><CD/sign/(<ARG/y/ * &PI;/2)</MATH>.
+138c138
+<   <TD/<ARG/x/,  <MATH/0 &LESS; <ARG/x///
+---
+>   <TD/<ARG/x/,  <MATH/0 &LESS; x//
+148c148
+<   <TD/<ARG/x/, <MATH/<ARG/x/ &LESS; 0//
+---
+>   <TD/<ARG/x/, <MATH/x &LESS; 0//
+157c157
+<   <TD/<ARG/y/, <MATH/0 &LESS; <ARG/y///
+---
+>   <TD/<ARG/y/, <MATH/0 &LESS; y//
+162c162
+<   <TD/<ARG/y/, <MATH/<ARG/y/ &LESS; 0//
+---
+>   <TD/<ARG/y/, <MATH/y &LESS; 0//
+167c167
+<   <TD/<MATH/&PLUSMINUS;/<ARG/y/, finite <MATH/<ARG/y/ &GREATER; 0//
+---
+>   <TD/<MATH/&PLUSMINUS;/<ARG/y/, finite <MATH/y &GREATER; 0//
+172c172
+<   <TD/<MATH/&PLUSMINUS;/<ARG/y/, finite <MATH/<ARG/y/ &GREATER; 0//
+---
+>   <TD/<MATH/&PLUSMINUS;/<ARG/y/, finite <MATH/y &GREATER; 0//
+178c178
+<   <TD/<ARG/x/, finite <MATH/<ARG/x///
+---
+>   <TD/<ARG/x/, finite <MATH/x//
+281c281
+<   <TD/<MATH/<ARG/y/ &NOTEQ; 0//
+---
+>   <TD/<MATH/y &NOTEQ; 0//
+290c290
+<   <TD/finite <MATH/<ARG/x/ &LESS; 0//
+---
+>   <TD/finite <MATH/x &LESS; 0//
+296c296
+<   <TD/<MATH/<ARG/y/ &LESS; 0/, odd integer/
+---
+>   <TD/<MATH/y &LESS; 0/, odd integer/
+301c301
+<   <TD/finite <MATH/<ARG/y/ &LESS; 0/, not odd integer/
+---
+>   <TD/finite <MATH/y &LESS; 0/, not odd integer/
+306c306
+<   <TD/<MATH/<ARG/y/ &GREATER; 0/, odd integer/
+---
+>   <TD/<MATH/y &GREATER; 0/, odd integer/
+311c311
+<   <TD/<MATH/<ARG/y/ &GREATER; 0/, not odd integer/
+---
+>   <TD/<MATH/y &GREATER; 0/, not odd integer/
+Only in Basis/ML-Doc: mono-array-slice.mldoc
+diff -r Basis/ML-Doc/mono-array.mldoc Basis.SAV/ML-Doc/mono-array.mldoc
+10c10
+< <VERSION VERID="1.11" YEAR=2000 MONTH=6 DAY=11>
+---
+> <VERSION VERID="1.10" YEAR=1998 MONTH=7 DAY=21>
+36,40d35
+<       <COMMENT>
+<       <PP>
+<       The corresponding monomorphic vector type. We denote the
+<       length of a vector <ARG/vec/ of type <TYREF/vector/ by
+<       <MATH/<NORM/<ARG/vec///.
+116c111,112
+<       <VAL>vector<TY>array -> vector
+---
+>       <VAL>extract<TY>(array * int * int option) -> vector
+>         <RAISES><EXNREF STRID="General"/Subscript/
+119c115
+<           vector <ARG/arr/
+---
+>           extract <ARG/slice/
+121,125c117,120
+<           generates a vector from <ARG/arr/. Specifically, if
+<           <ARG/vec/ is the resulting vector, we have
+<           <MATH/<NORM/<ARG/vec// = length <ARG/arr// and, for
+<           <MATH/0 &LESSEQ; <ARG/i/ &LESS; <CD/length/ <ARG/arr//,
+<           element <ARG/i/ of <ARG/vec/ is <CD/sub (<ARG/arr/, i)/.
+---
+> 	  extracts the <AREF TAG="array-vector-slice">array slice</AREF>
+> 	  <ARG/slice/ from the array <ARG/arr/, and returns it as a vector.
+> 	  If the slice is not <AREF TAG="valid-slices">valid,</AREF> then
+> 	  the exception <EXNREF STRID="General"/Subscript/ is raised.
+127c122
+<       <VAL>copy<TY>{src : array, dst : array, di : int} -> unit
+---
+>       <VAL>copy<TY>{src : array, si : int, len : int option, dst : array, di : int} -> unit
+129c124
+<       <VAL>copyVec<TY>{src : vector, dst : array, di : int} -> unit
+---
+>       <VAL>copyVec<TY>{src : vector, si : int, len : int option, dst : array, di : int} -> unit
+133,135c128,130
+<           copy {<ARG/src/, <ARG/dst/, <ARG/di/}
+<           <PROTO>
+<           copyVec {<ARG/src/, <ARG/dst/, <ARG/di/}
+---
+>             copy {<ARG/src/, <ARG/si/, <ARG/len/, <ARG/dst/, <ARG/di/}
+> 	  <PROTO>
+>             copyVec {<ARG/src/, <ARG/si/, <ARG/len/, <ARG/dst/, <ARG/di/}
+137,145c132,143
+< 	  copy the given array or vector
+< 	  into the array <ARG/dst/, with the <CD/i/th element in <ARG/src/,
+<       for <MATH/0 &LESSEQ; <ARG/i/ &LESS; <ARG/len//
+<       where <ARG/len/ is the length of <ARG/src/,
+<       being copied to
+< 	  position <MATH/<ARG/di/ + <ARG/i// in the destination array.
+< 	  If <MATH><ARG/di/ &LESS; 0</MATH> or if
+< 	  <MATH><VALREF STRID="Array"/length/ <ARG/dst/ &LESS; <ARG/di/+<ARG/len/</MATH>,
+<       then the
+---
+> 	  copy the slice specified by <CD>(<ARG/src/, <ARG/si/, <ARG/len/)</CD>
+> 	  into the array <ARG/dst/, with element <ARG/si/ being copied to
+> 	  position <ARG/di/ in the destination array.
+> 	  The function <VALREF SIGID="MONO_ARRAY"/copy/ takes an <AREF TAG="array-vector-slice">array
+> 	  slice</AREF> as its source, while the function  <CD/copyVec/ uses
+> 	  a vector slice.
+> <!-- SHOULD THERE BE AN ANCHOR FOR "vector slice: TOO? -->
+> 	  If the source slice is not <AREF TAG="valid-slices">valid,</AREF>
+> 	  then the <EXNREF STRID="General"/Subscript/ exception is raised.
+> 	  Likewise, if <MATH><ARG/di/ &LESS; 0</MATH> or if
+> 	  <MATH><NORM><ARG/dst/</NORM> &LESS; <ARG/di/+n</MATH>, where
+> 	  <MATH/n/ is the number of elements copied, then the
+148,150c146,147
+< The <CD/copy/ function must correctly handle the case in which
+< <ARG/dst/ and the base array of <ARG/src/
+< are equal, and the source and destination regions overlap.
+---
+> The <CD/copy/ function must correctly handle the case in which <ARG/src/
+> and <ARG/dst/ are equal, and the source and destination slices overlap.
+152d148
+<     <SPECBREAK NEWLINE>
+154c150,151
+<       <VAL>appi<TY>((int * elem) -> unit) -> array -> unit
+---
+>       <VAL>appi<TY>((int * elem) -> unit) -> (array * int * int option) -> unit
+>         <RAISES><EXNREF STRID="General"/Subscript/
+158c155
+<           appi <ARG/f/ <ARG/arr/
+---
+>           appi <ARG/f/ <ARG/slice/
+164,165c161,163
+< 	  The more general <VALREF SIGID="MONO_ARRAY"/appi/ function
+< 	  supplies both the element and the element's index to the
+---
+> 	  The more general <VALREF SIGID="MONO_ARRAY"/appi/ function applies <ARG/f/ to the elements
+> 	  of the <AREF TAG="array-vector-slice">array slice</AREF> <ARG/slice/
+> 	  and supplies both the element and the element's index to the
+167,188c165,170
+< 	  The expression <CD>app <ARG/f/ <ARG/arr/</CD>
+< 	  is equivalent to:
+< 	  <CODE>
+<       appi (<ARG/f/ o #2) <ARG/arr/
+<       </CODE>
+<     <SPECBREAK>
+<     <SPEC>
+<       <VAL>modifyi<TY>((int * elem) -> elem) -> array -> unit
+<       <VAL>modify<TY>(elem -> elem) -> array -> unit
+<         <COMMENT>
+<           <PROTOTY>
+<             modifyi <ARG/f/ <ARG/arr/
+< 	  <PROTO>
+<             modify <ARG/f/ <ARG/arr/
+<           </PROTOTY>
+< 	  apply the function <ARG/f/ to the elements of an array in
+< 	  left to right order (i.e., increasing indices), and replace each
+< 	  element with the result of applying <ARG/f/.
+< 	  The more general <VALREF SIGID="MONO_ARRAY"/modifyi/ function
+< 	  supplies both the element and the element's index to the
+< 	  function <ARG/f/.
+< 	  The expression <CD>modify <ARG/f/ <ARG/arr/</CD>
+---
+> 	  If <ARG/slice/ is not <AREF TAG="valid-slices">valid</AREF>, then
+> 	  the exception <EXNREF STRID="General"/Subscript/ is raised.
+> 	  <PP>
+> 	  The function <VALREF SIGID="MONO_ARRAY"/app/ applies <ARG/f/ to the whole array and
+> 	  does not supply the element index to <ARG/f/.
+> 	  Thus the expression <CD>app <ARG/f/ <ARG/arr/</CD>
+191,192c173,174
+<       modifyi (<ARG/f/ o #2) <ARG/arr/
+<       </CODE>
+---
+> appi (<ARG/f/ o #2) (<ARG/arr/, 0, NONE)
+> </CODE>
+194,195c176,179
+<       <VAL>foldli<TY>((int * elem * 'b) -> 'b) -> 'b -> array -> 'b
+<       <VAL>foldri<TY>((int * elem * 'b) -> 'b) -> 'b -> array -> 'b
+---
+>       <VAL>foldli<TY>((int * elem * 'b) -> 'b) -> 'b -> (array * int * int option) -> 'b
+>         <RAISES><EXNREF STRID="General"/Subscript/
+>       <VAL>foldri<TY>((int * elem * 'b) -> 'b) -> 'b -> (array * int * int option) -> 'b
+>         <RAISES><EXNREF STRID="General"/Subscript/
+200c184
+<             foldli <ARG/f/ <ARG/init/ <ARG/arr/
+---
+>             foldli <ARG/f/ <ARG/init/ <ARG/slice/
+202c186
+<             foldri <ARG/f/ <ARG/init/ <ARG/arr/
+---
+>             foldri <ARG/f/ <ARG/init/ <ARG/slice/
+208,217c192,200
+<       fold the function <ARG/f/ over the elements of an array, using
+<       the value <ARG/init/ as the initial value.
+<       The functions <VALREF SIGID="MONO_ARRAY"/foldli/ and 
+<       <VALREF SIGID="MONO_ARRAY"/foldl/ apply the function <ARG/f/
+<       from left to right (increasing indices), while the functions
+<       <VALREF SIGID="MONO_ARRAY"/foldri/ and <VALREF SIGID="MONO_ARRAY"/foldr/ 
+<       work from right to left (decreasing indices).
+<       The more general functions <VALREF SIGID="MONO_ARRAY"/foldli/ 
+<       and <VALREF SIGID="MONO_ARRAY"/foldri/ supply <ARG/f/ with 
+<       the array index of the corresponding element.
+---
+> 	  fold the function <ARG/f/ over the elements of an array, using
+> 	  the value <ARG/init/ as the initial value.
+> 	  The functions <VALREF SIGID="MONO_ARRAY"/foldli/ and <VALREF SIGID="MONO_ARRAY"/foldl/ apply the function <ARG/f/
+> 	  from left to right (increasing indices), while the functions
+> 	  <VALREF SIGID="MONO_ARRAY"/foldri/ and <VALREF SIGID="MONO_ARRAY"/foldr/ work from right to left (decreasing
+> 	  indices).
+> 	  The more general functions <VALREF SIGID="MONO_ARRAY"/foldli/ and <VALREF SIGID="MONO_ARRAY"/foldri/ work on
+> 	  <AREF TAG="array-vector-slice">array slices</AREF>, and supply both the
+> 	  element and the element's index to the function <ARG/f/.
+219c202,204
+< 	  The expression <CD>foldl <ARG/f/ <ARG/init/ <ARG/arr/</CD>
+---
+> 	  The functions <VALREF SIGID="MONO_ARRAY"/foldl/ and <VALREF SIGID="MONO_ARRAY"/foldr/ work on the whole array
+> 	  <ARG/arr/ and do not supply the element index to <ARG/f/.
+> 	  Thus the expression <CD>foldl <ARG/f/ <ARG/init/ <ARG/arr/</CD>
+222c207,208
+< foldli (fn (_, <ARG/a/, <ARG/x/) => <ARG/f/(<ARG/a/, <ARG/x/)) <ARG/init/ <ARG/arr/
+---
+> foldl (fn (_, <ARG/a/, <ARG/x/) => <ARG/f/(<ARG/a/, <ARG/x/))
+>   <ARG/init/ (<ARG/arr/, 0, NONE)
+224,225d209
+<           The analogous equivalences hold for <VALREF SIGID="MONO_ARRAY"/foldri/ 
+<           and <VALREF SIGID="MONO_ARRAY"/foldr/.
+233d216
+<     <SPECBREAK>
+235,276c218,219
+<       <VAL>findi<TY>((int * elem) -> bool) -> array -> (int * elem) option
+<       <VAL>find<TY>(elem -> bool) -> array -> elem option
+<         <COMMENT>
+<           <PROTOTY>
+<           findi <ARG/f/ <ARG/arr/
+<           <PROTO>
+<           find <ARG/f/ <ARG/arr/
+<           </PROTOTY>
+<           apply <ARG/f/ to each element of the array
+< <ARG/arr/, from left to right (i.e., increasing indices), until 
+< a <CD>true</> value is returned. If this occurs, the functions return
+< the element. The more general version <VALREF/appi/ also supplies <ARG/f/ with
+< the array index of the element and, upon finding an entry
+< satisfying the predicate, returns that index with the element.
+<     <SPECBREAK>
+<     <SPEC>
+<       <VAL>exists<TY>(elem -> bool) -> array -> bool
+<         <COMMENT>
+<           <PROTOTY>
+<           exists <ARG/f/ <ARG/arr/
+<           </PROTOTY>
+<           applies <ARG/f/ to each element <ARG/x/ of the array
+< <ARG/arr/, from left to right (i.e., increasing indices),
+< until <CD/<ARG/f/ <ARG/x// evaluates to
+< <CD>true</>; returns <CD>true</> if  
+< such an <ARG/x/ exists and <CD>false</> otherwise.
+<     <SPECBREAK>
+<     <SPEC>
+<       <VAL>all<TY>(elem -> bool) -> array -> bool
+<         <COMMENT>
+<           <PROTOTY>
+<           all <ARG/f/ <ARG/arr/
+<           </PROTOTY>
+< applies <ARG/f/ to each element <ARG/x/ of the array <ARG/arr/, from left to
+< right (i.e., increasing indices), until <CD/<ARG/f/ <ARG/x// evaluates 
+< to <CD>false</>; returns <CD>false</> 
+< if such an <ARG/x/ exists and <CD>true</> otherwise.
+< Equivalent to 
+< <CD/<VALREF STRID="Bool">not</>(<VALREF SIGID="MONO_ARRAY"/exists/ (<VALREF STRID="Bool">not</> o <ARG/f/) <ARG/l/))/.
+<     <SPECBREAK>
+<     <SPEC>
+<       <VAL>collate<TY>((elem * elem) -> order) -> (array * array) -> order
+---
+>       <VAL>modifyi<TY>((int * elem) -> elem) -> (array * int * int option) -> unit
+>       <VAL>modify<TY>(elem -> elem) -> array -> unit
+279c222,224
+<           collate <ARG/f/ (<ARG/arrl/, <ARG/arr2/)
+---
+>             modifyi <ARG/f/ <ARG/slice/
+> 	  <PROTO>
+>             modify <ARG/f/ <ARG/arr/
+281,282c226,242
+<           performs lexicographic comparison of the two arrays using the
+<           given ordering <ARG/f/ on elements.
+---
+> 	  apply the function <ARG/f/ to the elements of an array in
+> 	  left to right order (i.e., increasing indices), and replace the
+> 	  elements with the results of <ARG/f/.
+> 	  The more general <VALREF SIGID="MONO_ARRAY"/modifyi/ function applies <ARG/f/ to the elements
+> 	  of the <AREF TAG="array-vector-slice">array slice</AREF> <ARG/slice/
+> 	  and supplies both the element and the element's index to the
+> 	  function <ARG/f/.
+> 	  If <ARG/slice/ is not <AREF TAG="valid-slices">valid</AREF>, then
+> 	  the exception <EXNREF STRID="General"/Subscript/ is raised.
+> 	  <PP>
+> 	  The function <CD/modify/ applies <ARG/f/ to the whole array and
+> 	  does not supply the element index to <ARG/f/.
+> 	  Thus the expression <CD>modify <ARG/f/ <ARG/arr/</CD>
+> 	  is equivalent to:
+> 	  <CODE>
+> modifyi (<ARG/f/ o #2) (<ARG/arr/, 0, NONE)
+> </CODE>
+305,307d264
+<   <SIGINSTANCE STATUS=OPTIONAL> <IDFAMILY>Word<ID.INDEX NAME="N">Array</IDFAMILY>
+<     <WHERETYPE>vector<TY><IDFAMILY>Word<ID.INDEX NAME="N">Vector.vector</IDFAMILY>
+<     <WHERETYPE>elem<TY><IDFAMILY>Word<ID.INDEX NAME="N">.word</IDFAMILY>
+diff -r Basis/ML-Doc/mono-array2.mldoc Basis.SAV/ML-Doc/mono-array2.mldoc
+6c6
+< <VERSION VERID="1.6" YEAR=2000 MONTH=5 DAY=21>
+---
+> <VERSION VERID="1.5" YEAR=1998 MONTH=7 DAY=21>
+18,19c18
+< As usual, 
+< arrays have the equality property that two arrays are equal only 
+---
+> Arrays also have a special equality property: two arrays are equal 
+23a23
+> Thus, type <CD/t array/ admits equality even if <CD/ty/ does not.
+40,41c40,41
+<       in the range from <ARG/w/ to
+<       <MATH><ARG/col/ + (<ARG/w/ - 1)</MATH>, inclusively. If
+---
+>       in the range
+>       <MATH><ARG/col/ + (<ARG/w/ - 1)</MATH> (inclusive). If
+68a69,71
+>       <SUBSTRUCT>Vector<ID>MONO_VECTOR<WHERETYPE>elem<TY>elem</SUBSTRUCT>
+>     <SPECBREAK NEWLINE>
+>     <SPEC>
+194c197
+<       <VAL>appi<TY>traversal -> ((int * int * elem) -> unit) -> region -> unit
+---
+>       <VAL>appi<TY>Array2.traversal -> ((int * int * elem) -> unit) -> region -> unit
+196c199
+<       <VAL>app<TY>traversal -> (elem -> unit) -> array -> unit
+---
+>       <VAL>app<TY>Array2.traversal -> (elem -> unit) -> array -> unit
+221c224
+<       <VAL>modifyi<TY>traversal -> ((int * int * elem) -> elem) -> region -> unit
+---
+>       <VAL>modifyi<TY>Array2.traversal -> ((int * int * elem) -> elem) -> region -> unit
+223c226
+<       <VAL>modify<TY>traversal -> (elem -> elem) -> array -> unit
+---
+>       <VAL>modify<TY>Array2.traversal -> (elem -> elem) -> array -> unit
+249c252
+<       <VAL>foldi<TY>traversal -> ((int * int * elem * 'b) -> 'b) -> 'b -> region -> 'b
+---
+>       <VAL>foldi<TY>Array2.traversal -> ((int * int * elem * 'b) -> 'b) -> 'b -> region -> 'b
+251c254
+<       <VAL>fold<TY>traversal -> ((elem * 'b) -> 'b) -> 'b -> array -> 'b
+---
+>       <VAL>fold<TY>Array2.traversal -> ((elem * 'b) -> 'b) -> 'b -> array -> 'b
+299,301d301
+<   <SIGINSTANCE STATUS=OPTIONAL> <IDFAMILY>Word<ID.INDEX NAME="N">Array2</IDFAMILY>
+<     <WHERETYPE>vector<TY><IDFAMILY>Word<ID.INDEX NAME="N">Vector.vector</IDFAMILY>
+<     <WHERETYPE>elem<TY><IDFAMILY>Word<ID.INDEX NAME="N">.word</IDFAMILY>
+Only in Basis/ML-Doc: mono-vector-slice.mldoc
+diff -r Basis/ML-Doc/mono-vector.mldoc Basis.SAV/ML-Doc/mono-vector.mldoc
+10c10
+< <VERSION VERID="1.8" YEAR=2000 MONTH=5 DAY=26>
+---
+> <VERSION VERID="1.7" YEAR=1997 MONTH=4 DAY=16>
+52c52
+< 	  creates a vector of <ARG/n/ elements, where the elements are
+---
+> 	  creates an vector of <ARG/n/ elements, where the elements are
+68c68
+<           returns <MATH/<NORM/<ARG/vec///, the length of the vector <ARG/vec/.
+---
+>           returns <MATH/<NORM/<ARG/vec///, the length of the array <ARG/vec/.
+80d79
+<     <SPECBREAK>
+82c81
+<       <VAL>update<TY>(vector * int * elem) -> vector
+---
+>       <VAL>extract<TY>(vector * int * int option) -> vector
+86c85
+<           update (<ARG/vec/, <ARG/i/, <ARG/x/)
+---
+>           extract <ARG/slice/
+88,92c87,90
+< 	  returns a new vector, identical to <ARG/vec/, except the 
+<       <ARG/i/th element of <ARG/vec/ is set to <ARG/x/.
+< 	  If <MATH><ARG/i/ &LESS; 0</MATH> or
+< 	  <MATH><NORM><ARG/vec/</NORM> &LESSEQ; <ARG/i/</MATH>, then
+< 	  the <EXNREF STRID="General"/Subscript/ exception is raised.
+---
+> 	  extracts the <AREF TAG="array-vector-slice">vector slice</AREF>
+> 	  <ARG/slice/ from the vector <ARG/vec/, and returns it as a vector.
+> 	  If the slice is not <AREF TAG="valid-slices">valid,</AREF> then
+> 	  the exception <EXNREF STRID="General"/Subscript/ is raised.
+105,106c103,105
+<       <VAL>appi<TY>((int * elem) -> unit) -> vector -> unit
+<       <VAL>app<TY>(elem -> unit) -> vector -> unit
+---
+>       <VAL>mapi<TY>((int * elem) -> elem) -> (vector * int * int option) -> vector
+>         <RAISES><EXNREF STRID="General"/Subscript/
+>       <VAL>map<TY>(elem -> elem) -> vector -> vector
+109c108
+<           appi <ARG/f/ <ARG/vec/
+---
+>           mapi <ARG/f/ <ARG/slice/
+111c110
+<           app <ARG/f/ <ARG/vec/
+---
+>           map <ARG/f/ <ARG/vec/
+113,116c112,116
+< 	  apply the function <ARG/f/ to the elements of a vector in
+< 	  left to right order (i.e., increasing indices).
+< 	  The more general <VALREF SIGID="MONO_VECTOR"/appi/ function
+< 	  supplies both the element and the element's index to the
+---
+>           produce new vectors by mapping the function <ARG/f/ from left to 
+>           right over the argument vector or slice.
+> 	  The more general <VALREF STRID="Vector"/mapi/ function applies <ARG/f/ to the elements
+> 	  of the <AREF TAG="array-vector-slice">vector slice</AREF> <ARG/slice/
+> 	  and supplies both the element and the element's index to the
+118c118,128
+< 	  The expression <CD>app <ARG/f/ <ARG/vec/</CD>
+---
+> 	  If <ARG/slice/ is not <AREF TAG="valid-slices">valid</AREF>, then
+> 	  the exception <EXNREF STRID="General"/Subscript/ is raised.
+> 	  The expression <CD>mapi <ARG/f/ <ARG/slice/</CD>
+> 	  is equivalent to:
+> 	  <CODE>
+> fromList (List.map f (foldri (fn (i,a,l) => (i,a)::l) [] slice))
+> </CODE>
+> 	  <PP>
+> 	  The function <VALREF STRID="Vector"/map/ applies <ARG/f/ to the whole vector and
+> 	  does not supply the element index to <ARG/f/.
+> 	  Thus the expression <CD>map <ARG/f/ <ARG/vec/</CD>
+121,122c131,132
+<       appi (<ARG/f/ o #2) <ARG/vec/
+<       </CODE>
+---
+> mapi (<ARG/f/ o #2) (<ARG/vec/, 0, NONE)
+> </CODE>
+124,125c134,136
+<       <VAL>mapi<TY>((int * elem) -> elem) -> vector -> vector
+<       <VAL>map<TY>(elem -> elem) -> vector -> vector
+---
+>       <VAL>appi<TY>((int * elem) -> unit) -> (vector * int * int option) -> unit
+>         <RAISES><EXNREF STRID="General"/Subscript/
+>       <VAL>app<TY>(elem -> unit) -> vector -> unit
+128c139
+<           mapi <ARG/f/ <ARG/vec/
+---
+>           appi <ARG/f/ <ARG/slice/
+130c141
+<           map <ARG/f/ <ARG/vec/
+---
+>           app <ARG/f/ <ARG/vec/
+132,135c143,147
+<           produce new vectors by mapping the function <ARG/f/ from left to 
+<           right over the argument vector.
+< 	  The more general <VALREF STRID="Vector"/mapi/ function
+< 	  supplies both the element and the element's index to the
+---
+> 	  apply the function <ARG/f/ to the elements of a vector in
+> 	  left to right order (i.e., increasing indices).
+> 	  The more general <VALREF SIGID="MONO_VECTOR"/appi/ function applies <ARG/f/ to the elements
+> 	  of the <AREF TAG="array-vector-slice">vector slice</AREF> <ARG/slice/
+> 	  and supplies both the element and the element's index to the
+137,142c149,154
+< 	  The expression <CD>mapi <ARG/f/ <ARG/vec/</CD>
+< 	  is equivalent to:
+< 	  <CODE>
+<       fromList (List.map f (foldri (fn (i,a,l) => (i,a)::l) [] vec))
+<       </CODE>
+< 	  The expression <CD>map <ARG/f/ <ARG/vec/</CD>
+---
+> 	  If <ARG/slice/ is not <AREF TAG="valid-slices">valid</AREF>, then
+> 	  the exception <EXNREF STRID="General"/Subscript/ is raised.
+> 	  <PP>
+> 	  The function <CD/app/ applies <ARG/f/ to the whole vector and
+> 	  does not supply the element index to <ARG/f/.
+> 	  Thus the expression <CD>app <ARG/f/ <ARG/vec/</CD>
+145,146c157,158
+<       mapi (<ARG/f/ o #2) <ARG/vec/
+<       </CODE>
+---
+> appi (<ARG/f/ o #2) (<ARG/vec/, 0, NONE)
+> </CODE>
+148,149c160,163
+<       <VAL>foldli<TY>((int * elem * elem) -> elem) -> 'a -> vector -> 'a
+<       <VAL>foldri<TY>((int * elem * 'a) -> 'a) -> 'a -> vector -> 'a
+---
+>       <VAL>foldli<TY>((int * elem * 'a) -> 'a) -> 'a -> (vector * int * int option) -> 'a
+>         <RAISES><EXNREF STRID="General"/Subscript/
+>       <VAL>foldri<TY>((int * elem * 'a) -> 'a) -> 'a -> (vector * int * int option) -> 'a
+>         <RAISES><EXNREF STRID="General"/Subscript/
+154c168
+<             foldli <ARG/f/ <ARG/init/ <ARG/vec/
+---
+>             foldli <ARG/f/ <ARG/init/ <ARG/slice/
+156c170
+<             foldri <ARG/f/ <ARG/init/ <ARG/vec/
+---
+>             foldri <ARG/f/ <ARG/init/ <ARG/slice/
+164,165c178
+< 	  The functions <VALREF SIGID="MONO_VECTOR"/foldli/ 
+<       and <VALREF SIGID="MONO_VECTOR"/foldl/ apply the function <ARG/f/
+---
+> 	  The functions <VALREF SIGID="MONO_VECTOR"/foldli/ and <VALREF SIGID="MONO_VECTOR"/foldl/ apply the function <ARG/f/
+167,172c180,183
+< 	  <VALREF SIGID="MONO_VECTOR"/foldri/ 
+<       and <VALREF SIGID="MONO_VECTOR"/foldr/ work from right to left 
+<       (decreasing indices).
+< 	  The more general functions <VALREF SIGID="MONO_VECTOR"/foldli/ 
+<       and <VALREF SIGID="MONO_VECTOR"/foldri/
+<       supply both the
+---
+> 	  <VALREF SIGID="MONO_VECTOR"/foldri/ and <VALREF SIGID="MONO_VECTOR"/foldr/ work from right to left (decreasing
+> 	  indices).
+> 	  The more general functions <VALREF SIGID="MONO_VECTOR"/foldli/ and <VALREF SIGID="MONO_VECTOR"/foldri/ work on
+> 	  <AREF TAG="array-vector-slice">vector slices</AREF>, and supply both the
+174c185,188
+< 	  Thus the expression <CD>foldl <ARG/f/</CD>
+---
+> 	  <PP>
+> 	  The functions <VALREF SIGID="MONO_VECTOR"/foldl/ and <VALREF SIGID="MONO_VECTOR"/foldr/ work on the whole vector
+> 	  <ARG/vec/ and do not supply the element index to <ARG/f/.
+> 	  Thus the expression <CD>foldl <ARG/f/ <ARG/init/ <ARG/vec/</CD>
+177,179c191,193
+<       foldli (fn (_, <ARG/a/, <ARG/x/) => <ARG/f/(<ARG/a/, <ARG/x/))
+<       </CODE>
+<       A similar relation holds between <VALREF/foldr/ and <VALREF/foldri/.
+---
+> foldli (fn (_, <ARG/a/, <ARG/x/) => <ARG/f/(<ARG/a/, <ARG/x/))
+>   <ARG/init/ (<ARG/vec/, 0, NONE)
+> </CODE>
+184,185c198,199
+<         foldr (op ::) [] <ARG/vec/
+<         </CODE>
+---
+> foldr (op ::) [] <ARG/vec/
+> </CODE>
+187,235d200
+<     <SPEC>
+<       <VAL>findi<TY>((int * elem) -> bool) -> vector -> (int * elem) option
+<       <VAL>find<TY>(elem -> bool) -> vector -> elem option
+<         <COMMENT>
+<           <PROTOTY>
+<           findi <ARG/f/ <ARG/vec/
+<           <PROTO>
+<           find <ARG/f/ <ARG/vec/
+<           </PROTOTY>
+<           apply <ARG/f/ to each element of the vector
+< <ARG/vec/, from left to right (i.e., increasing indices), until 
+< a <CD>true</> value is returned. If this occurs, the functions return
+< the element. The more general version <VALREF/appi/ also supplies <ARG/f/ with
+< the vector index of the element and, upon finding an entry
+< satisfying the predicate, returns that index with the element.
+<     <SPECBREAK>
+<     <SPEC>
+<       <VAL>exists<TY>(elem -> bool) -> vector -> bool
+<         <COMMENT>
+<           <PROTOTY>
+<           exists <ARG/f/ <ARG/vec/
+<           </PROTOTY>
+<           applies <ARG/f/ to each element <ARG/x/ of the vector
+< <ARG/vec/, from left to right (i.e., increasing indices),
+< until <CD/<ARG/f/ <ARG/x// evaluates to
+< <CD>true</>; returns <CD>true</> if  
+< such an <ARG/x/ exists and <CD>false</> otherwise.
+<     <SPECBREAK>
+<     <SPEC>
+<       <VAL>all<TY>(elem -> bool) -> vector -> bool
+<         <COMMENT>
+<           <PROTOTY>
+<           all <ARG/f/ <ARG/vec/
+<           </PROTOTY>
+< applies <ARG/f/ to each element <ARG/x/ of the vector <ARG/vec/, from left to
+< right (i.e., increasing indices), until <CD/<ARG/f/ <ARG/x// evaluates
+< to <CD>false</>; returns <CD>false</>
+< if such an <ARG/x/ exists and <CD>true</> otherwise.
+< Equivalent to
+< <CD/<VALREF STRID="Bool">not</>(<VALREF STRID="Vector"/exists/ (<VALREF STRID="Bool">not</> o <ARG/f/
+< ) <ARG/l/))/.
+<     <SPEC>
+<       <VAL>collate<TY>((elem * elem) -> order) -> (vector * vector) -> order
+<         <COMMENT>
+<           <PROTOTY>
+<           collate <ARG/f/ (<ARG/vecl/, <ARG/vec2/)
+<           </PROTOTY>
+<           performs lexicographic comparison of the two vectors using the
+<           given ordering <ARG/f/ on elements.
+237c202
+<     <WHERETYPE>elem<TY>Word8.word
+---
+>     <WHERETYPE>Word8Vector.elem<TY>Word8.word
+240c205
+<     <WHERETYPE>elem<TY>char
+---
+>     <WHERETYPE>CharVector.elem<TY>char
+243c208
+<     <WHERETYPE>elem<TY>WideChar.char
+---
+>     <WHERETYPE>WideCharVector.elem<TY>WideChar.char
+246c211
+<     <WHERETYPE>elem<TY>bool
+---
+>     <WHERETYPE>BoolVector.elem<TY>bool
+249c214
+<     <WHERETYPE>elem<TY>int
+---
+>     <WHERETYPE>IntVector.elem<TY>int
+252c217
+<     <WHERETYPE>elem<TY>real
+---
+>     <WHERETYPE>RealVector.elem<TY>real
+255,258c220,221
+<     <WHERETYPE>elem<TY><IDFAMILY>Int<ID.INDEX NAME="N">.int</IDFAMILY>
+<     <COMMENT><PP>The type <IDFAMILY>Int{n}Vector.vector</IDFAMILY> admits equality.
+<   <SIGINSTANCE STATUS=OPTIONAL> <IDFAMILY>Word<ID.INDEX NAME="N">Vector</IDFAMILY>
+<     <WHERETYPE>elem<TY><IDFAMILY>Word<ID.INDEX NAME="N">.word</IDFAMILY>
+---
+>     <WHERETYPE><IDFAMILY>Int<ID.INDEX NAME="N">Vector.elem
+>       <TY><IDFAMILY>Int<ID.INDEX NAME="N">.int</IDFAMILY>
+261c224,225
+<     <WHERETYPE>elem<TY><IDFAMILY>Real<ID.INDEX NAME="N">.real</IDFAMILY>
+---
+>     <WHERETYPE><IDFAMILY>Real<ID.INDEX NAME="N">Vector.elem</IDFAMILY>
+>       <TY><IDFAMILY>Real<ID.INDEX NAME="N">.real</IDFAMILY>
+diff -r Basis/ML-Doc/net-db.mldoc Basis.SAV/ML-Doc/net-db.mldoc
+24c24
+< <STRUCTURE STRID="NetDB" STATUS=OPTIONAL>
+---
+> <STRUCTURE STRID="NetDB">
+Only in Basis/ML-Doc: note
+Only in Basis/ML-Doc: numeric-over.mldoc
+diff -r Basis/ML-Doc/option.mldoc Basis.SAV/ML-Doc/option.mldoc
+25c25
+< <STRUCTURE STRID="Option" STATUS=REQUIRED>
+---
+> <STRUCTURE STRID="Option">
+diff -r Basis/ML-Doc/os-io.mldoc Basis.SAV/ML-Doc/os-io.mldoc
+18c18
+< provides a general interface for polling I/O
+---
+> provides a general interface for polling IO
+20c20
+< A <TYREF STRID="OS.IO"/poll_desc/, created from an I/O descriptor, can be
+---
+> A <TYREF STRID="OS.IO"/poll_desc/, created from an IO descriptor, can be
+30c30
+< 	supports I/O (e.g., file, tty, device, socket, ...). In Unix,
+---
+> 	supports IO (e.g., file, tty, device, socket, ...). In Unix,
+55c55
+< 	 return a hash value for the I/O descriptor <ARG/iod/.
+---
+> 	 return a hash value for the IO descriptor <ARG/iod/.
+138c138
+< 	An abstract representation of a polling operation on an I/O descriptor.
+---
+> 	An abstract representation of a polling operation on an IO descriptor.
+154c154
+< <CONREF STRID="Option"/NONE/ is returned when no polling is supported by the I/O device.
+---
+> <CONREF STRID="Option"/NONE/ is returned when no polling is supported by the IO device.
+162c162
+< 	return the I/O descriptor that is being polled using <ARG/pd/.
+---
+> 	return the IO descriptor that is being polled using <ARG/pd/.
+184c184
+<           events) is not appropriate for the underlying I/O device.
+---
+>           events) is not appropriate for the underlying IO device.
+diff -r Basis/ML-Doc/os-path.mldoc Basis.SAV/ML-Doc/os-path.mldoc
+10c10
+< <VERSION VERID="1.8" YEAR=2000 MONTH=5 DAY=26>
+---
+> <VERSION VERID="1.7" YEAR=1997 MONTH=10 DAY=6>
+182d181
+<                 <EXNREF STRID="General"/Size/
+199,201d197
+<           The exception <EXNREF STRID="General"/Size/ is raised if the resulting
+<           string would have size greater 
+<           than <VALREF STRID="String"/String.maxSize/.
+266d261
+<                 <EXNREF STRID="General"/Size/
+275,277d269
+<           The exception <EXNREF STRID="General"/Size/ is raised if the resulting
+<           string would have size greater 
+<           than <VALREF STRID="String"/String.maxSize/.
+318d309
+<         <RAISES><EXNREF STRID="General"/Size/
+333,335d323
+<           The exception <EXNREF STRID="General"/Size/ is raised if the resulting
+<           string would have size greater 
+<           than <VALREF STRID="String"/String.maxSize/.
+390,392d377
+<           The exception <EXNREF STRID="General"/Size/ is raised if the resulting
+<           string would have size greater 
+<           than <VALREF STRID="String"/String.maxSize/.
+396d380
+<                 <EXNREF STRID="General"/Size/
+420,422d403
+<           The exception <EXNREF STRID="General"/Size/ is raised if the resulting
+<           string would have size greater 
+<           than <VALREF STRID="String"/String.maxSize/.
+465d445
+<                 <EXNREF STRID="General"/Size/
+473,478c453
+<           volumes. 
+<           The exception <EXNREF STRID="General"/Size/ is raised if the resulting
+<           string would have size greater 
+<           than <VALREF STRID="String"/String.maxSize/.
+<           <PP>
+<           A implementation of <CD/concat/ would be:
+---
+>           volumes. A implementation of <CD/concat/ would be:
+499d473
+<       <VAL>fromUnixPath<TY>string -> string
+500a475
+>       <VAL>fromUnixPath<TY>string -> string
+504,505d478
+<           fromUnixPath <ARG/s/
+<           <PROTO>
+506a480,481
+>           <PROTO>
+>           fromUnixPath <ARG/s/
+508,518c483,484
+<          convert between Unix-style paths and the conventions of the local 
+<          operating system.  
+<          Slash characters are translated to the directory separators of the 
+<          local system, as are parent arcs and current arcs.  These translations 
+<          allow for context-sensitive interpretation of these arcs, as on the 
+<          Macintosh.
+<          <PP>
+<          These functions are useful for specifying OS-independent relative 
+<          pathnames, and for using Unix-style tools packages for other 
+<          operating systems, such as the MKS or GNU toolkits for Windows.
+< 
+---
+>           convert between paths as represented in the underlying operating
+>           system and Unix-style paths.
+diff -r Basis/ML-Doc/os-process.mldoc Basis.SAV/ML-Doc/os-process.mldoc
+10c10
+< <VERSION VERID="1.5" YEAR=2000 MONTH=5 DAY=26>
+---
+> <VERSION VERID="1.4" YEAR=1997 MONTH=9 DAY=1>
+154,160d153
+<     <SPEC>
+<       <VAL>sleep<TY>Time.time -> unit
+<         <COMMENT>
+<           <PROTOTY>
+<           sleep <ARG/t/
+<           </PROTOTY>
+<           suspends the current process for the time specified by <ARG/t/.
+Only in Basis/ML-Doc: out
+diff -r Basis/ML-Doc/pack-float.mldoc Basis.SAV/ML-Doc/pack-float.mldoc
+10c10
+< <VERSION VERID="1.1" YEAR=2000 MONTH=5 DAY=28>
+---
+> <VERSION VERID="1.0" YEAR=1996 MONTH=1 DAY=20>
+71,75c71,72
+< <CODE>
+< <ARG/arg/[<VALREF SIGID="PACK_REAL"/bytesPerElem/*<ARG/i/
+< ..<VALREF SIGID="PACK_REAL"/bytesPerElem/*<ARG/i/+<VALREF SIGID="PACK_REAL"/bytesPerElem/-1]
+< </CODE>
+< of the
+---
+> <CD/<ARG/arg/[<VALREF SIGID="PACK_REAL"/bytesPerElem/*<ARG/i/
+> .. <VALREF SIGID="PACK_REAL"/bytesPerElem/*<ARG/i/+<VALREF SIGID="PACK_REAL"/bytesPerElem/-1]/ of the
+78,80c75,77
+< Raise exception
+< <EXNREF STRID="General"/Subscript/ if <MATH><ARG/i/ &LESS; 0</MATH> or if
+< <MATH>(<CD/Word8Array.length/(<ARG/arr/) / <CD/bytesPerElem/) &LESSEQ; <ARG/i/</MATH>.
+---
+> Raise exception <EXNREF STRID="General"/Subscript/ if <MATH><ARG/i/ &LESS; 0</MATH>, or if
+> <MATH>(<CD/len/) / <CD/bytesPerElem/) &LESSEQ; <ARG/i/</MATH>,
+> where <CD/len/ is the length of <ARG/arg/.
+90,91c87
+< according to the structure's endianess.  
+< Raises exception
+---
+> according to the structure's endianess.  Raises exception
+diff -r Basis/ML-Doc/pack-word.mldoc Basis.SAV/ML-Doc/pack-word.mldoc
+10c10
+< <VERSION VERID="1.6" YEAR=2000 MONTH=5 DAY=29>
+---
+> <VERSION VERID="1.5" YEAR=1997 MONTH=1 DAY=9>
+55,59c55,58
+<           </PROTOTY> extract the subvector
+< <CODE>
+<   <ARG/vec/[<VALREF SIGID="PACK_WORD"/bytesPerElem/*<ARG/i/..<VALREF SIGID="PACK_WORD"/bytesPerElem/*<ARG/i/+<VALREF SIGID="PACK_WORD"/bytesPerElem/-1]
+< </CODE>
+< of the vector <ARG/vec/ and converts it into a word according to the
+---
+>           </PROTOTY> extracts the subvector
+> <CD/<ARG/vec/[<VALREF SIGID="PACK_WORD"/bytesPerElem/*<ARG/i/
+> .. <VALREF SIGID="PACK_WORD"/bytesPerElem/*<ARG/i/+<VALREF SIGID="PACK_WORD"/bytesPerElem/-1]/ of the
+> vector <ARG/vec/ and converts it into a word according to the
+78,82c77,78
+< extracts the subvector 
+< <CODE>
+< <ARG/arr/[<VALREF SIGID="PACK_WORD"/bytesPerElem/*<ARG/i/..<VALREF SIGID="PACK_WORD"/bytesPerElem/*<ARG/i/+<VALREF SIGID="PACK_WORD"/bytesPerElem/-1]
+< </CODE>
+< of the array
+---
+> extracts the subvector <CD/<ARG/arr/[<VALREF SIGID="PACK_WORD"/bytesPerElem/*<ARG/i/
+> .. <VALREF SIGID="PACK_WORD"/bytesPerElem/*<ARG/i/+<VALREF SIGID="PACK_WORD"/bytesPerElem/-1]/ of the array
+diff -r Basis/ML-Doc/posix-io.mldoc Basis.SAV/ML-Doc/posix-io.mldoc
+161c161
+< <PP>              File status flag to enable non-blocking I/O.
+---
+> <PP>              File status flag to enable non-blocking IO.
+diff -r Basis/ML-Doc/posix.mldoc Basis.SAV/ML-Doc/posix.mldoc
+92,94d91
+< <PP>
+<     The <STRREF TOPID/Posix/ structures and signatures plus <STRREF/SysWord/
+<     are optional as a group, i.e., they are either all present or all absent.
+diff -r Basis/ML-Doc/preface.mldoc Basis.SAV/ML-Doc/preface.mldoc
+35c35
+< This document presents a standard library for &SML;.
+---
+> This document presents a proposal for such a standard library for &SML;.
+39,49c39,40
+< the library. The following chapters describe some of the component
+< areas, such as I/O and text handling, in more depth. 
+< These chapters discuss the common themes connecting the modules
+< of a component, and note related assumptions and restrictions.
+< The library includes some elegant solutions to certain
+< programming tasks, but these are not necessarily obvious
+< from a bare presentation of the signatures.
+< Thus, many of these chapters include short tutorial sections
+< which discuss how various types and functions were intended to
+< be used, including examples of idiomatic use.
+< The bulk of this book is filled with detailed manual pages describing
+---
+> the library. The remaining chapters provide fairly detailed 
+> manual pages describing
+52d42
+< <!--
+55d44
+< -->
+60c49
+< The appendix describes some of the changes that have taken place in the
+---
+> The final appendix describes some of the changes that have taken place in the
+65,98d53
+< <PP>
+< The library is certainly not complete; there are some glaring omissions,
+< such as a module for handling regular expressions or guidelines for
+< internationalization.
+< It is assumed that, as needs are identified and consensus in reached on
+< the design of a structure, new modules will be added to the library or
+< be standardized as a separate library.
+< An on-line version of this document can be found at various sites,
+< such as:
+< <CODE>
+< cm.bell-labs.com/cm/cs/what/smlnj/doc/basis
+< www.dina.kvl.dk/~sestoft/sml/
+< </CODE>
+< The evolution of the library will be reflected in these sites.
+< 
+< <PP>
+< This document, in its various forms, arises from an application of
+< SML and the Basis Library. 
+< All of the parts of this
+< document were written and annotated using ML-Doc,
+< an SGML DTD that models
+< SML signatures along with a simple Latex-style formatting. 
+< We then use
+< various tools to transcribe the document into HTML or Latex. 
+< In addition,
+< there are tools that take a commented SML signature
+< and produce an ML-Doc version of the signature with the comments
+< included in the text.
+< Going in the opposite direction, SML signatures can be extracted
+< from the documents. This has allowed us to test automatically whether
+< a structure provided by an implementation at least matches the appropriate
+< signature provided by the documentation.
+< These tools were largely built using SML and the Basis Library.
+< 
+119,121c74,76
+< In addition, Peter Michael Bertelsen, Peter Lee, Kevin Mitchell, Brian Monahan,
+< Larry Paulson and Mads Tofte provided helpful comments on drafts 
+< of this document.
+---
+> In addition, Peter Michael Bertelsen, Peter Lee, Larry Paulson and 
+> Mads Tofte provided helpful comments on drafts of this document.
+> 
+123a79
+> 
+diff -r Basis/ML-Doc/prim-io.mldoc Basis.SAV/ML-Doc/prim-io.mldoc
+10c10
+< <VERSION VERID="1.7" YEAR=2000 MONTH=5 DAY=26>
+---
+> <VERSION VERID="1.6" YEAR=1996 MONTH=4 DAY=21>
+26c26
+< operations commonly available on file descriptors. Higher level I/O
+---
+> operations commonly available on file descriptors. Higher level IO
+28,29c28
+< access the appropriate <ADEF TAG="PrimIO:Layer">primitive I/O</ADEF>
+< <TYREF SIGID="PRIM_IO"/reader/ and
+---
+> access the appropriate <ADEF TAG="PrimIO:Layer">primitive IO</ADEF><TYREF SIGID="PRIM_IO"/reader/ and
+39,41d37
+< More typically, the close operation on a reader or writer may cause an exception
+< to be raised if there is a failure in the underlying file system, such as the
+< disk being full or the file server being unavailable.
+169c165
+< element is available for reading without blocking, or until EOF is detected.
+---
+> element is available for reading without blocking, or if EOF is detecte, or if EOF is detectedd.
+384,406d379
+<     <SPEC>
+<       <VAL>openVector<TY>vector -> reader
+<         <COMMENT>
+<           <PROTOTY>
+<           openVector <ARG/v/
+<           </PROTOTY>
+<           creates a reader whose content is <ARG/v/.
+<     <SPEC>
+<       <VAL>nullRd<TY>unit -> reader
+<       <VAL>nullWr<TY>unit -> writer
+<         <COMMENT>
+<           <PROTOTY>
+<           nullRd ()
+<           <PROTO>
+<           nullWr ()
+<           </PROTOTY>
+<           create readers and writers for a null device abstraction.
+<           The reader <CD/nullRd ()/ acts like a reader that is at EOF.
+<           The writer <CD/nullWr ()/ serves as a sink; any data written
+<           is thrown away. Null readers and writers can be closed; if closed, 
+<           they are expected to behave the same as any other closed reader
+<           or writer.
+<          
+diff -r Basis/ML-Doc/prot-db.mldoc Basis.SAV/ML-Doc/prot-db.mldoc
+24c24
+< <STRUCTURE STRID="NetProtDB" STATUS=OPTIONAL>
+---
+> <STRUCTURE STRID="NetProtDB">
+diff -r Basis/ML-Doc/real.mldoc Basis.SAV/ML-Doc/real.mldoc
+10c10
+< <VERSION VERID="1.13" YEAR=2000 MONTH=5 DAY=25>
+---
+> <VERSION VERID="1.12" YEAR=1997 MONTH=10 DAY=5>
+41c41
+<         Note that, as discussed below, <TYREF/real/ is not an <CD/eqtype/.
+---
+>         Note that, as discussed above <TYREF/real/ is not an <CD/eqtype/.
+87c87
+<           two infinities produces a NaN value.
+---
+>           two infinities produces a NaN.
+128,129c128,129
+<       <VAL>*+<TY>(real * real * real) -> real
+<       <VAL>*-<TY>(real * real * real) -> real
+---
+>       <VAL>*+<TY>real * real * real -> real
+>       <VAL>*-<TY>real * real * real -> real
+164,165c164,165
+<           returns the absolute value of <ARG/r/.
+<           <MATH/<CD/abs/ (&PLUSMINUS;&INF;) = +&INF;/.
+---
+>           the absolute value of <ARG/r/.
+>           <MATH/<CD/abs/ (&PLUSMINUS;&INF;) = &INF;/.
+362,363c362,364
+< <CD/"inf"/ and <CD/"~inf"/, respectively, and
+< NaN values are converted to the form <TT/"nan"/.
+---
+> <CD/"inf"/ and <CD/"~inf"/, respectively.
+> If <ARG/spec/ is not <CD/EXACT/, NaN values are returned as <CD/"nan"/;
+> otherwise, NaN values are converted to the form <TT/"nan(<MATH/d<SUB/1/d<SUB/2/...d<SUB/n//)"/.
+395c396
+<           the regular expressions
+---
+>           the regular expression
+397,399c398
+< [+~-]?(inf|infinity)
+< [+~-]?nan
+< [+~-]?(([0-9]+(\.[0-9]+)?)|(\.[0-9]+))(e[+~-]?[0-9]+)?
+---
+> [+~-]?(([0-9]+(\.[0-9]+)?)|(\.[0-9]+))([eE][+~-]?[0-9]+)?
+401d399
+< where alphabetic characters are case-insensitive.
+443,445c441,442
+<           Note that, even if <ARG/man/ is a non-zero, finite real value, the
+<           result of <VALREF/fromManExp/ can be zero or infinity
+<           because of underflows and overflows.
+---
+>           Note that non-exceptional arguments can produce zero or infinities,
+>           essentially because of underflows and overflows.
+526c523
+<       <VAL>floor<TY>real -> int
+---
+>       <VAL>floor<TY>real -> Int.int
+529c526
+<       <VAL>ceil<TY>real -> int
+---
+>       <VAL>ceil<TY>real -> Int.int
+532c529
+<       <VAL>trunc<TY>real -> int
+---
+>       <VAL>trunc<TY>real -> Int.int
+535c532
+<       <VAL>round<TY>real -> int
+---
+>       <VAL>round<TY>real -> Int.int
+613c610
+<         <RAISES><EXNREF STRID="General"/Overflow/
+---
+>         <RAISES><EXNREF STRID="General"/Domain/
+625,626c622,623
+<           In particular, for any normal or subnormal 
+<           real value <ARG/r/, we have:
+---
+>           i.e., for any <CD/Normal/ or <CD/SubNormal/ real value <ARG/r/, 
+>           we have:
+631,633c628,632
+< 	  Let <CD/<ARG/df/ = <VALREF STRID="IEEEReal"/IEEEReal.fieldsOf/ (toDecimal <ARG/r/)/.
+<       If the class of <ARG/r/ is not normal or subnormal, 
+< 	  then <CD/#exp <ARG/df/ = 0/ and <CD/#digits <ARG/df/ = []/.
+---
+> 	  For <CD/toDecimal/,
+> 	  when the <CD/kind/ field is not <CD/Normal/ or <CD/SubNormal/, 
+> 	  then <CD/exp = 0/ and <CD/digits = []/ except if <CD/kind/ is <CD/NAN/,
+> 	  which case the <CD/digits/ field provides a decimal representation of the
+> 	  fraction field of <ARG/r/.
+635,645c634,643
+<       Considering <CD/fromDecimal <ARG/d//,
+< 	  let <CD/<ARG/df/ = <VALREF STRID="IEEEReal"/IEEEReal.fieldsOf/ <ARG/d//.
+< If <CD/#class <ARG/r// is <CONREF STRID="IEEEReal"/IEEEReal.ZERO/ 
+< or <CONREF STRID="IEEEReal"/IEEEReal.INF/, 
+< the resulting
+< 	  real is the appropriate signed zero or infinity.
+< 	  If <CD/#class <ARG/df// is <CONREF STRID="IEEEReal"/IEEEReal.NAN/, 
+<       a signed NaN is generated.
+< If <CD/#class <ARG/df// is <CONREF STRID="IEEEReal"/IEEEReal.NORMAL/ or 
+<       <CONREF STRID="IEEEReal"/IEEEReal.SUBNORMAL/, the values
+<      <CD/#sign <ARG/df//, <CD/#digits <ARG/df// and <CD/#exp <ARG/df//
+---
+> 	  For <CD/fromDecimal/, if <CD/kind/ is <CD/ZERO/ or <CD/INF/, the resulting
+> 	  real is the appropriate signed zero or infinity, with the <CD/digits/ and
+> 	  <CD/exp/ fields ignored. If <CD/kind/ is <CD/NAN/, a signed NaN is
+> 	  generated, where the <CD/exp/ field is ignored and the <CD/digits/ field 
+> 	  is used as the decimal representation of the fractional field. If
+> 	  the resulting fractional field has all zero bits, which corresponds to
+> 	  an infinity, <CD/fromDecimal/ raises the <EXNREF STRID="General"/Domain/
+> 	  exception. If <CD/digits/
+> 	  is empty, an implementation-dependent NaN is produced. If <CD/kind/ is
+> 	  <CD/NORMAL/ or <CD/SUBNORMAL/, the <CD/sign/, <CD/digits/ and <CD/exp/ fields 
+647,649c645,646
+< 	  ignore the value <CD/#class <ARG/df//, so that the resulting value 
+<       might be normal, subnormal or zero.
+<       In particular, if <CD/#digits <ARG/df// is
+---
+> 	  ignore the <CD/kind/ field, so that the resulting value might have class
+> 	  <CD/NORMAL/, <CD/SUBNORMAL/ or <CD/ZERO/. In particular, is <CD/digits/ is
+651,654d647
+<       If the argument to <CD/fromDecimal/ is ill-formed, i.e., an integer
+<       in the list of digits is not in the range <CD/[0,9]/ or the exponent
+<       value is outside of the range of legal exponents, the function returns
+<       <CD/NONE/.
+667,670d659
+<     If <STRREF TOPID/LargeReal/ is not the
+<     same as <STRREF TOPID/Real/, then there must be a
+<     structure <STRREF/Real{N}/ equal to <STRREF/LargeReal/.
+< <PP>
+778a768,772
+> <PP>
+> In the functions below, unless specified otherwise, if any argument
+> is a NaN, the return value is a NaN. In a list of rules specifying the
+> behavior of a function in special cases, the first matching rule defines
+> the semantics.
+801,802c795,796
+< floating-point <CD/real/ type. This would give a second-class status
+< to the latter, while providing the default real with worse performance
+---
+> floating-point <CD/real/ type. This imbued a second-class status
+> on the latter, while providing a default real of lesser performance
+diff -r Basis/ML-Doc/serv-db.mldoc Basis.SAV/ML-Doc/serv-db.mldoc
+24c24
+< <STRUCTURE STRID="NetServDB" STATUS=OPTIONAL>
+---
+> <STRUCTURE STRID="NetServDB">
+diff -r Basis/ML-Doc/sml90.mldoc Basis.SAV/ML-Doc/sml90.mldoc
+6c6
+< <VERSION VERID="1.2" YEAR=2000 MONTH=5 DAY=31>
+---
+> <VERSION VERID="1.1" YEAR=1997 MONTH=10 DAY=31>
+14,17c14,16
+< available in the original 1990 version of SML. This reduces
+< the number of changes needed to compile old SML'90 code with an
+< SML'97 compiler. Note, however, this structure does not help with
+< deeper language changes such as value restriction.
+---
+> available in older versions of SML. This allows code written under
+> the old basis to be used with little or no change.
+> 
+19,20c18,19
+< The identifiers included here are
+< those specified in the 1990 Definition as part of the initial basis for
+---
+> The required identifiers correspond
+> to those specified in the Definition as part of the initial basis for
+39,43c38,39
+< old code in the new environment while, it is hoped, rewriting
+< the source to be compatible with the new environment. 
+< Programmers are strongly encouraged to adapt their code to revised language
+< and basis library.
+< At some point,
+---
+> old code in the new environment while, it is hoped, gradually rewriting
+> the source to be compatible with the new environment. At some point,
+85,86d80
+<       It is included for completeness, but old user code that deals with
+<       interrupts by handling <EXNREF/Interrupt/ will have to be rewritten.
+Only in Basis/ML-Doc: socket-over.mldoc
+diff -r Basis/ML-Doc/socket.mldoc Basis.SAV/ML-Doc/socket.mldoc
+26c26
+< <STRUCTURE STRID="Socket" STATUS=OPTIONAL>
+---
+> <STRUCTURE STRID="Socket">
+diff -r Basis/ML-Doc/stream-io-fn.mldoc Basis.SAV/ML-Doc/stream-io-fn.mldoc
+20c20
+< The optional <CD/StreamIO/ functor provides a way to build a stream I/O
+---
+> The optional <CD/StreamIO/ functor provides a way to build a stream IO
+diff -r Basis/ML-Doc/stream-io.mldoc Basis.SAV/ML-Doc/stream-io.mldoc
+213,214d212
+< 	  This function raises the <EXNREF STRID="IO">Io</EXNREF> exception if there is
+< 	  an error in the underlying system calls.
+diff -r Basis/ML-Doc/string-cvt.mldoc Basis.SAV/ML-Doc/string-cvt.mldoc
+104c104
+<           return <ARG/s/ padded, on the left or right, respectively, with 
+---
+>           return <ARG/s/ padded, on the left and right, respectively, with 
+142,146c142,144
+<           the maximal prefix consisting of characters satisfying the predicate, 
+<           returning the rest of the source, 
+<           while <VALREF STRID="StringCvt"/takel/
+<           returns the maximal prefix consisting of characters
+<           satisfying the predicate. 
+---
+>           the maximal prefix satisfying the predicate, returning the
+>           rest of the source, while <VALREF STRID="StringCvt"/takel/
+>           returns the maximal prefix satisfying the predicate. 
+177c175,177
+<           <PP>
+---
+>           <PROTOTY>
+>           scanString <ARG/f/ <ARG/s/
+>           </PROTOTY>
+180c180
+<           scanning function and a string. <VALREF STRID="StringCvt"/scanString/
+---
+>           scanning function <ARG/f/ and a string <ARG/s/. <VALREF STRID="StringCvt"/scanString/
+diff -r Basis/ML-Doc/string.mldoc Basis.SAV/ML-Doc/string.mldoc
+10c10
+< <VERSION VERID="1.11" YEAR=2000 MONTH=5 DAY=23>
+---
+> <VERSION VERID="1.10" YEAR=1998 MONTH=7 DAY=21>
+29c29,30
+< <TYREF SIGID="CHAR"/char/ as defined in the structure.
+---
+> <TYREF SIGID="CHAR"/char/ as defined in the substructure
+> <STRREF SIGID="STRING"/Char/.
+33,34c34
+< The former implements strings based on the extended ASCII 8-bit characters,
+< and is a companion structure to the <STRREF/Char/ structure.
+---
+> The former implements strings based on 8-bit characters.
+36,45c36
+< of some size greater than or equal to 8 bits,
+< and is related to the structure <STRREF/WideChar/.
+< In particular, the type <TYREF STRID="String" NOLINK/String.char/
+< is identical to the type <TYREF STRID="Char" NOLINK/Char.char/
+< and, when <STRREF/WideString/ is defined, the type
+< <TYREF STRID="WideString" NOLINK/WideString.char/
+< is identical to the type <TYREF STRID="WideChar" NOLINK/WideChar.char/.
+< These connections are made explicit in the
+< <STRREF TOPID/Text/ and <STRREF TOPID/WideText/ structures,
+< which match the <SIGREF/TEXT/ signature.
+---
+> of some size greater than or equal to 8 bits.
+151,152d141
+<           This raises <EXNREF STRID="General"/Size/ if resulting string would
+<           have length greater than <VALREF SIGID="STRING"/maxSize/.
+206d194
+<       <VAL>isSubstring<TY>string -> string -> bool
+210,211d197
+<           <PROTO>
+<             isSubstring <ARG/s1/ <ARG/s2/
+213,217c199,200
+<           return <CD/true/ if the string <ARG/s1/ is a prefix 
+<           (substring, respectively) of the string <ARG/s2/.
+<           Note that the empty string is a prefix and a substring
+<           of any string, and that a string is a prefix and a substring
+<           of itself.
+---
+>           returns <CD/true/ if the string <ARG/s1/ is a prefix of the string
+>           <ARG/s2/.
+259c242
+<           scans a string <ARG/s/ as an SML source program string,
+---
+>           scans a printable string <ARG/s/ as an SML source program string,
+263,264c246
+<           of <ARG/s/, or a non-printing character (i.e., one not
+<           satisfying<VALREF STRID="Char"/isPrint/), 
+---
+>           of <ARG/s/ or a non-printing character, 
+266c248
+<           These remaining characters are ignored.
+---
+>           These additional characters are ignored.
+293c275
+<           scans the string <ARG/s/ as a string in the C language,
+---
+>           scans the string <ARG/s/ as a C source program string,
+301,302d282
+< Note that <VALREF/fromCString/ accepts an unescaped single quote character,
+< but does not accept an unescaped double quote character.
+diff -r Basis/ML-Doc/substring.mldoc Basis.SAV/ML-Doc/substring.mldoc
+10c10
+< <VERSION VERID="1.10" YEAR=2000 MONTH=5 DAY=24>
+---
+> <VERSION VERID="1.9" YEAR=1998 MONTH=7 DAY=21>
+26,27c26
+< an abstract representation of a sequence of contiguous characters
+< in a string.
+---
+> an abstract representation of a piece of a string.
+38,39c37,38
+< In addition, using the <TYREF NOLINK/substring/ functions avoid much of the
+< copying and bounds checking that occur if similar operations are
+---
+> In addition, using the <TYREF NOLINK/substring/ functions avoids much of the
+> copying and bounds checking that occurs if similar operations are
+44,45c43
+< the required <STRREF NOLINK/Substring/ and the 
+< optional <STRREF NOLINK/WideSubstring/.
+---
+> the required <STRREF NOLINK/Substring/ and the optional <STRREF NOLINK/WideSubstring/.
+51,64c49,53
+< In particular, the types <TYREF STRID="Substring" NOLINK/Substring.string/
+< and <TYREF STRID="Substring" NOLINK/Substring.char/
+< are identical to those types in the structure <STRREF/String/ and, 
+< when <STRREF/WideSubstring/ is defined, the types
+< <TYREF STRID="WideSubstring" NOLINK/WideSubstring.string/
+< and <TYREF STRID="WideSubstring" NOLINK/WideSubstring.char/
+< are identical to those types in the structure <STRREF/WideString/.
+< <PP>
+< All of these connections are made explicit in the
+< <STRREF TOPID/Text/ and <STRREF TOPID/WideText/ structures,
+< which match the <SIGREF/TEXT/ signature.
+< In the exposition below, references to a <CD/String/ structure refers
+< to the substructure of that name defined in either the <STRREF TOPID/Text/ 
+< or the <STRREF TOPID/WideText/ structure, which ever is appropriate.
+---
+> In particular, substructure <STRREF STRID="Substring" NOLINK/Substring.String/
+> is identical to the structure <STRREF/String/ and, when <STRREF/WideSubstring/
+> is defined, the substructure
+> <STRREF STRID="WideSubstring" NOLINK/WideSubstring.String/ is identical 
+> to <STRREF/WideString/.
+105c94
+<           <MATH/<CD/size/ <ARG/s/ &LESS; <ARG/i//.
+---
+>           <CD/<VALREF SIGID="STRING"/size/ <ARG/s/ &LESS; <ARG/i//.
+112,113c101
+<           Note that, if defined, <VALREF SIGID="SUBSTRING"/extract/ returns 
+<           the empty substring
+---
+>           Note that, if defined, <VALREF SIGID="STRING"/extract/ returns the empty string
+194c182
+<           and <MATH/<ARG/k/ &LESSEQ; <ARG/j//, we have:
+---
+>           and <MATH/<ARG/k/ &GREATER; <ARG/j//, we have:
+196,197c184,185
+< <VALREF SIGID="SUBSTRING"/triml/ <ARG/k/ <ARG/ss/ = <VALREF SIGID="SUBSTRING"/substring/(<ARG/s/, <ARG/i/+<ARG/k/, <ARG/j/-<ARG/k/)
+< <VALREF SIGID="SUBSTRING"/trimr/ <ARG/k/ <ARG/ss/ = <VALREF SIGID="SUBSTRING"/substring/(<ARG/s/, <ARG/i/, <ARG/j/-<ARG/k/)
+---
+> <VALREF SIGID="SUBSTRING"/triml/ <ARG/k/ <ARG/ss/ = <VALREF SIGID="SUBSTRING"/substring/(<ARG/s/, <ARG/i/+<ARG/j/, <ARG/0/)
+> <VALREF SIGID="SUBSTRING"/trimr/ <ARG/k/ <ARG/ss/ = <VALREF SIGID="SUBSTRING"/substring/(<ARG/s/, <ARG/i/, <ARG/0/)
+235,236d222
+<           <MATH/0 &LESSEQ; <ARG/i// and 
+<           <MATH/<ARG/i/ &LESSEQ; <VALREF SIGID="TEXT"/String.size/ <ARG/s//.
+272d257
+<       <VAL>isSubstring<TY>string -> substring -> bool
+276,277d260
+<           <PROTO>
+<             isSubstring <ARG/s/ <ARG/ss/
+279,280c262,263
+<           returns <CD/true/ if the string <ARG/s/ is a prefix (substring,
+<           respectively) of the substring <ARG/ss/.
+---
+>           returns <CD/true/ if the string <ARG/s/ is a prefix of the substring
+>           <ARG/ss/.
+363,365c346,347
+<           the maximal substring consisting of characters satisfying 
+<           the predicate, while the take
+<           functions take the maximal such substring. These can be defined
+---
+>           the maximal substring satisfying the predicate, while the take
+>           functions take the maximal substring. These can be defined
+388c370
+<           If there is a least index <MATH/<ARG/k/ &GREATEREQ; <ARG/i// such that
+---
+>           If there is a least index <ARG/k/ such that
+431c413
+<    val host = takel (notc #"/") (triml 3 rest)
+---
+>    val host = takel (notc #"/") (trim  3 rest)
+512,518d493
+< <PP>
+< <IMPLNOTE>
+< Functions that extract pieces of a substring, such as <VALREF/splitl/ or 
+< <VALREF/tokens/ should return substrings with the same base string. 
+< This is particularly important if <VALREF/span/ is to be used to put
+< the pieces back together again.
+< </IMPLNOTE>
+Only in Basis/ML-Doc: system-over.mldoc
+Only in Basis/ML-Doc: text-over.mldoc
+diff -r Basis/ML-Doc/text.mldoc Basis.SAV/ML-Doc/text.mldoc
+46,47d45
+<   <SIGINSTANCE STATUS=REQUIRED> <ID>Text
+<   <SIGINSTANCE STATUS=OPTIONAL> <ID>WideText
+diff -r Basis/ML-Doc/top-level-chapter.mldoc Basis.SAV/ML-Doc/top-level-chapter.mldoc
+20,27c20
+< <PP>
+< There are two reasons for including (non-module) identifiers in the
+< top-level environment. The first is convenience. Certain types and
+< values are used so frequently that it would be perverse to force
+< the programmer to always open the containing structures or
+< to use the qualified names. This is particularly true for interactive
+< interfaces, in which notational simplicity and fewer keystrokes are desirable.
+< The second reason is to allow operator overloading.
+---
+> 
+31c24
+< There are no default requirements on which modules will be initially
+---
+> There are no default requirements on which modules will be intially
+47c40
+< We note that the special identifiers <CD/=/ and <CD/&NEQ;/,
+---
+> We note in passing that the special identifiers <CD/=/ and <CD/&NEQ;/,
+123,124c116,117
+< The next list presents the exception constructors
+< available at top-level. All of these are defined in
+---
+> The next list presents the exceptions and exception constructors
+> available at top-level. All of the exceptions are defined in
+168c161
+< at top-level, plus the structure value in which each is bound.
+---
+> at top-level, plus the structure value to which each is bound.
+177c170
+<   <TD/<TT/val ! : 'a ref -> 'a//
+---
+>   <TD/<CD/val ! : 'a ref -> 'a//
+181c174
+<   <TD/<TT/val := : 'a ref * 'a -> unit//
+---
+>   <TD/<CD/val := : 'a ref * 'a -> unit//
+185,186c178,179
+<   <TD/<TT/val @ : ('a list * 'a list) -> 'a list//
+<   <TD/<CD/List.@//
+---
+>   <TD/<CD/val ref : 'a -> 'a ref//
+>   <TD/<IT/primitive//
+189,190c182,183
+<   <TD/<TT/val ^ : string * string -> string//
+<   <TD/<CD/String.^//
+---
+>   <TD/<CD/val before : 'a * unit -> 'a//
+>   <TD/<CD/General.before//
+193,194c186,187
+<   <TD/<TT/val app : ('a -> unit) -> 'a list -> unit//
+<   <TD/<CD/List.app//
+---
+>   <TD/<CD/val ignore : 'a -> unit//
+>   <TD/<CD/General.ignore//
+197,198c190,191
+<   <TD/<TT/val before : 'a * unit -> 'a//
+<   <TD/<CD/General.before//
+---
+>   <TD/<CD/val o : ('a->'b) * ('c->'a) -> 'c->'b//
+>   <TD/<CD/General.o//
+201,202c194,195
+<   <TD/<TT/val ceil : real -> int//
+<   <TD/<CD/Real.ceil//
+---
+>   <TD/<CD/val exnName : exn -> string//
+>   <TD/<CD/General.exnName//
+205,206c198,199
+<   <TD/<TT/val chr : int -> char//
+<   <TD/<CD/Char.chr//
+---
+>   <TD/<CD/val exnMessage : exn -> string//
+>   <TD/<CD/General.exnMessage//
+209,210c202,203
+<   <TD/<TT/val concat : string list -> string//
+<   <TD/<CD/String.concat//
+---
+>   <TD/<CD/val getOpt : ('a option * 'a) -> 'a//
+>   <TD/<CD/Option.getOpt//
+213,214c206,207
+<   <TD/<TT/val exnMessage : exn -> string//
+<   <TD/<CD/General.exnMessage//
+---
+>   <TD/<CD/val isSome : 'a option -> bool//
+>   <TD/<CD/Option.isSome//
+217,218c210,211
+<   <TD/<TT/val exnName : exn -> string//
+<   <TD/<CD/General.exnName//
+---
+>   <TD/<CD/val valOf : 'a option -> 'a//
+>   <TD/<CD/Option.valOf//
+221,222c214,215
+<   <TD/<TT/val explode : string -> char list//
+<   <TD/<CD/String.explode//
+---
+>   <TD/<CD/val not : bool -> bool//
+>   <TD/<CD/Bool.not//
+225,226c218,219
+<   <TD/<TT/val floor : real -> int//
+<   <TD/<CD/Real.floor//
+---
+>   <TD/<CD/val real : int -> real//
+>   <TD/<CD/Real.fromInt//
+229,230c222,223
+<   <TD/<TT/val foldl: ('a*'b->'b)-> 'b -> 'a list -> 'b//
+<   <TD/<CD/List.foldl//
+---
+>   <TD/<CD/val trunc : real -> int//
+>   <TD/<CD/Real.trunc//
+233,234c226,227
+<   <TD/<TT/val foldr: ('a*'b->'b)-> 'b -> 'a list -> 'b//
+<   <TD/<CD/List.foldr//
+---
+>   <TD/<CD/val floor : real -> int//
+>   <TD/<CD/Real.floor//
+237,238c230,231
+<   <TD/<TT/val getOpt : ('a option * 'a) -> 'a//
+<   <TD/<CD/Option.getOpt//
+---
+>   <TD/<CD/val ceil : real -> int//
+>   <TD/<CD/Real.ceil//
+241,242c234,235
+<   <TD/<TT/val hd : 'a list -> 'a//
+<   <TD/<CD/List.hd//
+---
+>   <TD/<CD/val round : real -> int//
+>   <TD/<CD/Real.round//
+245,246c238,239
+<   <TD/<TT/val ignore : 'a -> unit//
+<   <TD/<CD/General.ignore//
+---
+>   <TD/<CD/val ord : char -> int//
+>   <TD/<CD/Char.ord//
+249,250c242,243
+<   <TD/<TT/val isSome : 'a option -> bool//
+<   <TD/<CD/Option.isSome//
+---
+>   <TD/<CD/val chr : int -> char//
+>   <TD/<CD/Char.chr//
+253,254c246,247
+<   <TD/<TT/val implode : char list -> string//
+<   <TD/<CD/String.implode//
+---
+>   <TD/<CD/val size : string -> int//
+>   <TD/<CD/String.size//
+257,258c250,251
+<   <TD/<TT/val length : 'a list -> int//
+<   <TD/<CD/List.length//
+---
+>   <TD/<CD/val str : char -> string//
+>   <TD/<CD/String.str//
+261,262c254,255
+<   <TD/<TT/val map : ('a -> 'b) -> 'a list -> 'b list//
+<   <TD/<CD/List.map//
+---
+>   <TD/<CD/val concat : string list -> string//
+>   <TD/<CD/String.concat//
+265,266c258,259
+<   <TD/<TT/val not : bool -> bool//
+<   <TD/<CD/Bool.not//
+---
+>   <TD/<CD/val implode : char list -> string//
+>   <TD/<CD/String.implode//
+269,270c262,263
+<   <TD/<TT/val null : 'a list -> bool//
+<   <TD/<CD/List.null//
+---
+>   <TD/<CD/val explode : string -> char list//
+>   <TD/<CD/String.explode//
+273,274c266,267
+<   <TD/<TT/val o : ('a->'b) * ('c->'a) -> 'c->'b//
+<   <TD/<CD/General.o//
+---
+>   <TD/<CD/val substring : string * int * int -> string//
+>   <TD/<CD/String.substring//
+277,278c270,271
+<   <TD/<TT/val ord : char -> int//
+<   <TD/<CD/Char.ord//
+---
+>   <TD/<CD/val ^ : string * string -> string//
+>   <TD/<CD/String.^//
+281,282c274,275
+<   <TD/<TT/val print : string -> unit//
+<   <TD/<CD/TextIO.print//
+---
+>   <TD/<CD/val null : 'a list -> bool//
+>   <TD/<CD/List.null//
+285,286c278,279
+<   <TD/<TT/val real : int -> real//
+<   <TD/<CD/Real.fromInt//
+---
+>   <TD/<CD/val hd : 'a list -> 'a//
+>   <TD/<CD/List.hd//
+289,290c282,283
+<   <TD/<TT/val ref : 'a -> 'a ref//
+<   <TD/<IT/primitive//
+---
+>   <TD/<CD/val tl : 'a list -> 'a list//
+>   <TD/<CD/List.tl//
+293,294c286,287
+<   <TD/<TT/val rev  : 'a list -> 'a list//
+<   <TD/<CD/List.rev//
+---
+>   <TD/<CD/val length : 'a list -> int//
+>   <TD/<CD/List.length//
+297,298c290,291
+<   <TD/<TT/val round : real -> int//
+<   <TD/<CD/Real.round//
+---
+>   <TD/<CD/val rev  : 'a list -> 'a list//
+>   <TD/<CD/List.rev//
+301,302c294,295
+<   <TD/<TT/val size : string -> int//
+<   <TD/<CD/String.size//
+---
+>   <TD/<CD/val @ : ('a list * 'a list) -> 'a list//
+>   <TD/<CD/List.@//
+305,306c298,299
+<   <TD/<TT/val str : char -> string//
+<   <TD/<CD/String.str//
+---
+>   <TD/<CD/val app : ('a -> unit) -> 'a list -> unit//
+>   <TD/<CD/List.app//
+309,310c302,303
+<   <TD/<TT/val substring : string * int * int -> string//
+<   <TD/<CD/String.substring//
+---
+>   <TD/<CD/val map : ('a -> 'b) -> 'a list -> 'b list//
+>   <TD/<CD/List.map//
+313,314c306,307
+<   <TD/<TT/val tl : 'a list -> 'a list//
+<   <TD/<CD/List.tl//
+---
+>   <TD/<CD/val foldr: ('a*'b->'b)-> 'b -> 'a list -> 'b//
+>   <TD/<CD/List.foldr//
+317,318c310,311
+<   <TD/<TT/val trunc : real -> int//
+<   <TD/<CD/Real.trunc//
+---
+>   <TD/<CD/val foldl: ('a*'b->'b)-> 'b -> 'a list -> 'b//
+>   <TD/<CD/List.foldl//
+321,322c314,315
+<   <TD/<TT/val use : string -> unit//
+<   <TD/<IT/implementation-dependent//
+---
+>   <TD/<CD/val print : string -> unit//
+>   <TD/<CD/TextIO.print//
+325,326c318,319
+<   <TD/<TT/val valOf : 'a option -> 'a//
+<   <TD/<CD/Option.valOf//
+---
+>   <TD/<CD/val vector : 'a list -> 'a vector//
+>   <TD/<CD/Vector.fromList//
+329,330c322,323
+<   <TD/<TT/val vector : 'a list -> 'a vector//
+<   <TD/<CD/Vector.fromList//
+---
+>   <TD/<CD/val use : string -> unit//
+>   <TD/<IT/primitive//
+409c402
+< The same type must be chosen throughout the entire type schema of
+---
+> The same type must be chosen throughout the entire type of
+417c410
+< The appendix provides additional information on how overloading resolution 
+---
+> Appendix C provides additional information on how overloading resolution 
+436c429
+< and both bind more tightly than <CD/::/ and <CD/@/.  All these identifiers
+---
+> and both bind tighter than <CD/::/ and <CD/@/.  All these identifiers
+438c431
+< <CD/::/ and <CD/@/, which are right-associative.
+---
+> <CD/::/ and <CD/@/ which are right-associative.
+diff -r Basis/ML-Doc/tut-io.mldoc Basis.SAV/ML-Doc/tut-io.mldoc
+17,20c17,38
+< This section explains how to use the top three I/O layers
+< (ImperativeIO, StreamIO, PrimIO), 
+< and how to move from one layer to another.
+< We give examples using
+---
+> The Input/Output subsystem of the SML Basis Library comprises several
+> layers.  At bottom, one can operate directly on raw file descriptors
+> using <STRREF STRID="Posix" NOLINK/Posix.IO/ or its Windows equivalent.
+> The next level up, <SIGREF/PRIM_IO/ provides an operating-system-independent
+> view of the same primitive operations.  The <SIGREF/STREAM_IO/ layer
+> provides buffering and functional-stream capabilities, and the
+> <SIGREF/IMPERATIVE_IO/ layer above that provides "conventional" 
+> imperative buffered input/output.
+> <PP>
+> Most programmers will want to operate at the <SIGREF/STREAM_IO/ 
+> or <SIGREF/IMPERATIVE_IO/ layer; only for special purposes should
+> it be necessary to go to a lower layer of the I/O stack.  This chapter
+> explains how to use each layer, and how to move from one layer to
+> another.
+> <PP>
+> <BF>Characters and bytes.</BF>
+> The I/O hierarchy (ImperativeIO, StreamIO, PrimIO) has two instantiations:
+> <STRREF TOPID/TextIO/, where the individual elements are characters 
+> (<TYREF STRID="Char"/Char.char/), and <STRREF TOPID/BinIO/,
+> where the elements are bytes (<TYREF STRID="Word8"/Word8.word/).
+> Users can also create new instantiations of the hierarchy at
+> other element types.  In this chapter we give examples using
+22a41
+> <PP>
+33c52
+< Of course, something might go wrong: perhaps the file does not
+---
+> Of course, something might go wrong: perhaps the file doesn't
+51,70d69
+< <PP>
+< There are other ways to open streams. One can use 
+< <CD/<VALREF STRID="TextIO"/TextIO.openString/ <ARG/s// to open an input stream
+< whose content is the string <ARG/s/. Operating system interfaces will
+< typically provide a mechanism for converting an open file descriptor
+< into a <TYREF STRID=PrimIO/PrimIO.reader/, which can then easily be
+< converted into a function or imperative stream. For example,
+< the following function uses a Posix file descriptor to create an
+< functional input stream:
+< <CODE>
+< fun openIn (fd : Posix.IO.file_desc, name : string) =
+<  let val rdr : PrimIO.reader = Posix.IO.mkReader {
+<                                  fd = fd,
+<                                  name = name,
+<                                  initBlkMode = true
+<                                }
+<  in TextIO.StreamIO.mkInstream(rdr, "")
+< end
+< </CODE>
+< 
+102c101
+< where the chunks are at the convenience of the SML system and
+---
+> where the chunks are at the convenience of the ML system and
+130,131c129,130
+< the functional style of the SML programming language, we may not wish
+< to use the imperative I/O operations that say,
+---
+> the functional style of the ML programming language, we may not wish
+> to use the imperative IO operations that say,
+208c207
+< word <CD/"thousand"/ if it
+---
+> word "thousand" if it
+315,324d313
+< To make a <TYREF STRID="TextIO"/TextIO.instream/ from
+< a <TYREF STRID="TextIO.StreamIO"/TextIO.StreamIO.instream/,
+< use <VALREF STRID="TextIO"/mkInstream/.  Thus, to go from a reader
+< <ARG/rd/ and buffer <ARG/buf/
+< all the way to an imperative stream, we write
+< <CODE>
+< TextIO.mkInstream(TextIO.StreamIO.mkInstream(<ARG/rd/,<ARG/buf/))
+< </CODE>
+< 
+< <PP>
+393c382
+< <PP>Stream output in SML also comes in two flavors, provided by
+---
+> <PP>Stream output in ML also comes in two flavors, provided by
+414c403
+< this mostly achieves the expected interactive behavior.  However, the SML
+---
+> this mostly achieves the expected interactive behavior.  However, the ML
+417c406
+< use <CD/TextIO.flushOut f/ after one or more outputs to stream <CD/f/.
+---
+> use <CD/TextIO.flushOut(f)/ after one or more outputs to stream <CD/f/.
+422,427c411,413
+< <TYREF STRID=TextIO.StreamIO/out_pos/ value, representing the current
+< position in the output. If, at some later time, the program wishes
+< to return to that position, for example, to overwrite the text there,
+< it can call <VALREF STRID=TextIO/setPosOut/ with the 
+< <TYREF STRID=TextIO.StreamIO/out_pos/ value. This will reset 
+< the output stream to that position.
+---
+> <TYREF STRID=TextIO.StreamIO/out_pos/, and 
+> <VALREF STRID=TextIO/setPosOut/ resets output to a previously
+> gotten position.  
+436c422
+< <PP>
+---
+> 
+444c430
+< to make the standard output stream 
+---
+> to dynamically make the standard output stream 
+473,476c459,460
+< <TYREF STRID="TextPrimIO"/writer/ supports primitive output operations. 
+< (Note that the primitive I/O <TYREF STRID="TextPrimIO"/reader/
+< has no connection with <TYREF STRID="StringCvt"/StringCvt.reader/.)
+< Typically, each read or write operation at this
+---
+> <TYREF STRID="TextPrimIO"/writer/ supports primitive output
+> operations.  Typically, each read or write operation at this
+494,497c478,480
+< A reader is basically a record of various operations, 
+< wrapped in a <CONREF STRID="TextPrimIO"/RD/ data constructor.
+< We could, for example, read 1024 characters and then rebuild 
+< an <TYREF STRID="TextIO.StreamIO"/instream/ (using
+---
+> The reader comprises a <CONREF STRID="TextPrimIO"/RD/ data constructor
+> applied to a record of several operations.  We could, for example,
+> read 1024 characters and then rebuild an an outstream (using
+510c493
+< Moving from the StreamIO layer to the PrimIO layer and back gives one
+---
+> Moving from the StreamIO layer to the PrimIO layer and back gives
+573c556
+< files than in SML strings.  For example, newlines are one character in 
+---
+> files than in ML strings.  For example, newlines are one character in 
+623a607,625
+> <BF>Empty readers.</BF>
+> To turn a string into an instream, one can use it as the initial
+> buffer supplied to <VALREF STRID="TextIO.StreamIO"/mkInstream/,
+> and provide an "empty" reader:
+> <CODE>
+> fun stringToStream(mystring: string) : TS.instream =
+>   let val rd = TextPrimIO.RD{
+>                 name="empty", chunkSize=1, 
+>                 readVec=SOME(fn n => ""),
+>                 readArr=NONE,readVecNB=NONE,readArrNB=NONE,
+>                 block=SOME(fn()=>()), 
+>                 canInput=SOME(fn()=>true),
+>                 avail=fn()=>NONE,
+>                 getPos=NONE, setPos=NONE, endPos=NONE, verifyPos=NONE,
+>                 close=fn()=>(),
+>                 ioDesc=NONE}
+>    in TS.mkInstream(rd, mystring)
+>   end
+> </CODE>
+624a627,637
+> <BF>From StreamIO up to ImperativeIO.</BF>
+> To make a <TYREF STRID="TextIO"/TextIO.instream/ from
+> a <TYREF STRID="TextIO.StreamIO"/TextIO.StreamIO.instream/,
+> use <VALREF STRID="TextIO"/mkInstream/.  Thus, to go from a reader
+> <ARG/rd/ and buffer <ARG/buf/
+> all the way to an imperative stream, we write,
+> <CODE>
+> TextIO.mkInstream(TextIO.StreamIO.mkInstream(<ARG/rd/,<ARG/buf/))
+> </CODE>
+> The <CD/infiniteBlanks/ and <CD/stringToStream/ examples could
+> be easily adjusted to produce imperative streams instead of functional ones.
+625a639
+> 
+diff -r Basis/ML-Doc/unix-sock.mldoc Basis.SAV/ML-Doc/unix-sock.mldoc
+27c27
+< <STRUCTURE STRID="UnixSock" STATUS=OPTIONAL>
+---
+> <STRUCTURE STRID="UnixSock">
+diff -r Basis/ML-Doc/unix.mldoc Basis.SAV/ML-Doc/unix.mldoc
+6c6
+< <VERSION VERID="1.1" YEAR=2000 MONTH=5 DAY=31>
+---
+> <VERSION VERID="1.0" YEAR=1997 MONTH=1 DAY=31>
+141,152c141
+<           given by <ARG/pr/ when it terminated. If <CD/reap/ is applied
+<           again to <ARG/pr/, it should immediately return the previous
+<           exit status.
+<           <IMPLNOTE>
+<           Typically, one cannot rely on the underlying operating system
+<           to provide the exit status of a terminated process after it
+<           has done so once. Thus, the exit status probably needs to be cached.
+<           Also note that <CD/reap/ should not return until the process
+<           being monitored has terminated. In particular, implementations 
+<           should be careful not to return if the process has only been
+<           suspended.
+<           </IMPLNOTE>
+---
+>           given by <ARG/pr/ when it terminated.
+Only in Basis/ML-Doc: vector-slice.mldoc
+diff -r Basis/ML-Doc/vector.mldoc Basis.SAV/ML-Doc/vector.mldoc
+47c47
+< 	  creates a vector of <ARG/n/ elements, where the elements are
+---
+> 	  creates an vector of <ARG/n/ elements, where the elements are
+63c63
+<           returns <MATH/<NORM/<ARG/vec///, the length of the vector <ARG/vec/.
+---
+>           returns <MATH/<NORM/<ARG/vec///, the length of the array <ARG/vec/.
+75d74
+<     <SPECBREAK>
+77c76
+<       <VAL>update<TY>('a vector * int * 'a) -> 'a vector
+---
+>       <VAL>extract<TY>('a vector * int * int option) -> 'a vector
+81c80
+<           update (<ARG/vec/, <ARG/i/, <ARG/x/)
+---
+>           extract <ARG/slice/
+83,87c82,85
+< 	  returns a new vector, identical to <ARG/vec/, except the 
+<       <ARG/i/th element of <ARG/vec/ is set to <ARG/x/.
+< 	  If <MATH><ARG/i/ &LESS; 0</MATH> or
+< 	  <MATH><NORM><ARG/vec/</NORM> &LESSEQ; <ARG/i/</MATH>, then
+< 	  the <EXNREF STRID="General"/Subscript/ exception is raised.
+---
+> 	  extracts the <AREF TAG="array-vector-slice">vector slice</AREF>
+> 	  <ARG/slice/ from the vector <ARG/vec/, and returns it as a vector.
+> 	  If the slice is not <AREF TAG="valid-slices">valid,</AREF> then
+> 	  the exception <EXNREF STRID="General"/Subscript/ is raised.
+100,101c98,100
+<       <VAL>appi<TY>((int * 'a) -> unit) -> 'a vector -> unit
+<       <VAL>app<TY>('a -> unit) -> 'a vector -> unit
+---
+>       <VAL>mapi<TY>((int * 'a) -> 'b) -> ('a vector * int * int option) -> 'b vector
+>         <RAISES><EXNREF STRID="General"/Subscript/
+>       <VAL>map<TY>('a -> 'b) -> 'a vector -> 'b vector
+104c103
+<           appi <ARG/f/ <ARG/vec/
+---
+>           mapi <ARG/f/ <ARG/slice/
+106c105
+<           app <ARG/f/ <ARG/vec/
+---
+>           map <ARG/f/ <ARG/vec/
+108,111c107,111
+< 	  apply the function <ARG/f/ to the elements of a vector in
+< 	  left to right order (i.e., increasing indices).
+< 	  The more general <VALREF STRID="Vector"/appi/ function
+< 	  supplies both the element and the element's index to the
+---
+>           produce new vectors by mapping the function <ARG/f/ from left to 
+>           right over the argument vector or slice.
+> 	  The more general <VALREF STRID="Vector"/mapi/ function applies <ARG/f/ to the elements
+> 	  of the <AREF TAG="array-vector-slice">vector slice</AREF> <ARG/slice/
+> 	  and supplies both the element and the element's index to the
+113,117c113,127
+<           These are respectively equivalent to:
+<       <CODE>
+<       List.app f (foldri (fn (i,a,l) => (i,a)::l) [] vec)
+<       List.app f (foldr (fn (a,l) => a::l) [] vec)
+<       </CODE>
+---
+> 	  If <ARG/slice/ is not <AREF TAG="valid-slices">valid</AREF>, then
+> 	  the exception <EXNREF STRID="General"/Subscript/ is raised.
+> 	  The expression <CD>mapi <ARG/f/ <ARG/slice/</CD>
+> 	  is equivalent to:
+> 	  <CODE>
+> fromList (List.map f (foldri (fn (i,a,l) => (i,a)::l) [] slice))
+> </CODE>
+> 	  <PP>
+> 	  The function <VALREF STRID="Vector"/map/ applies <ARG/f/ to the whole vector and
+> 	  does not supply the element index to <ARG/f/.
+> 	  Thus the expression <CD>map <ARG/f/ <ARG/vec/</CD>
+> 	  is equivalent to:
+> 	  <CODE>
+> mapi (<ARG/f/ o #2) (<ARG/vec/, 0, NONE)
+> </CODE>
+119,120c129,131
+<       <VAL>mapi<TY>((int * 'a) -> 'b) -> 'a vector -> 'b vector
+<       <VAL>map<TY>('a -> 'b) -> 'a vector -> 'b vector
+---
+>       <VAL>appi<TY>((int * 'a) -> unit) -> ('a vector * int * int option) -> unit
+>         <RAISES><EXNREF STRID="General"/Subscript/
+>       <VAL>app<TY>('a -> unit) -> 'a vector -> unit
+123c134
+<           mapi <ARG/f/ <ARG/vec/
+---
+>           appi <ARG/f/ <ARG/slice/
+125c136
+<           map <ARG/f/ <ARG/vec/
+---
+>           app <ARG/f/ <ARG/vec/
+127,134c138,153
+<           produce new vectors by mapping the function <ARG/f/ from left to 
+<           right over the argument vector. The more general form <VALREF/mapi/ supplies
+<           <CD/f/ with the vector index of an element along with the element. 
+<           These are respectively equivalent to:
+<       <CODE>
+<       fromList (List.map f (foldri (fn (i,a,l) => (i,a)::l) [] vec))
+<       fromList (List.map f (foldr (fn (a,l) => a::l) [] vec))
+<       </CODE>
+---
+> 	  apply the function <ARG/f/ to the elements of a vector in
+> 	  left to right order (i.e., increasing indices).
+> 	  The more general <VALREF STRID="Vector"/appi/ function applies <ARG/f/ to the elements
+> 	  of the <AREF TAG="array-vector-slice">vector slice</AREF> <ARG/slice/
+> 	  and supplies both the element and the element's index to the
+> 	  function <ARG/f/.
+> 	  If <ARG/slice/ is not <AREF TAG="valid-slices">valid</AREF>, then
+> 	  the exception <EXNREF STRID="General"/Subscript/ is raised.
+> 	  <PP>
+> 	  The function <VALREF STRID="Vector"/app/ applies <ARG/f/ to the whole vector and
+> 	  does not supply the element index to <ARG/f/.
+> 	  Thus the expression <CD>app <ARG/f/ <ARG/vec/</CD>
+> 	  is equivalent to:
+> 	  <CODE>
+> appi (<ARG/f/ o #2) (<ARG/vec/, 0, NONE)
+> </CODE>
+136,137c155,158
+<       <VAL>foldli<TY>((int * 'a * 'b) -> 'b) -> 'b -> 'a vector -> 'b
+<       <VAL>foldri<TY>((int * 'a * 'b) -> 'b) -> 'b -> 'a vector -> 'b
+---
+>       <VAL>foldli<TY>((int * 'a * 'b) -> 'b) -> 'b -> ('a vector * int * int option) -> 'b
+>         <RAISES><EXNREF STRID="General"/Subscript/
+>       <VAL>foldri<TY>((int * 'a * 'b) -> 'b) -> 'b -> ('a vector * int * int option) -> 'b
+>         <RAISES><EXNREF STRID="General"/Subscript/
+142c163
+<             foldli <ARG/f/ <ARG/init/ <ARG/vec/
+---
+>             foldli <ARG/f/ <ARG/init/ <ARG/slice/
+144c165
+<             foldri <ARG/f/ <ARG/init/ <ARG/vec/
+---
+>             foldri <ARG/f/ <ARG/init/ <ARG/slice/
+157,158c178,179
+< 	  The more general functions <VALREF STRID="Vector"/foldli/ 
+<       and <VALREF STRID="Vector"/foldri/ supply both the
+---
+> 	  The more general functions <VALREF STRID="Vector"/foldli/ and <VALREF STRID="Vector"/foldri/ work on
+> 	  <AREF TAG="array-vector-slice">vector slices</AREF>, and supply both the
+160,161c181,185
+< 	  The last two expressions
+< 	  are respectively equivalent to:
+---
+> 	  <PP>
+> 	  The functions <VALREF STRID="Vector"/foldl/ and <VALREF STRID="Vector"/foldr/ work on the whole vector
+> 	  <ARG/vec/ and do not supply the element index to <ARG/f/.
+> 	  Thus the expression <CD>foldl <ARG/f/ <ARG/init/ <ARG/vec/</CD>
+> 	  is equivalent to:
+163,165c187,189
+<       foldli (fn (_, <ARG/a/, <ARG/x/) => <ARG/f/(<ARG/a/, <ARG/x/)) <ARG/init/ <ARG/vec/
+<       foldri (fn (_, <ARG/a/, <ARG/x/) => <ARG/f/(<ARG/a/, <ARG/x/)) <ARG/init/ <ARG/vec/
+<       </CODE>
+---
+> foldli (fn (_, <ARG/a/, <ARG/x/) => <ARG/f/(<ARG/a/, <ARG/x/))
+>   <ARG/init/ (<ARG/vec/, 0, NONE)
+> </CODE>
+170,171c194,195
+<        foldr (op ::) [] <ARG/vec/
+<        </CODE>
+---
+> foldr (op ::) [] <ARG/vec/
+> </CODE>
+173,221d196
+<     <SPEC>
+<       <VAL>findi<TY>((int * 'a) -> bool) -> 'a vector -> (int * 'a) option
+<       <VAL>find<TY>('a -> bool) -> 'a vector -> 'a option
+<         <COMMENT>
+<           <PROTOTY>
+<           findi <ARG/f/ <ARG/vec/
+<           <PROTO>
+<           find <ARG/f/ <ARG/vec/
+<           </PROTOTY>
+<           apply <ARG/f/ to each element of the vector
+< <ARG/vec/, from left to right (i.e., increasing indices), until 
+< a <CD>true</> value is returned. If this occurs, the functions return
+< the element. The more general version <VALREF/appi/ also supplies <ARG/f/ with
+< the vector index of the element and, upon finding an entry
+< satisfying the predicate, returns that index with the element.
+<     <SPECBREAK>
+<     <SPEC>
+<       <VAL>exists<TY>('a -> bool) -> 'a vector -> bool
+<         <COMMENT>
+<           <PROTOTY>
+<           exists <ARG/f/ <ARG/vec/
+<           </PROTOTY>
+<           applies <ARG/f/ to each element <ARG/x/ of the vector
+< <ARG/vec/, from left to right (i.e., increasing indices),
+< until <CD/<ARG/f/ <ARG/x// evaluates to
+< <CD>true</>; returns <CD>true</> if  
+< such an <ARG/x/ exists and <CD>false</> otherwise.
+<     <SPECBREAK>
+<     <SPEC>
+<       <VAL>all<TY>('a -> bool) -> 'a vector -> bool
+<         <COMMENT>
+<           <PROTOTY>
+<           all <ARG/f/ <ARG/vec/
+<           </PROTOTY>
+< applies <ARG/f/ to each element <ARG/x/ of the vector <ARG/vec/, from left to
+< right (i.e., increasing indices), until <CD/<ARG/f/ <ARG/x// evaluates
+< to <CD>false</>; returns <CD>false</>
+< if such an <ARG/x/ exists and <CD>true</> otherwise.
+< Equivalent to
+< <CD/<VALREF STRID="Bool">not</>(<VALREF STRID="Vector"/exists/ (<VALREF STRID="Bool">not</> o <ARG/f/
+< ) <ARG/l/))/.
+<     <SPEC>
+<       <VAL>collate<TY>(('a * 'a) -> order) -> ('a vector * 'a vector) -> order
+<         <COMMENT>
+<           <PROTOTY>
+<           collate <ARG/f/ (<ARG/vecl/, <ARG/vec2/)
+<           </PROTOTY>
+<           performs lexicographic comparison of the two vectors using the
+<           given ordering <ARG/f/ on elements.
+diff -r Basis/ML-Doc/windows.mldoc Basis.SAV/ML-Doc/windows.mldoc
+6c6
+< <VERSION VERID="1.2" YEAR=2000 MONTH=5 DAY=29>
+---
+> <VERSION VERID="1.0" YEAR=1999 MONTH=4 DAY=19>
+31c31
+< <STRUCTURE STRID="Windows" STATUS=OPTIONAL>
+---
+> <STRUCTURE STRID="Windows">
+412,432d411
+<       <VAL>executeWithNullStreams<TY>(string * string list) -> (unit,unit) proc
+<       <RAISES><EXNREF STRID="OS"/OS.SysErr/
+<         <COMMENT>
+<           <PROTOTY>
+<           executeWithNullStreams (<ARG/module/, <ARG/args/)
+<           </PROTOTY>
+<     spawns the process specified by <ARG/module/, with command-line arguments
+<     <ARG/args/, redirecting standard input and standard output to the 
+<     null device. This function handles those cases in Windows in which
+<     an executable cannot be run using the 
+<     <VALREF STRID="OS.Process"/OS.Process.system/ function.
+<     Also, the return value can be used with <VALREF/reap/ to provide more 
+<     information about the exit status of the process.
+<     <IMPLNOTE>
+<     This function corresponds to the use of <CD/CreateProcess/ as
+<     detailed in the Windows SDK document ``Creating a Child Process
+<     with Redirected Input and Output.''
+<     </IMPLNOTE>
+< 
+<     <SPECBREAK>
+<     <SPEC>
+465,477c444
+<           when it terminates.  If <CD/reap/ is applied
+<           again to <ARG/pr/, it should immediately return the previous
+<           exit status.
+<           <IMPLNOTE>
+<           Typically, one cannot rely on the underlying operating system
+<           to provide the exit status of a terminated process after it
+<           has done so once. Thus, the exit status probably needs to be cached.
+<           Also note that <CD/reap/ should not return until the process
+<           being monitored has terminated. In particular, implementations
+<           should be careful not to return if the process has only been
+<           suspended.
+<           </IMPLNOTE>
+< 
+---
+>           when it terminates.
+diff -r Basis/ML-Doc/word.mldoc Basis.SAV/ML-Doc/word.mldoc
+8c8
+< <VERSION VERID="1.9" YEAR=2000 MONTH=5 DAY=29>
+---
+> <VERSION VERID="1.8" YEAR=2000 MONTH=3 DAY=29>
+28,30c28,31
+< In order to provide a more intuitive description of the shift
+< operators below, we assume a bit ordering in which the most significant
+< bit is leftmost, and the least significant bit is rightmost.
+---
+> Note: In this text, a bit ordering is assumed as follows: The most
+> significant bit (MSB) is the leftmost, the least significant bit the
+> rightmost bit.  This does not touch the semantics of the operations,
+> but the (intuitive) description of the shift operators.
+94,95c95,96
+<           least <VALREF SIGID="WORD"/wordSize/ (cf. the discussion below), 
+<           <VALREF SIGID="WORD"/toLargeIntX/ will never raise an exception.
+---
+>           least <VALREF SIGID="WORD"/wordSize/, <VALREF SIGID="WORD"/toLargeIntX/ will never
+>           raise an exception.
+108c109
+<       <VAL>toInt<TY>word -> int
+---
+>       <VAL>toInt<TY>word -> Int.int
+110c111
+<       <VAL>toIntX<TY>word -> int
+---
+>       <VAL>toIntX<TY>word -> Int.int
+128c129
+<       <VAL>fromInt<TY>int -> word
+---
+>       <VAL>fromInt<TY>Int.int -> word
+206,207c207,209
+< 	  value of the leftmost bit of <ARG/i/ remains the same;
+< 	  in a two's-complement interpretation this corresponds to sign extension.
+---
+> 	  value of the leftmost bit (the MSB) of <ARG/i/ is filled in
+> 	  from the left; in a two's-complement interpretation this
+> 	  corresponds to sign extension.
+209c211
+< 	  two's-complement integer and <ARG/n/ is interpreted as an
+---
+> 	  twos-complement integer and <ARG/n/ is interpreted as an
+349c351
+<       <VAL>scan<TY>StringCvt.radix -> (char, 'a) StringCvt.reader -> 'a -> (word * 'a) option
+---
+>       <VAL>scan<TY>StringCvt.radix -> (char, 'a) StringCvt.reader -> 'a -> (word, 'a) option
+403d404
+< A structure <STRREF/Word{N}/ implements <TT/N/-bit words.
+407,409d407
+<     If <STRREF/LargeWord/ is not the
+<     same as <STRREF/Word/, then there must be a
+<     structure <STRREF/Word{N}/ equal to <STRREF/LargeWord/.
+414c412
+< to hold any unsigned integral value used by the underlying system.
+---
+> to hold any integral value used by the underlying system.

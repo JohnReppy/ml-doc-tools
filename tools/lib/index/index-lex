@@ -1,0 +1,107 @@
+(* index-lex
+ *
+ * COPYRIGHT (c) 1995 AT&T Bell Laboratories.
+ *)
+
+structure T = Tokens
+
+type pos = int
+type svalue = T.svalue
+type arg = (string * int * int) -> unit
+type ('a, 'b) token = ('a, 'b) T.token
+type lexresult = (svalue, pos) token
+
+val lnum = ref 1
+
+fun eof _ = Tokens.EOF(!lnum, !lnum)
+
+local
+  structure KW =
+    struct
+      type token = lexresult
+      type pos = pos
+      fun ident (id, _, _) =
+	    Error.error'["bogus keyword \"", Atom.toString id, "\""]
+      val keywords = [
+	      ("@ANCHORS",	T.KW_ANCHORS),
+	      ("@CODE",		T.KW_CODE),
+	      ("@DATATYPE",	T.KW_DATATYPE),
+	      ("@EMPTY",	T.KW_EMPTY),
+	      ("@EQTYPE",	T.KW_EQTYPE),
+	      ("@EXCEPTIONS",	T.KW_EXCEPTIONS),
+	      ("@EXTERNAL",	T.KW_EXTERNAL),
+	      ("@FIGURE",	T.KW_FIGURE),
+	      ("@FILE",		T.KW_FILE),
+	      ("@FILES",	T.KW_FILES),
+	      ("@FUNCTOR",	T.KW_FUNCTOR),
+	      ("@INCLUDE",	T.KW_INCLUDE),
+	      ("@INTERFACE",	T.KW_INTERFACE),
+	      ("@LABELS",	T.KW_LABELS),
+	      ("@SECTION",	T.KW_SECTION),
+	      ("@SIGNATURE",	T.KW_SIGNATURE),
+	      ("@STRUCTURE",	T.KW_STRUCTURE),
+	      ("@TABLE",	T.KW_TABLE),
+	      ("@TYPE",		T.KW_TYPE),
+	      ("@TYPES",	T.KW_TYPES),
+	      ("@VALS",		T.KW_VALS)
+	    ]
+    end
+in
+structure KW = KeywordFn (KW)
+end
+
+%%
+
+%header (
+  functor IndexLexFun (structure Tokens : Index_TOKENS));
+
+%count
+
+alpha=[A-Za-z];
+digit=[0-9];
+idchar=({alpha}|{digit}|['_{}]);
+id=({alpha}{idchar}*);
+symchar=[!%&$+/:<=>?@~|#*`]|\-|\^|"\\";
+symid=({symchar}+);
+sdata="\\|@"{id}"\\|";
+ws = [\ \t];
+
+%%
+
+<INITIAL>#.*\n
+	=> (lnum := !lnum+1; continue());
+
+<INITIAL>\n
+	=> (lnum := !lnum+1; continue());
+
+<INITIAL>{ws}+
+	=> (continue());
+
+<INITIAL>({symchar}|{sdata})+
+	=> (T.ID(Atom.atom yytext, !lnum, !lnum));
+
+<INITIAL>"@"{alpha}+
+	=> (KW.keyword(yytext, !lnum, !lnum));
+
+<INITIAL>{id}
+	=> (T.ID(Atom.atom yytext, !lnum, !lnum));
+
+<INITIAL>";"
+	=> (T.SC(!lnum, !lnum));
+<INITIAL>"."
+	=> (T.DOT(!lnum, !lnum));
+<INITIAL>"["
+	=> (T.LB(!lnum, !lnum));
+<INITIAL>"]"
+	=> (T.RB(!lnum, !lnum));
+
+<INITIAL>"\""[^\n"]*"\""
+	=> (T.STRING(String.substring(yytext, 1, String.size yytext-2),
+		!lnum, !lnum));
+
+<INITIAL>.
+	=> (TextIO.output(TextIO.stdErr,
+		Format.format "bogus character \"%s\" at line %d\n"
+		[Format.STR yytext, Format.INT(!lnum)]);
+	    continue());
+

@@ -1,0 +1,20 @@
+Library
+  structure Main 
+is
+#if defined(NEW_CM)
+  $/basis.cm
+  $/smlnj-lib.cm
+#else
+  smlnj-lib.cm
+#endif
+
+
+  ../lib/latex/sources.cm
+  ../lib/sgmls-input/sources.cm
+  ../lib/mldoc/sources.cm
+  ../lib/config/sources.cm
+  ../lib/index/sources.cm
+
+  do-file.sml
+  main.sml
+

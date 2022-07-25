@@ -1,0 +1,19 @@
+I'm including a new version of mkdoc below as a shar file. The
+changes include:
+
+  - adding new options so that one doesn't have to append a 
+signature file with dummy declarations to get SIGINSTANCE and
+STRUCTURE elements. Basically, you can not specify 
+
+    -s sname           to get <STRUCTURE STRID="sname">
+    -i sname           to get <SIGINSTANCE> <ID>sname
+    -f sname sid ssig  to get <FUNCTOR FCTID="sname"><ID>sid</ID><ID>ssig</ID>
+
+Using + instead of - causes the matching to be opaque.
+
+  - fixing some bugs that occurred when generating functors.
+  - changing the option processing and usage reporting to reflect 
+the new options.
+  - cleaning up a few places in Dan's code.
+
+    Emden

@@ -1,0 +1,48 @@
+(* sources.cm
+ *
+ * COPYRIGHT (c) 1996 AT&T Research.
+ *
+ * Sources file for ML-Doc index library.
+ *)
+
+Library
+
+signature MLDOC_INDEX
+signature BUILD_INDEX
+
+structure MLDocIndex
+structure BuildIndex
+structure FileTree
+structure Document
+structure ResolveRef
+
+is
+#if defined(NEW_CM)
+  $/basis.cm
+  $/smlnj-lib.cm
+  $/ml-yacc-lib.cm
+#else
+  smlnj-lib.cm
+  ml-yacc-lib.cm
+#endif
+  ../mldoc/sources.cm
+  ../config/sources.cm
+
+  index-lex : MLLex
+  index-gram : MLYacc
+
+  index-rep.sml
+  index-search.sml
+
+  index-parse-tree.sml
+  index-parser.sml
+  print-index.sml
+
+  mldoc-index-sig.sml
+  mldoc-index.sml
+  build-index-sig.sml
+  build-index.sml
+  file-tree.sml
+  document.sml
+  resolve-ref.sml
+

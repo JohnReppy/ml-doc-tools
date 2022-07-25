@@ -1,0 +1,33 @@
+FILES
+  {"list"; "The List structure";}
+SIGNATURE LIST "list" {
+  TYPES 
+    DATATYPE {list; nil ::}
+  EXCEPTIONS 
+  Empty
+  VALS 
+  exists
+  tl
+  foldl
+  find
+  length
+  take
+  filter
+  foldr
+  all
+  partition
+  mapPartial
+  hd
+  map
+  @
+  app
+  tabulate
+  last
+  revAppend
+  drop
+  concat
+  nth
+  null
+  rev
+}
+STRUCTURE List "list" LIST

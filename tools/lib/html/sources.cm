@@ -1,0 +1,40 @@
+(* sources.cm
+ *
+ * COPYRIGHT (c) 2022 John Reppy (http://cs.uchicago.edu/~jhr)
+ * All rights reserved.
+ *)
+
+Library
+
+signature HTML
+
+structure HTML
+structure HTMLDev       (* rebinding of HTML3Dev from SMLNJ Library *)
+structure HRefs
+structure HTMLContext
+structure EntitiesToHTML
+structure TextToHTML
+structure HTMLTemplate
+structure HTMLPPSpec
+structure HTMLPPStrm
+structure PrHTML
+
+is
+
+$/basis.cm
+$/smlnj-lib.cm
+$/html-lib.cm
+$/pp-lib.cm
+$/pp-extras-lib.cm
+
+../config/sources.cm
+../mldoc/sources.cm
+../index/sources.cm
+
+hrefs.sml
+html-context.sml
+html-entities.sml
+text-to-html.sml
+scan-pcdata.sml
+html-template.sml
+html-ppspec.sml

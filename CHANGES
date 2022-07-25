@@ -1,0 +1,404 @@
+Change history for ML-Doc tools
+-------------------------------
+
+[2012-01-01]
+        Changed tools/lib/code-style/sml-token-scanner.sml to track removal of the
+        option type in the REGEXP signature.  Also changed entities to translate DASH
+        properly.  This version of ML-Doc requires SML/NJ version 110.72+ to compile.
+        (Thanks to Alley Stoughton for these changes)
+
+[2012-01-01]
+	Cleanup source tree and move to svn repository.
+
+[2007-06-18]
+	Fixed a compile problem with the mkdoc tool.  This change means that
+	ml-doc requires a more recent version of SML/NJ (110.61 or later
+	should work).
+
+[2007-05-11]
+	Updated the mkdoc tool to work with more recent versions of SML/NJ (the visible
+	compiler interface had changed).
+
+[2007-05-11]
+	Fixed various issues with supporting hierarchical directories of ml-doc sources.
+	The tools now produce a directory structure under Info, HTML, and Hardcopy that
+	is isomorphic to the ML-Doc directory structure.  I.e., an input file
+	ML-Doc/foo/bar/baz.mldoc will map to HTML/foo/bar/baz.html.
+
+[2007-05-10]
+	The path to the nsgmls program is now set by the configuration script.
+
+[2006-11-27]
+	Change uses of Substring.all to Substring.full (the latter is no longer
+	supported by SML/NJ).  Also updated the configuration scripts so the
+	Intel Mac is supported.
+
+[2005-08-30]
+	Changes to extract-sig to track new TextIOPP interface.  ML-Doc now requires
+	SML/NJ 110.55 to build.
+
+[2005-08-30]
+	Modified RunSGMLS to work around Tiger (MacOS X 10.4) pipe bug.
+
+[2004-05-24]
+	Bug fix for latex-gen.
+
+[2004-05-21]
+	Added filter-index tool.
+
+[2004-05-19]
+	The latex-gen tool now is smart about figuring if a <SECREF>
+	refers to a section or chapter.  It assume that level 0
+	sections are chapters.
+
+[2004-05-17]
+	Complete overhaul of how index entries are generated for the Identifier
+	and Raises indexes.  Added support for KEY-VIEW elements.
+
+[2004-05-13]
+	Added MARK attribute to INDEX element (values are START and STOP)
+	for specifying page ranges.
+
+[2004-05-13]
+	Fixed rendering of structure IDs to properly handle ID families.
+
+[2004-05-04]
+	Generated LaTeX now omits <QUESTION> elements by default (but there
+	is a hook to enable this with a command-line option later).
+
+[2004-04-29]
+	Added \mldEG and \mldIE macros for &EG; and &IE;.
+
+[2004-04-29]
+	Added EQNARRAY element as alternative math environment.
+
+[2004-01-15]
+	Port to SML/NJ 110.43+.
+
+[2003-08-26]
+	Preliminary HTML support for <CODE> in <FLOAT>s.
+
+[2003-07-31]
+	We now generate raises index entries.
+
+[2003-07-30]
+	Fixed a problem with how NOLABEL sections were rendered and
+	added support for <CODE> in <FLOAT> elements.
+
+[2003-07-29]
+	Added SUBINDEX element support for latex-gen and improved
+	index generation (but there we still need to deal with
+	index entries for specs!).
+
+[2003-07-24]
+	Added LaTeX formatting for Id families (i.e., "Int{N}" gets
+	formatted as "Int\mldArg{N}").
+
+[2003-07-24]
+	Added <FLOOR>, <CEILING>, and <MOD> elements for math markup.
+
+[2003-07-24]
+	Added &IE; and &EG; entities.
+
+[2003-07-22]
+	Added a patch from Allen Stoughton that makes the generated
+	makefile more precise.
+
+[2003-07-22]
+	Added <RE>, <REGEXP>, and <GRAM.ALT> elements to the DTD, with
+	corresponding implementation support.
+
+[2003-07-17]
+	Bug fixes and added longtable support for latex-gen.
+
+[2003-07-16]
+	Fixed latex-gen tool to insert \pagebreak directives in the
+	Synopsis, so that when the Synopsis is very long it does not
+	force bad layout.
+
+[2003-07-15]
+	Added support for floating tables (<FLOAT><TABLE>) and added
+	kind information to the labes in the info files.
+
+[2003-07-14]
+	Added partial implementation of INDEX element in latex-gen and
+	implementation in html-gen (just ignore it for now).
+	Also made ARG elements always render in italic-tt font.
+
+[2003-07-02]
+	Fixed pretty-printing of SPECBREAK elements to eliminate
+	excess whitespace.  Also fixed a bug in the code stylizer
+	with the handling of indentation.
+
+[2003-07-01]
+	Fixed indexing of symbolic identifiers, where the identifiers
+	were comprised of special characters.
+
+[2003-07-01]
+	Got rid of old-style autoconf file and fixed a problem with
+	ml-build for SML/NJ 110.0.7.
+
+[2003-06-25]
+	Added SMALL attribute to TABLE element and PARBOX attribute to
+	COL element.
+
+[2002-12-12]
+	Ported configuration script to autoconf 2.50+.  It also works
+	with onsgmls as the frontend.
+
+[2002-07-16]
+	Ported all of the tools except mkdoc to work with recent versions
+	of SML/NJ (e.g., 110.41).  Also changed the configuration and
+	build scheme to use GNU make and ml-build.
+
+[2002-07-08]
+	Fixed both html-gen and latex-gen to render comments on datatype
+	constuctors.
+
+[2002-07-08]
+	Modified latex-gen tool so that <PROTOTY> elements that have two
+	or more <PROTO> elements are followed by a line break.
+
+[2002-07-08]
+	Fixed latex-gen tool so that substructure comments are included in
+	the description section.
+
+[2002-06-17]
+	Fixed latex-gen tool so that SEEALSO cross references now work
+	(but only for signature, structure, and functor references).
+
+[2002-06-10]
+	Added URL element to DTD.
+
+[2002-06-06]
+	Removed the IDFAMILY element from the DTD.  Instead, we use the
+	convention of "{N}" to index families of identifiers (this is
+	rendered in HTML as an italic "<N>").
+
+[2002-06-06]
+	Added "OPTIONAL" annotation to optional components in the
+	Synopsis section.
+
+[2002-06-06]
+	Added support for SECREF element in HTML generation.  This change
+	also required changes to the index library.
+
+[2002-06-06]
+	Modified the tools so that there different Master info files
+	for HTML and LaTeX output are used (HTML.info and LaTeX.info).
+
+[2001-04-02]
+	Modified DTD to allow <CODE> in <FLOAT>; also changed <TBLREF> to
+	<FLOATREF>.
+
+[2001-04-02]
+	Rewrote extract-sig tool to use Spec pretty printer.
+
+[2000-11-21]
+	Modified the mkdoc tool to generate </ARG> terminator.
+
+[2000-09-14]
+	Added MTEXT element for escaping back into normal text mode
+	from math.  This element replaces the CD, ARG, and %IDREF
+	content in %MATHTEXT, but we still support ARG elements, because
+	they are so common.  Note, however, that if two ARG elements
+	are adjacent, then one should put them inside a MTEXT element.
+
+[2000-09-11]
+	Added raises component to value specifications (constructor VALspec)
+	in MLSpec.
+
+[2000-09-11]
+	The mldoc-book.cls and mldoc.sty files now use the index package
+	for indexing.  With this change, we can support an index of
+	raised exceptions.
+
+[2000-09-07]
+	The mk-mldoc-makefile tool now supports different input file
+	lists for the HTML and LaTeX versions of the document.
+	In the list of input files, one can add the annotation "!html"
+	(or "!tex) to exclude the file from being included in the
+	HTML (or LaTeX) version of the document.  The annotation follows
+	the file name and there must be whitespace between the filename
+	and the annotation.
+
+[2000-09-07]
+	Added better error reporting to the HTMLContext module.
+
+[2000-09-06]
+	Added support for stylized text for CODE and CD elements in
+	LaTeX output (HTML to come soon).  Use the LANG="SML" attribute
+	in the CODE or CD element to enable stylized text.
+
+[2000-09-02]
+	Added NONUMBER and NOTOC attributes to SECTION element.
+
+[2000-05-14]
+	Fixed some bugs in HTML output; html-index now supports a template
+	file.
+
+[2000-05-18]
+	Reorganized the presentation of functors in the latex-gen tool:
+	now the argument interface and description are presented as a
+	group, followed by the result interface and description.  This
+	reorganization also required a change to the mldoc.sty.
+
+[2000-05-18]
+	Fixed bug in standard options that caused the configured path
+	of nsgmls to be ignored.
+
+[2000-05-17]
+	Fixed bug in html-gen: functors with opaque result signatures
+	were being rendered with ": instead of ":>".
+
+[2000-05-17]
+	Added a bunch of missing features to the latex-gen tool: signature
+	instances, where types, and functors.
+
+[2000-03-28]
+	Modified how the BaseURL attribute is treated in HTML generation.  If
+	one specifies the RelativeLinks flag in the configuration file, then
+	intra-document links are generated relative to the containing file.
+	If the RelativeLinks flag is not specified (and the BaseURL attribute is
+	defined), then a <BASE> element is generated and the links are relative
+	to the base.
+
+[2000-03-28]
+	Added anchors to specifications (these were lost when we switched to
+	the specification pretty-printer).
+
+[2000-03-28]
+	Added -root option to mk-mldoc-makefile.  This option allows one to
+	specify the document root for the Hardcopy target.  The argument should
+	not have the ".tex" suffix.
+
+[2000-03-25]
+	Fixed bug in HTMLPPSpec that caused links to be output as anchors (also
+	simplified the representation of tokens).
+
+[2000-03-24]
+	Added BASE and META elements to document head in html-gen.
+
+[2000-03-24]
+	Fixed various pretty-printing problems (sharing constraints, substructures,
+	and datatypes).
+
+[2000-03-24]
+	Fixed html-gen tool to not generate null descriptions.
+
+[2000-03-23]
+	Further changes to mk-mldoc-makefile and the other tools to better
+	support subdirectories.  It is now necessary for the output directories
+	to have the same directory structure as the ML-Doc directory tree.
+
+[2000-03-23]
+	Minor fixes to the output of the mkdoc tool.
+
+[2000-02-11]
+	Modified the mk-mldoc-makefile tool to handle subdirectories in
+	the ML-Doc sources.  Note that this structure is not preserved
+	in the generated file directories.
+
+[2000-02-11]
+	Modified the mk-mldoc-makefile tool to accept an input list from
+	standard input.  One can now do something like
+
+		find ML-Doc -name "*.mldoc" -print | mk-mldoc-input
+
+	to generate the makefile.
+
+[2000-02-02]
+	Added SPECBREAK element, which can be used to introduce whitespace
+	and pagebreaks into long interfaces.
+
+[2000-02-02]
+	Added ID.INDEX as content of IDFAMILY.  The idea is that we use
+	<IDFAMILY>Int<ID.INDEX NAME="N"></IDFAMILY> as markup for the
+	family of IntN structures.
+
+[2000-01-27]
+	Fixed tableToHTML in tools/lib/html/text-to-html.sml so that cells
+	that span more than one column are handled properly.
+
+[2000-01-17]
+	Added an autoconf-based configuration script and Makefile for building
+	and installing the tools.  This will allow users to install without
+	hand-editing sources or scripts.
+
+[1999-05-05]
+	Fixed a PP Library bug where nesting of relative and absolute indentation
+	did not work.  Also fixed bug in HTML generation, where sdata wasn't
+	getting translated in specifications.
+
+[1999-04-28]
+	Changes to support the latest version of the DTD.  Also added a
+	pretty-printer for spcifications.  The PP code needs a lot of tuning/
+	debugging before the layout will be acceptable, and currently links
+	are not being properly generated.
+
+[1999-04-12]
+	A number of changes to the DTD to better support production of the
+	book.  Mostly related to indexing.
+
+[1998-07-21]
+	Patched mkdoc to generate <SPEC> tags before <SHARING> tags (this
+	was a change in the DTD that mkdoc did not track).
+
+[1998-07-13]
+	Added first version of latex-gen tool (written by Andrew Appel).
+
+[1998-06-19]
+	New version of mkdoc (thanks to Emden Gansner).  Changes include:
+	  - new options for specifying the name of the structure/signature
+	    instance/functor that you want.
+	  - bug fixes and code cleanup.
+
+[1998-06-19]
+	Fixed a bug in html-index tool: it wasn't handling items declared
+	in anonymous functor result signatures.
+
+[1998-06-19]
+	Added support to the info format and database to handle signatures
+	that are defined in other documents.
+
+[1998-06-16]
+	Changed the DTD to allow a <SIGREF> element as the signature
+	of a functor argument.  This also required changes to the
+	various tools.
+
+[1998-06-16]
+	Fixed a bug with the lookup of the path for nsgmls (the "Tools"
+	link was missing).
+
+[1998-05-12]
+	Added a feature to the mkdoc tool to incorporate the comments from
+	the SML signature file as comments in the ML-Doc file.  Thanks to
+	Dan Wang (danwang@cs.princeton.edu).
+
+[1998-05-07]
+	Added new targets to generated makefiles: clean-info, clean-proof,
+	and clean-html.
+
+[1998-05-07]
+	Fixed a bug in mk-mldoc-makefile:  change "$(ProofFiles)"
+	to "$(PROOF_FILES)".
+
+[1998-05-06]
+	Added HTML template support to html-index and html-toc.  Also
+	added additional entities for refering to the current date
+	in templates.
+
+[1998-05-05]
+	Added html-toc tool; this required modifications to the html-gen
+	tool to include anchors on sections, and to mk-mldoc-makefile.
+
+[1998-04-27]
+	Added missing <ID> tag after <INCLUDE> in mkdoc output.
+
+[1998-04-25]
+	Fixed tools/make.sh script to check for subdirectories and
+	to not require "." in PATH.
+
+[1998-04-24]
+	First alpha release.
+

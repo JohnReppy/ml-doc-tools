@@ -1,0 +1,315 @@
+(* index-gram
+ *
+ * COPYRIGHT (c) 1995 AT&T Bell Laboratories.
+ *
+ * This is an ML-Yacc grammar for processing index files.
+ *)
+
+structure I = IndexParseTree
+structure IR = IndexRep
+
+%%
+
+%verbose
+%term EOF
+    | KW_ANCHORS
+    | KW_CODE
+    | KW_DATATYPE
+    | KW_EMPTY
+    | KW_EQTYPE
+    | KW_EXCEPTIONS
+    | KW_EXTERNAL
+    | KW_FIGURE
+    | KW_FILE
+    | KW_FILES
+    | KW_FUNCTOR
+    | KW_INCLUDE
+    | KW_INTERFACE
+    | KW_LABELS
+    | KW_SECTION
+    | KW_SIGNATURE
+    | KW_STRUCTURE
+    | KW_TABLE
+    | KW_TYPE
+    | KW_TYPES
+    | KW_VALS
+    | LB | RB		(* "[" "]" *)
+    | SC		(* ";" *)
+    | DOT		(* "." *)
+    | STRING of string
+    | ID of Atom.atom
+
+%nonterm File of I.index_tree
+       | Files of I.file_nd list
+       | FileRecords of I.file_nd list
+       | FileRecord of I.file_nd
+       | optEmpty of bool
+       | Contents of I.file_item list
+       | FileItem of I.file_item 
+       | Inclusions of Atom.atom list
+       | Anchors of I.anchor_nd list
+       | AnchorRecords of I.anchor_nd list
+       | AnchorRecord of I.anchor_nd
+       | optLabel of Atom.atom option
+       | Labels of I.label_nd list
+       | LabelRecords of I.label_nd list
+       | LabelRecord of I.label_nd
+       | LabelKind of IR.label_kind
+       | Sigs of I.sig_nd list
+       | Signature of I.sig_nd
+       | Modules of I.module_nd list
+       | Module of I.module_nd
+       | EnvOrSig of I.interface_nd
+       | Environment of I.env_nd
+       | Includes of Atom.atom list
+       | Structures of I.str_nd list
+       | TypeList of I.ty_nd list
+       | ExceptionList of Atom.atom list
+       | ValueList of Atom.atom list
+       | Structure of I.str_nd
+       | Types of I.ty_nd list
+       | TyRecord of I.ty_nd
+       | Ids of Atom.atom list
+       | StringName of Atom.atom
+
+%start File
+%pure
+%name Index
+%pos int
+%eop EOF
+%noshift EOF
+
+%%
+
+File
+	: Files Anchors Labels Sigs Modules
+		(I.INDEX{
+		    files = Files,
+		    anchors = Anchors,
+		    labels = Labels,
+		    sigs = Sigs,
+		    modules = Modules
+		  })
+
+(********** Files **********)
+Files
+	: (* empty *)
+		([])
+	| KW_FILES FileRecords
+		(FileRecords)
+
+FileRecords
+	: FileRecord
+		([FileRecord])
+	| FileRecord FileRecords
+		(FileRecord :: FileRecords)
+
+FileRecord
+	: LB optEmpty StringName SC STRING SC Contents RB
+		(I.FILE{
+		    name = StringName,
+		    isEmpty = optEmpty,
+		    title = STRING,
+		    content = Contents
+		  })
+
+optEmpty
+	: KW_EMPTY
+		(true)
+	| (* empty *)
+		(false)
+
+Contents
+	: (* empty *)
+		([])
+	| FileItem Contents
+		(FileItem :: Contents)
+
+FileItem
+	: KW_SECTION STRING optLabel LB Contents RB
+		(I.SECTION{title=STRING, label=optLabel, content=Contents})
+	| KW_FILE StringName
+		(I.INCLFILE StringName)
+	| KW_INTERFACE STRING
+		(I.INTERFACE{title=STRING})
+	| KW_FIGURE StringName
+		(I.FIGURE StringName)
+	| KW_TABLE StringName
+		(I.TABLE StringName)
+
+
+(********** Anchors **********)
+Anchors
+	: (* empty *)
+		([])
+	| KW_ANCHORS AnchorRecords
+		(AnchorRecords)
+
+AnchorRecords
+	: AnchorRecord
+		([AnchorRecord])
+	| AnchorRecord AnchorRecords
+		(AnchorRecord :: AnchorRecords)
+
+AnchorRecord
+	: LB StringName SC StringName RB
+		(I.ANCHOR{tag=StringName1, file=StringName2})
+
+
+(********** Labels **********)
+
+optLabel
+	: (* empty *)
+		(NONE)
+	| StringName
+		(SOME StringName)
+
+Labels
+	: (* empty *)
+		([])
+	| KW_LABELS LabelRecords
+		(LabelRecords)
+
+LabelRecords
+	: LabelRecord
+		([LabelRecord])
+	| LabelRecord LabelRecords
+		(LabelRecord :: LabelRecords)
+
+(* Note: for backwards compatibility, we accept no label kind *)
+LabelRecord
+	: LB StringName SC StringName RB
+		(I.LABEL{name=StringName1, kind=IR.Section, file=StringName2})
+	| LB StringName SC LabelKind SC StringName RB
+		(I.LABEL{name=StringName1, kind=LabelKind, file=StringName2})
+
+LabelKind
+	: KW_SECTION
+		(IR.Section)
+	| KW_TABLE
+		(IR.Table)
+	| KW_FIGURE
+		(IR.Figure)
+	| KW_CODE
+		(IR.Code)
+	| KW_INTERFACE
+		(IR.Interface)
+
+(********** Signatures **********)
+
+Sigs
+	: (* empty *)
+		([])
+	| Signature Sigs
+		(Signature :: Sigs)
+
+Signature
+	: KW_SIGNATURE ID StringName Environment
+		(I.SIGNATURE{id = ID, file = StringName, env = Environment})
+	| KW_SIGNATURE ID
+		(I.UNDEF_SIG ID)
+
+(********** Modules **********)
+
+Modules
+	: (* empty *)
+		([])
+	| Module Modules
+		(Module :: Modules)
+
+Module
+	: KW_STRUCTURE ID StringName EnvOrSig
+		(I.STRUCTURE{
+		    file = StringName,
+		    str = I.STR{id = ID, bodySig = EnvOrSig}
+		  })
+	| KW_FUNCTOR ID StringName EnvOrSig EnvOrSig
+		(I.FUNCTOR{
+		    id = ID, file = StringName,
+		    argSig = EnvOrSig1, bodySig = EnvOrSig2
+		  })
+
+EnvOrSig
+	: Environment
+		(I.SIGENV Environment)
+	| ID
+		(I.SIGREF ID)
+	| KW_EXTERNAL
+		(I.SIGEXTERN)
+
+(********** Environments **********)
+
+Environment
+	: LB Includes Structures TypeList ExceptionList ValueList RB
+		(I.ENV{
+		    incl = Includes,
+		    strs = Structures,
+		    tys = TypeList,
+		    exns = ExceptionList,
+		    vals = ValueList
+		  })
+
+Includes
+	: (* empty *)
+		([])
+	| KW_INCLUDE ID Includes
+		(ID :: Includes)
+
+Structures
+	: (* empty *)
+		([])
+	| Structure Structures
+		(Structure :: Structures)
+
+TypeList
+	: (* empty *)
+		([])
+	| KW_TYPES Types
+		(Types)
+
+ExceptionList
+	: (* empty *)
+		([])
+	| KW_EXCEPTIONS Ids
+		(Ids)
+
+ValueList
+	: (* empty *)
+		([])
+	| KW_VALS Ids
+		(Ids)
+
+(********** Structures **********)
+Structure
+	: KW_STRUCTURE ID EnvOrSig
+		(I.STR{id = ID, bodySig = EnvOrSig})
+
+(********** Types **********)
+Types
+	: TyRecord
+		([TyRecord])
+	| TyRecord Types
+		(TyRecord :: Types)
+
+TyRecord
+	: KW_DATATYPE ID LB Ids RB
+		(I.DTY{id = ID, cons = Ids})
+	| KW_DATATYPE ID
+		(I.DTYDEF{id = ID})
+	| KW_TYPE ID
+		(I.TY{id = ID, eq = false})
+	| KW_EQTYPE ID
+		(I.TY{id = ID, eq = true })
+
+(********** Misc **********)
+
+Ids
+	: ID
+		([ID])
+	| ID Ids
+		(ID :: Ids)
+
+StringName
+	: STRING
+		(Atom.atom STRING)
+

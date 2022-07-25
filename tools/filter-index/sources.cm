@@ -1,0 +1,13 @@
+(* sources.cm
+ *
+ * COPYRIGHT (c) 2004 John Reppy (http://www.cs.uchicago.edu/~jhr)
+ * All rights reserved.
+ *)
+
+Library
+  structure Main 
+is
+  $/basis.cm
+  $/smlnj-lib.cm
+
+  main.sml

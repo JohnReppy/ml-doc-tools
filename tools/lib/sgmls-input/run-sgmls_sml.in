@@ -1,0 +1,38 @@
+(* run-sgmls.sml
+ *
+ * COPYRIGHT (c) 2005 John Reppy (http://www.cs.uchicago.edu/~jhr)
+ * All rights reserved.
+ *
+ * Support for running SGMLS as a sub-process of SML.
+ *
+ * @configure_input@
+ *)
+
+structure RunSGMLS : sig
+
+    val run : {
+	    path : string option,
+	    args : string list
+	  } -> (TextIO.instream * (unit -> unit))
+
+  end = struct
+
+    structure F = Format
+
+    val sgmlsCmd = "@NSGMLS@"
+
+    fun run {path, args} = let
+	  val cmd = Option.getOpt (path, sgmlsCmd)
+	  val _ = if OS.FileSys.access(cmd, [OS.FileSys.A_EXEC])
+		then ()
+		else raise Fail (cmd ^ " not found")
+	  val pid = Unix.execute (cmd, args)
+	  val inStrm = Unix.textInstreamOf pid
+	  fun close () = (
+		TextIO.closeIn inStrm;
+		ignore (Unix.reap pid))
+	  in
+	    (inStrm, close)
+	  end
+
+  end

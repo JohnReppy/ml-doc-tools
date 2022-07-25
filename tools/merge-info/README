@@ -1,0 +1,5 @@
+This tool is used to merge the independent summary info files into
+a single master info file.  Standard usage is to name this file (using
+the "-o" option) either "HTML.info" for the HTML output or "LaTeX.info"
+for LaTeX output (if no output filename is given, then it defaults to
+"Master.info").

@@ -1,0 +1,59 @@
+# Makefile for ML-Doc tools
+#
+# COPYRIGHT (c) 2007 The Fellowship of SML/NJ (http://smlnj.org)
+# All rights reserved.
+#
+# @configure_input@
+#
+
+SHELL =		/bin/sh
+
+PREFIX =	@prefix@
+CONFIGDIR =	@top_srcdir@/config
+SRCDIR =	@top_srcdir@/tools
+BINDIR =	@mldoc_bindir@
+HEAPDIR =	@heapdir@
+
+EXT =		@SMLNJ_HEAP_SUFFIX@
+
+TARGETS =	extract-sig \
+		extract-info \
+		filter-index \
+		html-gen \
+		html-index \
+		html-toc \
+		latex-gen \
+		merge-info \
+		mkdoc \
+		mk-mldoc-makefile \
+		proof-latex
+# Missing: valid
+
+build:
+	for dir in $(TARGETS); do \
+	  (cd $(SRCDIR)/$$dir && $(MAKE) build) || exit $$?; \
+	done
+
+install:	build
+	for dir in $(TARGETS); do \
+	  (cd $(SRCDIR)/$$dir && $(MAKE) install) || exit $$?; \
+	done
+
+clean:
+	for dir in $(TARGETS); do \
+	  (cd $(SRCDIR)/$$dir && $(MAKE) clean) || exit $$?; \
+	done
+
+distclean:
+	for dir in $(TARGETS); do \
+	  (cd $(SRCDIR)/$$dir && $(MAKE) distclean) || exit $$?; \
+	done
+	rm -rf Makefile
+	rm -rf bin/ml-build bin/install-sml-wrapper.sh bin/.heap
+	rm -rf tools/lib/config/std-options.sml
+	rm -rf config.cache config.log config.status
+	rm -rf autom4te.cache
+
+devclean:	distclean
+	rm -rf configure
+

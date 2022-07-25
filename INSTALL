@@ -1,0 +1,57 @@
+COPYRIGHT (c) 2012 John Reppy (http://cs.uchicago.edu/~jhr)
+
+--------------------------------------------------------------------------------
+PREREQUISITES
+-------------
+
+  sml
+    The ML-Doc tools are written in SML and require SML/NJ version 110.0.7
+    or 110.40+ to compile (including the ML-Yacc, ML-Lex, and SML/NJ
+    utility, HTML, and PP libraries).
+
+  nsgmls or onsgmls
+    The ML-Doc tools use nsgmls as a preprocessor and you must have it
+    installed on your system. This program is part of James Clark's SP
+    package, and is available from http://www.jclark.com/sp/index.htm.
+    onsgmls is a new version of nsgmls and is part of the OpenJade
+    project.
+    On Mac OS X, you can install the opensp package from MacPorts to
+    get the onsgmls program.
+
+
+--------------------------------------------------------------------------------
+CONFIGURATION
+-------------
+
+  Configuration is simple; just go to the root of the ML-Doc source
+  tree and type
+
+    ./configure
+
+  By default, the ML-Doc tools are installed in ./bin, but this can be
+  changed by specifying a different path using the --prefix option.
+  For example
+
+    ./configure --prefix=/usr/local
+
+  will put the ML-Doc tools in /usr/local/bin.  Note, however, that the
+  ML-Doc tools are actually just shell scripts that invoke the sml with
+  the proper heap image.  The heap images are always installed in ./bin/.heap.
+
+
+--------------------------------------------------------------------------------
+BUILDING
+--------
+
+  After running the configure script, one can compile the tools by running
+  make in the root directory
+
+    make build
+
+  to install the tools, run
+
+    make install
+
+  After installation, you can remove unneeded files by running
+
+    make clean

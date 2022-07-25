@@ -1,0 +1,66 @@
+FILES
+  {"string"; "The STRING signature";}
+  {"list"; "The List structure";}
+SIGNATURE STRING "string" {
+  STRUCTURE Char CHAR
+  TYPES 
+    EQTYPE string
+  VALS 
+    \|@LT\|
+    explode
+    fromMLString
+    str
+    extract
+    toCString
+    ^
+    \|@GTE\|
+    maxSize
+    substring
+    toMLString
+    tokens
+    collate
+    \|@LTE\|
+    fields
+    compare
+    concat
+    sub
+    implode
+    size
+    \|@GT\|
+    translate
+    fromCString
+}
+SIGNATURE LIST "list" {
+  TYPES 
+    DATATYPE list { nil ::}
+  EXCEPTIONS 
+    Empty
+  VALS 
+    exists
+    tl
+    foldl
+    find
+    length
+    take
+    filter
+    foldr
+    all
+    partition
+    mapPartial
+    hd
+    map
+    @
+    app
+    tabulate
+    last
+    revAppend
+    drop
+    concat
+    nth
+    null
+    rev
+}
+SIGNATURE CHAR
+STRUCTURE WideString "string" STRING
+STRUCTURE String "string" STRING
+STRUCTURE List "list" LIST

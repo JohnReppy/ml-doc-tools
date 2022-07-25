@@ -1,0 +1,48 @@
+# Makefile for ML-Doc tools
+#
+# COPYRIGHT (c) 2005 John Reppy (http://www.cs.uchicago.edu/~jhr)
+# All rights reserved.
+#
+# @configure_input@
+#
+
+PREFIX =	@prefix@
+CONFIGDIR =	@top_srcdir@/config
+SRCDIR =	@top_srcdir@/tools
+BINDIR =	@mldoc_bindir@
+HEAPDIR =	@heapdir@
+
+SHELL =			/bin/sh
+INSTALL_WRAPPER =	@INSTALL_SMLNJ_WRAPPER@
+ML_BUILD =		@ML_BUILD@
+
+EXT =		@SMLNJ_HEAP_SUFFIX@
+
+PROGRAM =	latex-gen
+
+TARGET =	$(PROGRAM).$(EXT)
+
+SRCFILES =	$(wildcard *.sml)
+LIBFILES =	$(wildcard ../lib/mldoc/*.sml) \
+		$(wildcard ../lib/code-style/*.sml) \
+		$(wildcard ../lib/latex/*.sml) \
+		$(wildcard ../lib/sgmls-input/*.sml) \
+		$(wildcard ../lib/index/*.sml) \
+		$(wildcard ../lib/config/*.sml)
+
+build:		$(TARGET)
+
+install:	$(TARGET)
+	$(INSTALL_WRAPPER) $(PROGRAM) $(BINDIR)
+
+$(TARGET):	$(SRCFILES) $(LIBFILES) sources.cm
+	$(ML_BUILD) sources.cm Main.main $(PROGRAM)
+
+clean:
+	find $(SRCDIR) \( -name CM -o -name .cm -exec rm -rf {} \; -prune -print \)
+	rm -f $(TARGET)
+
+distclean:	clean
+	rm -f Makefile
+
+devclean:	distclean

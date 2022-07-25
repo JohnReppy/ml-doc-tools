@@ -1,0 +1,30 @@
+The basic scheme is to take a %INTERFACE element (STRUCTURE,
+FUNCTOR, or SIGNATURE), and map it to a synopsis part and
+signature plus description for each SIGBODY (SIGNATURE elements
+have exactly one; STRUCTURE elements have at most one; and
+FUNCTOR elements have at most two).
+
+The basic layout is one
+
+<title>
+<synopsis>
+INTERFACE-PART
+<discussion>
+<see also>
+
+where INTERFACE-PART is empty, or
+
+------------
+<signature>
+<description>
+------------
+
+or
+
+------------
+<functor argument signature>
+<description>
+------------
+<functor result signature>
+<description>
+------------

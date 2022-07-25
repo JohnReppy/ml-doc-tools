@@ -1,0 +1,17 @@
+This directory contains the implementation of a tool for generating
+a makefile for an ML-Doc document.  Given a list of ML-Doc input files,
+it generates rules for the Info files. the HTML files (including the
+index), and the proof LaTeX files.  The list of input files is specified
+in a text file, with one input file per line (use "#" for comments).
+
+Usage:
+	mk-mldoc-makefile [options] file
+
+Options:
+
+	-bin dir		specifies the bin directory (default is
+				installation specific)
+	-html dir		specifies the HTML_DIR variable (default HTML)
+	-info dir		specifies the INFO_DIR variable (default Info)
+	-proof dir		specifies the PROOF_DIR variable (default Proof)
+

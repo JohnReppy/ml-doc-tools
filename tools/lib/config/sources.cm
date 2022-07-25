@@ -1,0 +1,26 @@
+(* sources.cm
+ *
+ * COPYRIGHT (c) 1997 Bell Labs, Lucent Technologies.
+ *)
+
+Library
+
+signature MLDOC_CONFIG
+structure MLDocConfig
+structure StdOptions
+
+is
+#if defined(NEW_CM)
+  $/basis.cm
+  $/smlnj-lib.cm
+#else
+  smlnj-lib.cm
+#endif
+
+  config-scan.sml
+  config-parse.sml
+  config-db-sig.sml
+  config-db.sml
+  mldoc-config-sig.sml
+  mldoc-config.sml
+  std-options.sml

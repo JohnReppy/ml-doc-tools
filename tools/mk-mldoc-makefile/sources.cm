@@ -1,0 +1,21 @@
+(* sources.cm
+ *
+ * COPYRIGHT (c) 1997 Bell Labs, Lucent Technologies.
+ *)
+
+Library
+  structure Main
+is
+#if defined(NEW_CM)
+  $/basis.cm
+  $/smlnj-lib.cm
+#if (SMLNJ_MINOR_VERSION <= 42)
+  ../compat/sources.cm
+#endif
+#else
+  smlnj-lib.cm
+#endif
+
+  bin-dir.sml		(* generated from bin-dir.sml.in *)
+  main.sml
+

@@ -1,0 +1,58 @@
+#!@SHELL@
+#
+# COPYRIGHT (c) 2001 Bell Labe, Lucent Technologies.
+#
+# @configure_input@
+#
+# A shell script for building ML executable heap images under SML/NJ 110.0.x.
+# This has an interface that is compatible with the 110.31+ CM script of
+# the same name.
+
+SML=@SMLNJ_CMD@
+
+usage() {
+    echo "ml-build: $*"
+    echo "Usage: ml-build cm-file main-function heap-file"
+    exit 1
+}
+
+DULIST=""
+while [ $# != 0 ] ; do
+    case $1 in
+    -D*=*)
+	echo "ml-build: complex defines not supported yet"
+	exit 1
+	;;
+    -D*)
+        SYM=`echo $1 | sed -e 's/-D//'`
+	DULIST="$DULIST CM.SymVal.define(\"$SYM\", 1);"
+	shift
+	;;
+    -U*)
+        SYM=`echo $1 | sed -e 's/-U//'`
+	DULIST="$DULIST CM.SymVal.undef \"$SYM\";"
+	shift
+        ;;
+    *)
+        break
+        ;;
+    esac
+done
+
+if [ $# != 3 ] ; then
+    usage "wrong number of arguments"
+fi
+
+ROOT_CM=$1
+MAIN=$2
+HEAP=$3
+
+$SML <<XXXX
+  SMLofNJ.Internals.GC.messages false;
+  $DULIST
+  CM.make' "$ROOT_CM" handle _ => OS.Process.exit OS.Process.failure;
+  SMLofNJ.exportFn("$HEAP", $MAIN);
+XXXX
+
+exit $?
+

@@ -1,0 +1,21 @@
+(* sources.cm
+ *
+ * Sources file for mkdoc program.
+ *)
+
+Library
+  structure Main
+is
+
+  $/basis.cm
+  $/smlnj-lib.cm
+  $/pp-lib.cm
+
+  $smlnj/viscomp/basics.cm
+  $smlnj/viscomp/parser.cm
+
+  ../lib/mldoc/sources.cm
+  parse-with-comments.sml
+  output.sml
+  parse.sml
+  main.sml

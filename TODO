@@ -1,0 +1,58 @@
+FEATURES
+--------
+	LONG table support for LaTeX
+
+	We need to keep track of the directory structure of the ML-Doc files
+	and reflect that in the generated files (e.g., ML-Doc/foo/bar.mldoc maps
+	to Hardcopy/foo/bar.tex).  Also, we might want to consider creating
+	the subdirectories in the output.
+
+	Name substructures with qualified IDs (e.g., OS.IO).  The problem is
+	that MLDocModule uses the qualified ID prefix to create the context
+	and returns the unqualified substructure name.
+
+	When we have a subtructure with a signature that is defined in another
+	page, we should add a link to that other page from the comment
+	section.  If there is no comment, then the link should go directly
+	from the Interface section.  Note, we require a <SIGREF> tag
+	on the signature for this to work.
+
+	The <INCLSECT> tag is getting expanded into a misleading link
+	(e.g., the POSIX_FLAGS signature is labeled as a structure).
+
+	Fix HTML cross references for tables, figures, and sections.
+
+	Need better support for floating tables and figures in HTML.
+	Do we want floats on their own HTML page?
+
+	EPS to JPEG conversion for figures.
+
+	Prev/next links on footer.
+
+	Citations (include URL field).
+
+	Documentation.
+
+	The grammar elements are not quite right, and also need to be
+	supported by the tools.
+
+	Some URLs have strings like
+		large-int.html#SIG:INT_INF.\|@LT\|\|@LT\|:VAL:SPEC
+	which is not valid HTML.
+
+BUG FIXES
+---------
+	<SPECBREAK NEWLINE> is not producing a newline in LaTeX.
+
+	The prettyprinter is not translating ID Family names.  I.e.,
+	Int{N} should appear as Int<N>.
+
+	Links to components that in substructures are broken (e.g., the
+	list will be SIG:Windows.allAccess:VAL when the anchor is
+	SIG:Windows.Key.allAccess:VAL).
+
+	The mldoc.sty file needs some work to eliminate excess
+	vertical whitespace.  Look, for example, at datatype
+	specifications where the constructors have comments, but
+	the type does not (e.g., Posix.FileSys.open_mode).
+

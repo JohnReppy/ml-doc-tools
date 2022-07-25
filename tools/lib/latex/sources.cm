@@ -1,0 +1,39 @@
+(* sources.cm
+ *
+ * COPYRIGHT (c) 2000 Bell Labs, Lucent Technologies.
+ *)
+
+Library
+
+  structure LaTeXTranslate
+  structure TextToLaTeX
+  structure LaTeXContext
+  structure LaTeXIndex
+
+  structure LaTeXDev
+  structure LaTeXStyle
+  structure LaTeXPPStrm
+  structure LaTeXPPSpec
+
+is
+
+#if defined(NEW_CM)
+  $/basis.cm
+  $/smlnj-lib.cm
+  $/pp-lib.cm
+#else
+  smlnj-lib.cm
+  pp-lib.cm
+#endif
+  ../config/sources.cm
+  ../mldoc/sources.cm
+  ../index/sources.cm
+  ../code-style/sources.cm
+
+  latex-entities.sml
+  text-to-latex.sml
+  latex-id-family.sml
+  latex-context.sml
+  latex-index.sml
+  latex-ppspec.sml
+  latex-translate.sml

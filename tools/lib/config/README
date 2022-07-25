@@ -1,0 +1,27 @@
+This library provides generic support for specifying configuration
+options as name/value pairs in a configuration file.
+
+The syntax of configuration files is simple.  Comments start with "#" and
+run to the end of the line.  We have the following lexical elements:
+
+	Name	::= {alpha}({alphanum}|"-"|"_")*
+	Num	::= ("-")?{digit}+
+	HexNum	::= ("-")?("0x"|"0X"){hexdigit}+
+	String	::= <SML string literal>
+
+Note that the syntax of string literals includes all of the SML escape
+sequeces.  The configuration file grammar is:
+
+	File	::= Def*
+	Def	::= Name Value
+	Value	::= Atom | Object | List
+	Atom	::= Name | Num | HexNum | String
+	Object	::= "{" Def* "}"
+	List	::= "[" Value* "]"
+
+Currently, there is one special name/value pair:
+
+	"include"	String
+
+causes the configuration file named by the string to be included.
+

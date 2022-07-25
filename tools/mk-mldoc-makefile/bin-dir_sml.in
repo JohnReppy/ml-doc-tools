@@ -1,0 +1,15 @@
+(* bin-dir_sml.in
+ *
+ * COPYRIGHT (c) 2007 John Reppy (http://www.cs.uchicago.edu/~jhr)
+ * All rights reserved.
+ *
+ * @configure_input@
+ *)
+
+structure BinDir =
+  struct
+
+    val binDir = ref "@mldoc_bindir@"
+
+  end
+

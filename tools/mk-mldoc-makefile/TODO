@@ -1,0 +1,10 @@
+Add support for non-flat source directories (e.g., ML-Doc/foo/bar.mldoc).
+This will also require changes to the info tools, which store file names.
+
+Use the configuration file to determine directory names, etc.
+
+Generate the Makefile by editing an existing file (like makedepend does).
+
+Add rules for generating dvi and postscript files (will need to get
+latex.sh script fully hacked up).
+

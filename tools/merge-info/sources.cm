@@ -1,0 +1,21 @@
+(* sources.cm
+ *
+ * COPYRIGHT (c) 1997 Bell Labs, Lucent Technologies.
+ *)
+
+Library
+  structure Main
+is
+#if defined(NEW_CM)
+  $/basis.cm
+  $/smlnj-lib.cm
+#else
+  smlnj-lib.cm
+#endif
+
+  ../lib/index/sources.cm
+  ../lib/config/sources.cm
+  ../lib/mldoc/sources.cm
+
+  main.sml
+
