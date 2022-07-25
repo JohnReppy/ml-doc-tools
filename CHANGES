@@ -1,6 +1,10 @@
 Change history for ML-Doc tools
 -------------------------------
 
+[2022-07-25]
+	Migrate the repository to GitHub.  Also updated the sources to require SML/NJ
+	version 110.99+ and converted the README to Markdown.
+
 [2012-01-01]
         Changed tools/lib/code-style/sml-token-scanner.sml to track removal of the
         option type in the REGEXP signature.  Also changed entities to translate DASH

@@ -150,4 +150,4 @@ must have an entity defined in the Entities.sgml file.
 Andrew Appel wrote the first version of the latex-gen tool, Emden Gansner
 wrote the mkdoc and valid tools; Lal George wrote the proof-latex tool;
 and Dan Wang provided the comment extraction feature in the mkdoc tool.
-
+Alley Stoughton has provided helpful fixes at various times.
