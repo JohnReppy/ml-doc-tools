@@ -5,7 +5,7 @@ OBJ="latex-gen"
 SML=${SML:-sml}
 
 $SML <<XXX
-  CM.make();
+  CM.make "sources.cm";
   (SMLofNJ.exportFn("$OBJ", Main.main)):unit;
 XXX
 
