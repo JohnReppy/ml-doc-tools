@@ -17,3 +17,25 @@ autom4te.cache
 # Makefile dependencies
 .depend
 
+# project specific files
+Makefile
+bin
+config/run-latex
+tools/extract-info/extract-info.*-*
+tools/extract-sig/extract-sig.*-*
+tools/filter-index/filter-index.*-*
+tools/html-gen/html-gen.*-*
+tools/html-index/html-index.*-*
+tools/html-toc/html-toc.*-*
+tools/latex-gen/latex-gen.*-*
+tools/lib/config/std-options.sml
+tools/lib/index/index-gram.desc
+tools/lib/index/index-gram.sig
+tools/lib/index/index-gram.sml
+tools/lib/index/index-lex.sml
+tools/lib/sgmls-input/run-sgmls.sml
+tools/merge-info/merge-info.*-*
+tools/mk-mldoc-makefile/bin-dir.sml
+tools/mk-mldoc-makefile/mk-mldoc-makefile.*-*
+tools/mkdoc/mkdoc.*-*
+tools/proof-latex/proof-latex.*-*
