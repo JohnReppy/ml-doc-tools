@@ -1,6 +1,7 @@
 (* parse.sml
  *
- * COPYRIGHT (c) 1996 AT&T Research.
+ * COPYRIGHT (c) 2022 John Reppy (https://www.cs.uchicago.edu/~jhr)
+ * All rights reserved.
  *)
 
 structure ParseML : sig
@@ -15,7 +16,7 @@ structure ParseML : sig
 
     fun parse (fname, ins) = let
           val ppcons = {consumer = ppout, linewidth=fn () => 0, flush = ppflush}
-          val src = Source.newSource(fname,1,ins,false,ppcons)
+          val src = Source.newSource(fname, ins, false, ppcons)
           in
             SmlFile.parse src
           end

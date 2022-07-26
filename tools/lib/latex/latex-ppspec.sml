@@ -1,6 +1,6 @@
 (* latex-ppspec.sml
  *
- * COPYRIGHT (c) 2004 John Reppy (http://www.cs.uchicago.edu/~jhr)
+ * COPYRIGHT (c) 2022 John Reppy (https://www.cs.uchicago.edu/~jhr)
  * All rights reserved.
  *)
 
@@ -8,6 +8,12 @@ structure LaTeXDev =
   struct
 
     datatype style = Plain | Keyword | TyVar | Italic | IdIndex
+
+    datatype device = DEV of {
+	outStrm : TextIO.outstream,
+	lineWid : int option ref,
+	styleStk : style list ref
+      }
 
     local
       structure F = Format
@@ -21,17 +27,7 @@ structure LaTeXDev =
       fun prf (outS, fmt, items) = pr(outS, F.format fmt items)
     in
 
-    datatype device = DEV of {
-	outStrm : TextIO.outstream,
-	lineWid : int option ref,
-	styleStk : style list ref
-      }
-
-    fun openDev {dst, wid} = DEV{
-	    outStrm = dst,
-	    lineWid = ref (SOME wid),
-	    styleStk = ref[]
-	  }
+  (***** Style operations *****)
 
     fun sameStyle (s1 : style, s2) = (s1 = s2)
 
@@ -59,11 +55,13 @@ structure LaTeXDev =
 
     fun defaultStyle _ = Plain
 
+  (***** Device properties *****)
+
   (* maximum printing depth (in terms of boxes) *)
     fun maxDepth _ = NONE
     fun setMaxDepth _ = ()
 
-  (* the sized string to print in place of boxes when the maximum depth is reached. *)
+  (* since the maximum depth is unlimited, we do not need to define ellipses *)
     fun ellipses _ = raise Fail "impossible: LaTeXDev.ellipses"
     fun setEllipses _ = ()
     fun setEllipsesWithSz _ = ()
@@ -80,9 +78,11 @@ structure LaTeXDev =
     fun textWidth _ = NONE
     fun setTextWidth _ = ()
 
+  (***** Output operations *****)
+
   (* output some number of spaces to the device *)
     fun space (DEV{outStrm, ...}, n) = pr (outStrm, StringCvt.padLeft #" " n "")
-    fun indent (dev, n) = space(dev, n)
+    val indent = space
     fun newline (DEV{outStrm, ...}) = prc (outStrm, #"\n")
 
     fun string (DEV{outStrm, ...}, s) = pr (outStrm, s)
@@ -95,6 +95,12 @@ structure LaTeXDev =
 	  if nl
 	    then pr(outStrm, "\\mbox{}\\pagebreak[2]")
 	    else pr(outStrm, "\\pagebreak[2]")
+
+    fun openDev {dst, wid} = DEV{
+	    outStrm = dst,
+	    lineWid = ref(SOME wid),
+	    styleStk = ref[]
+	  }
 
     end (* local *)
   end

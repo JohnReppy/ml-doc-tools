@@ -5,9 +5,10 @@ PREREQUISITES
 -------------
 
   sml
-    The ML-Doc tools are written in SML and require SML/NJ version 110.0.7
-    or 110.40+ to compile (including the ML-Yacc, ML-Lex, and SML/NJ
-    utility, HTML, and PP libraries).
+    The ML-Doc tools are written in SML and require SML/NJ version 110.99
+    to compile (including the ML-Yacc, ML-Lex, and SML/NJ utility, HTML,
+    and PP libraries).  It is also possible to build them using the MLton
+    SML compiler.
 
   nsgmls or onsgmls
     The ML-Doc tools use nsgmls as a preprocessor and you must have it

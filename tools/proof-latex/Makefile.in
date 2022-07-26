@@ -9,8 +9,8 @@
 PREFIX =	@prefix@
 CONFIGDIR =	@top_srcdir@/config
 SRCDIR =	@top_srcdir@/tools
-BINDIR =	@mldoc_bindir@
-HEAPDIR =	@heapdir@
+BINDIR =	@MLDOC_BIN@
+HEAPDIR =	@HEAP_IMAGE_DIR@
 
 SHELL =			/bin/sh
 INSTALL_WRAPPER =	@INSTALL_SMLNJ_WRAPPER@

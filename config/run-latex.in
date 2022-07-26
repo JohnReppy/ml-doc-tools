@@ -7,7 +7,7 @@
 # A script for running LaTeX on the output of an ML-Doc tool.
 #
 
-LATEX_LIB=@mldoc_libdir@/LaTeX
+LATEX_LIB=@MLDOC_LIB@/LaTeX
 
 export TEXINPUTS
 TEXINPUTS=.:$LATEX_LIB:

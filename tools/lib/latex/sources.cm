@@ -1,6 +1,7 @@
 (* sources.cm
  *
- * COPYRIGHT (c) 2000 Bell Labs, Lucent Technologies.
+ * COPYRIGHT (c) 2022 John Reppy (https://www.cs.uchicago.edu/~jhr)
+ * All rights reserved.
  *)
 
 Library

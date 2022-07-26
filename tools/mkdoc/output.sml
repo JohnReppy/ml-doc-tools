@@ -1,22 +1,24 @@
 (* output.sml
  *
- * COPYRIGHT (c) 2000 Bell Labs, Lucent Technologies
+ * COPYRIGHT (c) 2022 John Reppy (https://www.cs.uchicago.edu/~jhr)
+ * All rights reserved.
  *
  * Queries:
- * top level declarations
- * optional
- * infix
- * open
- * where type
+ *	top level declarations
+ *	optional
+ *	infix
+ *	open
+ *	where type
  *)
 
 structure Output :
   sig
 
-    datatype spec = None
-                  | Str of (string * bool)    
-                  | Ftr of (string * string * string * bool)    
-                  | SigI of (string * bool) list   
+    datatype spec
+      = None
+      | Str of (string * bool)
+      | Ftr of (string * string * string * bool)
+      | SigI of (string * bool) list
 
     val outSGML : {
             specs : spec,
@@ -47,10 +49,11 @@ structure Output :
 	    "\" YEAR=%d>\n"
 	  ]
 
-    datatype spec = None
-                  | Str of (string * bool)    
-                  | Ftr of (string * string * string * bool)    
-                  | SigI of (string * bool) list   
+    datatype spec
+      = None
+      | Str of (string * bool)
+      | Ftr of (string * string * string * bool)
+      | SigI of (string * bool) list
 
     val translateFileEntity = String.translate (
 	   fn #"_" => "-"
@@ -79,7 +82,7 @@ structure Output :
  *** be controlled by a flag, that would also specify the Entities file
  *** to append the decl to.  Furthermore, we should extract the base
  *** name of the infile.
-	   (case infile of    
+	   (case infile of
 	       NONE => ()
 	     | (SOME f) =>
 		   app outf ["<!-- Entities.sgml entry \n",
@@ -88,8 +91,10 @@ structure Output :
 			     " -->\n"]);
  ***)
             F.formatf (prologue copyright) outf [F.INT(Date.year date)];
-            F.formatf fmt outf [F.STR version, F.INT(Date.year date), 
-              F.INT(intOf(Date.month date)), F.INT(Date.day date)];
+            F.formatf fmt outf [
+		F.STR version, F.INT(Date.year date),
+		F.INT(intOf(Date.month date)), F.INT(Date.day date)
+	      ];
             app outf ["<TITLE>The ", name, " ", kind, "</TITLE>\n"];
             outf "\n<INTERFACE>\n";
             app outf ["<HEAD>The <CD/", name, "/ ", kind, "</HEAD>\n"];
@@ -100,7 +105,7 @@ structure Output :
             outf "\n<PP>\n";
 	    outf "<!-- Some general introductory text -->\n\n"
           end
-          
+
     val epilogue = [
 	  "\n</INTERFACE>\n"
         ]
@@ -125,11 +130,11 @@ structure Output :
           fun stripSig (MarkSigb(sigb,_)) = stripSig sigb
             | stripSig sb = sb
           fun norml (MarkDec(d,_),l) = norml(d,l)
-            | norml (StrDec bl,(sgs,strs,fns)) = 
+            | norml (StrDec bl,(sgs,strs,fns)) =
                 (sgs,List.revAppend(map stripStr bl,strs),fns)
-            | norml (FctDec bl,(sgs,strs,fns)) = 
+            | norml (FctDec bl,(sgs,strs,fns)) =
                 (sgs,strs,List.revAppend(map stripFct bl,fns))
-            | norml (SigDec bl,(sgs,strs,fns)) = 
+            | norml (SigDec bl,(sgs,strs,fns)) =
                 (List.revAppend(map stripSig bl,sgs),strs,fns)
             | norml (SeqDec dl,l) = List.foldl norml l dl
             | norml _ = Error.error "Non-module declaration\n"
@@ -137,7 +142,7 @@ structure Output :
           in
             DECLS{sigs = rev sgs, strs = rev strs, functs = rev fns}
           end
-     
+
       (* moduleName
        * Heuristic - if a single structure/functor is declared, use
        * its name.
@@ -146,11 +151,11 @@ structure Output :
        * multiple structures and no signatures.
        *)
     fun moduleName (DECLS{functs = [Ast.Fctb{name,...}],strs=[],...}) =
-            (Sym.name name, "functor")
+	  (Sym.name name, "functor")
       | moduleName (DECLS{strs = [Ast.Strb{name,...}],functs=[],...}) =
-            (Sym.name name, "structure")
+	  (Sym.name name, "structure")
       | moduleName (DECLS{sigs = (Ast.Sigb{name,...})::_,...}) =
-            (Sym.name name, "signature")
+	  (Sym.name name, "signature")
       | moduleName _ = Error.error "No signatures defined\n"
 
     datatype sigexp_type = SIGNAME of Sym.symbol * Ast.wherespec list
@@ -173,7 +178,7 @@ structure Output :
           end
 
     fun tyVarStr (Ast.Tyv sym) = Sym.name sym
-      | tyVarStr (Ast.MarkTyv (tyvar,_)) = tyVarStr tyvar	
+      | tyVarStr (Ast.MarkTyv (tyvar,_)) = tyVarStr tyvar
 
     val arrowTycon = Sym.tycSymbol "->"
 
@@ -193,7 +198,7 @@ structure Output :
                     else concat[tyStr lhs, " -> ", tyStr rhs]
                   else concat[typarmsStr tys, " ", Sym.name sym]
             | tyConStr (syms, []) = longStr syms
-            | tyConStr (syms, [typ]) = 
+            | tyConStr (syms, [typ]) =
                 if isFunction typ
                   then concat["(", tyStr typ, ") ", longStr syms]
                   else concat[tyStr typ, " ", longStr syms]
@@ -208,7 +213,7 @@ structure Output :
           end
       | tyStr (Ast.TupleTy l) = let
           fun tupStr ty =
-                if isFunction ty 
+                if isFunction ty
                   then concat["(",tyStr ty,")"]
                   else tyStr ty
           in
@@ -264,7 +269,7 @@ structure Output :
             val i = !idx
             val si = !sidx
             in
-              if i < l 
+              if i < l
                 then wrapArg(Vector.sub(v,i)) before idx := i + 1
                 else wrapArg(v0^Vector.sub(suf,si)) before sidx := si + 1
             end
@@ -410,15 +415,15 @@ structure Output :
           fun doSpec ind = (doInd ind; outf "<SPEC>\n")
 
           fun doProto ind (name,ty) = (
-                doInd ind; 
+                doInd ind;
                 outf "<PROTOTY>\n";
-                doInd ind; 
+                doInd ind;
                 outf name;
                 if isFunction ty
                   then (outf " "; outf (argStr ty))
                   else ();
                 outf "\n";
-                doInd ind; 
+                doInd ind;
                 outf "</PROTOTY>\n"
               )
 
@@ -431,9 +436,9 @@ structure Output :
                 val name = translateVal(Sym.name sym)
 		val mrk = (mergeMarks(ty,NONE))
                 in
-                  doInd ind; 
+                  doInd ind;
                   app outf ["<VAL>", name, "<TY>", tyStr ty,"\n"];
-                  doInd (ind+1); 
+                  doInd (ind+1);
                   outf "<COMMENT>\n";
                   doProto (ind+2) (name,ty);
                   doInd (ind+2);
@@ -456,35 +461,26 @@ structure Output :
           fun doTypeVars [] = ()
             | doTypeVars tvl = (outf "<TYPARAM>"; outf (tyvarsStr tvl))
 
-          fun doCons ind (sym,tyopt) = (
+          fun doCons ind (sym, tyopt) = (
                 doInd ind;
                 outf "<CONS>";
                 outf (Sym.name sym);
-                case tyopt of
-                  NONE => ()
-                | SOME ty => (outf "<TY>"; outf(tyStr ty));
+                case tyopt
+                 of NONE => ()
+                  | SOME ty => (outf "<TY>"; outf(tyStr ty));
                 outf "\n"
               )
 
-          fun doDataty ind (Db{tyc, tyvars, rhs=Constrs def, ...}) = (
+          fun doDataty ind (Db{tyc, tyvars, rhs, ...}) = (
                 doInd ind;
                 outf "<DATATYPE>";
                 doTypeVars tyvars;
                 outf "<ID>";
                 outf (Sym.name tyc);
                 outf "\n";
-                app (doCons (ind+1)) def;
+                app (doCons (ind+1)) rhs;
                 doInd ind;
                 outf "</DATATYPE>\n"
-              )
-            | doDataty ind (Db{tyc, tyvars, rhs=Repl syms, ...}) = (
-                doInd ind;
-                outf "<DATATYPEDEF>";
-                outf "<ID>";
-                outf (Sym.name tyc);
-                outf "</ID>";
-                outf (longStr syms);
-                outf "</DATATYPEDEF>\n"
               )
             | doDataty ind (MarkDb (db,_)) = doDataty ind db
 
@@ -497,7 +493,7 @@ structure Output :
                     doTypeVars tvl;
                     outf "<ID>";
                     outf (Sym.name sym);
-                    case tyabbrev of 
+                    case tyabbrev of
                       SOME ty => (outf "<TY>"; outf(tyStr ty))
                     | NONE => ();
                     outf "\n"
@@ -518,9 +514,9 @@ structure Output :
 
           fun doSubstr ind (sym,se,qid) = (
                 if qid = NONE then ()
-                else 
+                else
                   Error.warning("structure spec ID : SIG = LONGID not supported\n", []);
-             
+
                 doInd ind;
                 outf "<SUBSTRUCT>";
                 outf (Sym.name sym);
@@ -557,11 +553,21 @@ structure Output :
                 app (doVal(ind+1)) vlist
               )
             | outSpec ind (DataSpec {datatycs, withtycs}) = (
-                case withtycs of 
-                  [] => ()
-                |  _ => Error.warning("with types not supported\n", []);
+                case withtycs
+		 of [] => ()
+                  |  _ => Error.warning("with types not supported\n", []);
                 doSpec ind;
-                app (doDataty(ind+1)) datatycs
+                app (doDataty (ind+1)) datatycs
+              )
+	    | outSpec ind (DataReplSpec(tyc, rhs)) = (
+		doSpec ind;
+		doInd ind;
+                outf "<DATATYPEDEF>";
+                outf "<ID>";
+                outf (Sym.name tyc);
+                outf "</ID>";
+                outf (longStr rhs);
+                outf "</DATATYPEDEF>\n"
               )
             | outSpec ind (ExceSpec elist) = (
                 doSpec ind;
@@ -637,21 +643,21 @@ structure Output :
 		Error.error "Rebinding of signature name not implemented\n"
 	    | (SIGBODY specs) => let
                 fun usesSig constraint =
-                      case (getSigType constraint) of 
+                      case (getSigType constraint) of
                         SIGNAME (sigName',_) => sigName = sigName'
                       | _ => false
 		fun split ([], l1, l2) = (rev l1, rev l2)
-		  | split ((str as Ast.MarkStrb(strb,_))::r,l1,l2) = 
+		  | split ((str as Ast.MarkStrb(strb,_))::r,l1,l2) =
                       split(strb::r,l1,l2)
-		  | split ((str as Ast.Strb{name, constraint,...})::r,l1,l2) = 
+		  | split ((str as Ast.Strb{name, constraint,...})::r,l1,l2) =
                       case constraint of
                         Ast.NoSig => split(r, l1, str::l2)
-                      | Ast.Transparent cst => 
-                          if usesSig cst 
+                      | Ast.Transparent cst =>
+                          if usesSig cst
                             then split (r, (Sym.name name,false)::l1, l2)
                             else split(r, l1, str::l2)
-                      | Ast.Opaque cst => 
-                          if usesSig cst 
+                      | Ast.Opaque cst =>
+                          if usesSig cst
                             then split (r, (Sym.name name,true)::l1, l2)
                             else split(r, l1, str::l2)
 		val (strs1, strs2) = split (strs, [], [])
@@ -695,10 +701,10 @@ structure Output :
     fun outFctHd outf name =
           app outf ["<FUNCTOR FCTID=\"",Sym.name name,"\">"]
 
-    fun mkArgs (pname, psig) = 
+    fun mkArgs (pname, psig) =
           [(SOME(Sym.strSymbol pname),Ast.VarSig(Sym.sigSymbol psig))]
 
-    fun outFctArgs _ [] = 
+    fun outFctArgs _ [] =
           Error.error "Empty functor parameters not supported\n"
       | outFctArgs (s as {outf,find}) [parm] = (
           (case parm of
@@ -771,7 +777,7 @@ structure Output :
 	    app (outStr s) strs'
 	  end
       | outAll (s,DECLS{sigs,strs,functs}) = (
-          app (outSig s) sigs; 
+          app (outSig s) sigs;
           app (outStr s) strs;
           app (outFct s) functs
         )
@@ -794,7 +800,7 @@ structure Output :
           outf "</FUNCTOR>\n"
         )
 
-    fun outModule (arg as (s as {outf,find}, 
+    fun outModule (arg as (s as {outf,find},
                            DECLS{sigs=[Ast.Sigb {name=sigName,def}],
                                  strs=[Ast.Strb {name,constraint,...}],
                                  functs=[]})) = let
@@ -803,7 +809,7 @@ structure Output :
                     SIGNAME (sigName',_) =>
                       if Sym.eq(sigName,sigName')
                         then case getSigType def of
-                          SIGBODY specs => 
+                          SIGBODY specs =>
                             outStrDecl (s,name,isOpaque,sigName,specs)
                         | _ => outAll arg
                         else outAll arg
@@ -814,14 +820,14 @@ structure Output :
               | Ast.Transparent cst => outStr (false, cst)
               | Ast.Opaque cst => outStr (true, cst)
             end
-      | outModule (arg as (s as {outf,find}, 
+      | outModule (arg as (s as {outf,find},
                            DECLS{sigs=[Ast.Sigb {name=sigName,def=sigDef}],
                                  functs=[Ast.Fctb {name,def}],
                                  strs=[]})) = let
           (* val Ast.Fctb {name,def} = fct *)
           val (args,constraint) = functArgs def
           (* val Ast.Sigb {name=sigName,def} = sg *)
-          fun outFct (isOpaque,constraint) = 
+          fun outFct (isOpaque,constraint) =
                 case getSigType constraint of
                   SIGNAME (sigName',_) =>
                     if Sym.eq(sigName,sigName')
@@ -855,11 +861,11 @@ structure Output :
                   val args = mkArgs (pname, psig)
                   in
                     case getSigType def of
-                      SIGBODY specs => 
+                      SIGBODY specs =>
                         outFtrDecl (s,Sym.fctSymbol name,args,isOpaque,sigName,specs)
                     | _ => Error.error "No signatures defined\n"
                   end
-              | SigI sigis => 
+              | SigI sigis =>
                   case getSigType def of
                     SIGBODY specs => outSigAndSigis (s,sigName,specs,rev sigis)
                   | _ => Error.error "No signatures defined\n"

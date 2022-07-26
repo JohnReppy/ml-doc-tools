@@ -1,6 +1,6 @@
 # Makefile for ML-Doc tools
 #
-# COPYRIGHT (c) 2007 The Fellowship of SML/NJ (http://smlnj.org)
+# COPYRIGHT (c) 2022 John Reppy (https://www.cs.uchicago.edu/~jhr)
 # All rights reserved.
 #
 # @configure_input@
@@ -11,8 +11,8 @@ SHELL =		/bin/sh
 PREFIX =	@prefix@
 CONFIGDIR =	@top_srcdir@/config
 SRCDIR =	@top_srcdir@/tools
-BINDIR =	@mldoc_bindir@
-HEAPDIR =	@heapdir@
+BINDIR =	@MLDOC_BIN@
+HEAPDIR =	@HEAP_IMAGE_DIR@
 
 EXT =		@SMLNJ_HEAP_SUFFIX@
 
