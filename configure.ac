@@ -1,6 +1,6 @@
 dnl Process this file with autoconf to produce a configure script.
 dnl
-dnl COPYRIGHT (c) 2022 John Reppy (http:www.cs.uchicago.edu/~jhr)
+dnl COPYRIGHT (c) 2022 John Reppy (https://www.cs.uchicago.edu/~jhr)
 dnl All rights reserved.
 dnl
 dnl This the configuration script for autoconf version 2.52+.  The
@@ -9,7 +9,7 @@ dnl file configure.in is for older versions.
 AC_INIT([ML-Doc],[2.20])
 
 AC_PREREQ([2.71])
-AC_COPYRIGHT([COPYRIGHT (c) 2022 John Reppy] (http://www.cs.uchicago.edu/~jhr))
+AC_COPYRIGHT([COPYRIGHT (c) 2022 John Reppy] (https://www.cs.uchicago.edu/~jhr))
 AC_CONFIG_SRCDIR(tools/lib/mldoc/mldoc-dtd.sml)
 AC_CONFIG_AUX_DIR(config)
 AC_CONFIG_MACRO_DIR(config)
